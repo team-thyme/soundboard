@@ -51,6 +51,7 @@
     </div>
 
     <div id="playerContainer">
+      <div id="playerPlayPause" class="play"></div>
       <audio id="player" controls></audio>
     </div>
 
