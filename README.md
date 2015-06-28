@@ -6,4 +6,4 @@
  
 Samples not included!
  
-Design by @Mesoptier!
+Design by [Mesoptier](https://github.com/mesoptier)!
