@@ -43,7 +43,7 @@ body {
     padding: 15px;
     z-index: 10;
  
-    background-color: #2196F3;
+    background-color: #4CAF50;
     box-shadow: 0 3px 15px rgba(0,0,0,0.2), 0 0 5px rgba(0,0,0,0.3);
 }
  
@@ -125,7 +125,7 @@ body {
 }
  
 #searchInput::-webkit-search-cancel-button:after {
-    content: '×';
+    content: 'Ã—';
     font-size: 27px;
     line-height: 36px
 }
@@ -223,6 +223,8 @@ body {
 }
  
 #playerContainer {
+    display: flex;
+
     -webkit-box-ordinal-group: 4;
     -webkit-order: 3;
         -ms-flex-order: 3;
@@ -234,17 +236,97 @@ body {
             flex: 0 0 auto;
  
     width: 100%;
-    height: 30px;
+    height: 80px;
  
     box-shadow: 0 0 20px rgba(0,0,0,0.1), 0 0 8px rgba(0,0,0,0.1);
-    background: #2196F3;
+    background: #444;
 }
  
 #player {
     width: 100%;
     height: 100%;
 }
- 
+
+#playerPlayPause {
+    position: relative;
+
+    flex: 0 0 auto;
+    margin: 10px 15px;
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+
+    transition: background-color 200ms ease, transform 500ms ease;
+}
+
+#playerPlayPause:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+#playerPlayPause:active {
+    background-color: rgba(0,0,0,0.2);
+}
+
+#playerPlayPause.play {
+    transform: rotate(0deg);
+}
+
+#playerPlayPause.pause {
+    transform: rotate(270deg);
+}
+
+#playerPlayPause:before,
+#playerPlayPause:after {
+    position: absolute;
+
+    content: "";
+    display: block;
+
+    border-style: solid;
+
+    transition: all 500ms ease;
+}
+
+#playerPlayPause.play:before,
+#playerPlayPause.play:after {
+    width: 0;
+    height: 0;
+    margin-left: 23px;
+
+    border-width: 13px 22px 0 0;
+    border-color: #fff transparent transparent transparent;
+}
+
+#playerPlayPause.play:before {
+    margin-top: 17px;
+    
+    transform: scale(1,-1);
+}
+
+#playerPlayPause.play:after {
+    margin-top: 30px;
+}
+
+#playerPlayPause.pause:before,
+#playerPlayPause.pause:after {
+    margin-left: 18px;
+    width: 24px;
+    height: 0;
+    
+    border-width: 6px 0 0 0;
+    border-color: #fff transparent transparent transparent;
+}
+
+#playerPlayPause.pause:before {
+    margin-top: 33px;
+    transform: scale(1,-1);
+}
+
+#playerPlayPause.pause:after {
+    margin-top: 21px;
+}
+
 #samplesContainer {
     -webkit-box-ordinal-group: 3;
     -webkit-order: 2;
