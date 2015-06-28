@@ -51,15 +51,15 @@
     </div>
 
     <div id="playerContainer">
-      <div id="playerPlayPause" class="play"></div>
-      <audio id="player" controls></audio>
+      <div id="playerPlayStop" class="play"></div>
+      <audio id="player"></audio>
     </div>
 
     <div id="samplesContainer"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>
-      //random element selection
+      //random element selection in jquery
       $.fn.random = function() {
           var randomIndex = Math.floor(Math.random() * this.length);  
           return jQuery(this[randomIndex]);
@@ -67,8 +67,32 @@
 
       var samples = <?php echo $samplesJson; ?>;
 
+      //player controls
+
+      //visjuls
+      $("#player").on("playing", function() {
+        $("#playerPlayStop").removeClass("play");
+        $("#playerPlayStop").addClass("stop");
+      });
+
+      $("#player").on("pause ended", function() {
+        $("#playerPlayStop").removeClass("stop");
+        $("#playerPlayStop").addClass("play");
+      });
+
+      //functions
+      $("#playerPlayStop").click(function() {
+        if ($(this).hasClass("play"))
+          $("#player").trigger("play");
+        else
+        {
+          $("#player").trigger("pause");
+          $("#player")[0].currentTime = 0;
+        }
+      });
+
       //search
-      $("#searchInput").on("search input", function(e) {
+      $("#searchInput").on("search input keyup", function(e) {
         //only filter if there has been a change in query
         filterSamples($(this).val());
 
@@ -105,7 +129,7 @@
           else
             player[0].currentTime = 0;
           
-          player[0].play();
+          player.trigger("play");
 
           history.pushState(null, "", $(this).data("id"));
         });

@@ -125,7 +125,7 @@ body {
 }
  
 #searchInput::-webkit-search-cancel-button:after {
-    content: 'Ã—';
+    content: '×';
     font-size: 27px;
     line-height: 36px
 }
@@ -165,7 +165,7 @@ body {
 
 #playRandom:active {
     background-color: rgba(0,0,0,0.2);
-    
+    aw
     -webkit-transform: rotate(-720deg);
     
         -ms-transform: rotate(-720deg);
@@ -247,7 +247,7 @@ body {
     height: 100%;
 }
 
-#playerPlayPause {
+#playerPlayStop {
     position: relative;
 
     flex: 0 0 auto;
@@ -260,24 +260,24 @@ body {
     transition: background-color 200ms ease, transform 500ms ease;
 }
 
-#playerPlayPause:hover {
+#playerPlayStop:hover {
     background-color: rgba(0,0,0,0.1);
 }
 
-#playerPlayPause:active {
+#playerPlayStop:active {
     background-color: rgba(0,0,0,0.2);
 }
 
-#playerPlayPause.play {
+#playerPlayStop.play {
     transform: rotate(0deg);
 }
 
-#playerPlayPause.pause {
+#playerPlayStop.stop {
     transform: rotate(270deg);
 }
 
-#playerPlayPause:before,
-#playerPlayPause:after {
+#playerPlayStop:before,
+#playerPlayStop:after {
     position: absolute;
 
     content: "";
@@ -288,8 +288,8 @@ body {
     transition: all 500ms ease;
 }
 
-#playerPlayPause.play:before,
-#playerPlayPause.play:after {
+#playerPlayStop.play:before,
+#playerPlayStop.play:after {
     width: 0;
     height: 0;
     margin-left: 23px;
@@ -298,18 +298,18 @@ body {
     border-color: #fff transparent transparent transparent;
 }
 
-#playerPlayPause.play:before {
+#playerPlayStop.play:before {
     margin-top: 17px;
     
     transform: scale(1,-1);
 }
 
-#playerPlayPause.play:after {
+#playerPlayStop.play:after {
     margin-top: 30px;
 }
 
-#playerPlayPause.pause:before,
-#playerPlayPause.pause:after {
+#playerPlayStop.stop:before,
+#playerPlayStop.stop:after {
     margin-left: 18px;
     width: 24px;
     height: 0;
@@ -318,12 +318,12 @@ body {
     border-color: #fff transparent transparent transparent;
 }
 
-#playerPlayPause.pause:before {
+#playerPlayStop.stop:before {
     margin-top: 33px;
     transform: scale(1,-1);
 }
 
-#playerPlayPause.pause:after {
+#playerPlayStop.stop:after {
     margin-top: 21px;
 }
 
