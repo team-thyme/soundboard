@@ -35,8 +35,9 @@
   <head>
     <meta charset="utf-8"/>
     <title>Viller's Soundboard copyright no stealerinos</title>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" href="styles.css" />
     <meta name='viewport' content='initial-scale=1' />
+    <link rel="shortcut icon" href="favicon.ico" />
   </head>
 
   <body>
