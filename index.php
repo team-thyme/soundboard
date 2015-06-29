@@ -123,6 +123,35 @@
         position.text(curMins + ":" + curSecs + " / " + durMins + ":" + durSecs);
       }
 
+      
+      function playFromUrl(initial)
+      {
+        var id = getIdFromUrl();
+
+        //play if its a valid id
+        var matchedSamples = $('.sample[data-id="' + id + '"]');
+        if (matchedSamples.length)
+        {
+          //add an empty state before playing, so that there can be returned to a no-sample point
+          if (initial)
+            history.replaceState(null, "", ".");
+
+          //trigger play
+          matchedSamples.random().click();
+        }
+        else
+        {
+          //stop playing audio
+          $("#player").trigger("pause");
+          $("#player").prop("currentTime", 0);
+        }
+      }
+
+      function getIdFromUrl()
+      {
+        return decodeURI(location.href.substring(location.href.lastIndexOf("/") + 1));
+      }
+
       //player visjul updates
       $("#player").on("durationchange playing pause ended play timeupdate", updatePlayerVisuals);
 
@@ -171,6 +200,7 @@
         var sample = $(this);
         var file = "samples/" + sample.data("file");
         var player = $("#player");
+        var id = $(this).data("id");
 
         //dont change source if its the same, so it can be replayed instantly
         if (player.attr("src") != file)
@@ -186,23 +216,18 @@
         
         player.trigger("play");
 
-        history.pushState(null, "", $(this).data("id"));
+        //only push state if not the current one
+        if (id != getIdFromUrl())
+          history.pushState({ id: id }, "", id);
       });
 
-      //alter query based on initial url
-      var initialQuery = decodeURI(location.href.substring(location.href.lastIndexOf("/") + 1));
+      //play from url on popstate
+      $(window).on("popstate", function(e) {
+        playFromUrl();
+      });
 
-      //click a sample that has query as the name
-      if (initialQuery)
-      {
-        //insert in searchbox and trigger change event with enter key (play)
-        var searchInput = $("#searchInput");
-        searchInput.val(initialQuery);
-
-        //trigger
-        var e = $.Event("input", { keyCode: 13 })
-        searchInput.trigger(e);
-      }
+      //initial play from url (replacing state if launched with argument)
+      playFromUrl(true);
     </script>
   </body>
 </html>
