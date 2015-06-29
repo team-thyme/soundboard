@@ -280,18 +280,18 @@ body {
 
 #playerPlayStop.play:before {
     margin-top: 17px;
-    margin-left: 21px;
+    margin-left: 22px;
     
     height: 0;
     border-width: 13px 0 13px 22px;
 }
 
 #playerPlayStop.stop:before {
-    margin-top: 18px;
-    margin-left: 18px;
+    margin-top: 19px;
+    margin-left: 19px;
     
-    height: 24px;
-    border-width: 0 0 0 24px;
+    height: 22px;
+    border-width: 0 0 0 22px;
 }
 
 #playerSliderContainer {
@@ -398,13 +398,11 @@ body {
     display: block;
     content: '';
 
-    -webkit-box-flex: 10;
-    -webkit-flex: 10 0 50px;
-        -ms-flex: 10 0 50px;
-            flex: 10 0 50px;
+    -webkit-box-flex: 9999;
+    -webkit-flex: 9999 0 0;
+        -ms-flex: 9999 0 0;
+            flex: 9999 0 0;
     height: 0;
-
-    background: red;
 }
 
 .sample {
