@@ -98,22 +98,16 @@
         var button = $("#playerPlayStop");
         var position = $("#playerSampleInfo .position");
         var duration = player.prop("duration");
-        var percentage;
 
         //to prevent NaN from displaying
         if (!duration)
-          duration = percentage = 0;
-        else
-          percentage = 100 / duration * player.prop("currentTime");
+          duration = 0;
 
         //play/stop button
         if (player.prop("ended") || player.prop("paused"))
           button.addClass("play").removeClass("stop");
         else
           button.addClass("stop").removeClass("play");
-
-        //slider
-        slider.css("width", percentage + "%");
 
         //position
         var durMins = ("0" + Math.floor(duration / 60)).slice(-2);
@@ -123,6 +117,22 @@
         position.text(curMins + ":" + curSecs + " / " + durMins + ":" + durSecs);
       }
 
+      function updatePlayerSlider() {
+        var player = $("#player");
+        var slider = $("#playerSliderBar");
+        var duration = player.prop("duration");
+        var percentage;    
+    
+        if (!duration)
+          percentage = 0;
+        else
+          percentage = 100 / duration * player.prop("currentTime");
+    
+        slider.css("width", percentage + "%");
+    
+        if (!player.prop("ended") && !player.prop("paused"))
+          requestAnimationFrame(updatePlayerSlider);
+      }
       
       function playFromUrl(initial)
       {
@@ -154,6 +164,7 @@
 
       //player visjul updates
       $("#player").on("durationchange playing pause ended play timeupdate", updatePlayerVisuals);
+      $("#player").on("play", updatePlayerSlider);
 
       //player play/stop
       $("#playerPlayStop").click(function() {
