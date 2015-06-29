@@ -158,6 +158,8 @@ body {
     border-radius: 50%;
     -webkit-transition: background-color 200ms ease, -webkit-transform 700ms ease-in-out;
             transition: background-color 200ms ease, transform 700ms ease-in-out;
+    
+    cursor: pointer;
 }
 
 #playRandom:hover {
@@ -252,6 +254,7 @@ body {
     height: 60px;
 
     border-radius: 50%;
+    cursor: pointer;
 
     transition: background-color 200ms ease, transform 500ms ease;
 }
