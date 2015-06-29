@@ -54,11 +54,11 @@
       <div id="playerPlayStop" class="play"></div>
       <div id="playerSliderContainer">
         <div id="playerSampleInfo">
-          <div class="name">placeholder naampjes</div>
-          <div class="location">placeholder/location</div>
-          <div class="position">00:02 / 00:12</div>
+          <div class="name">no sample</div>
+          <div class="location"></div>
+          <div class="position">00:00 / 00:00</div>
         </div>
-        <input type="range" id="playerSlider">
+        <input type="range" id="playerSlider" value="0" step="0.001" disabled>
       </div>
       <audio id="player"></audio>
     </div>
@@ -72,76 +72,6 @@
           var randomIndex = Math.floor(Math.random() * this.length);  
           return jQuery(this[randomIndex]);
       };
-
-      var samples = <?php echo $samplesJson; ?>;
-
-      //player controls
-
-      //visjuls
-      $("#player").on("playing", function() {
-        $("#playerPlayStop").removeClass("play");
-        $("#playerPlayStop").addClass("stop");
-      });
-
-      $("#player").on("pause ended", function() {
-        $("#playerPlayStop").removeClass("stop");
-        $("#playerPlayStop").addClass("play");
-      });
-
-      //functions
-      $("#playerPlayStop").click(function() {
-        if ($(this).hasClass("play"))
-          $("#player").trigger("play");
-        else
-        {
-          $("#player").trigger("pause");
-          $("#player")[0].currentTime = 0;
-        }
-      });
-
-      //search
-      $("#searchInput").on("search input keyup", function(e) {
-        //only filter if there has been a change in query
-        filterSamples($(this).val());
-
-        //play first shown sample on enter
-        if (e.keyCode == 13)
-          $(".sample:visible").first().click();
-      });
-
-      //play random
-      $("#playRandom").click(function() {
-        $(".sample:visible").random().click();
-      });
-
-      function populateSampleContainer()
-      {
-        $("#samplesContainer").empty();
-
-        samples.forEach(function(sample) {
-          $("#samplesContainer").append(
-            '<div class="sample" data-file="' + encodeURI(sample.file) + '" data-id="' + sample.id + '" data-name="' + sample.name + '" data-location="' + sample.location + '">' +
-              "<div class='name'>" + sample.name + "</div>" +
-              "<div class='location'>" + sample.location + "</div>" +
-            "</div>");
-        });
-
-        //register for playback
-        $(".sample").click(function() {
-          var file = "samples/" + $(this).data("file");
-          var player = $("#player");
-
-          //dont change source if its the same, so it can be replayed instantly
-          if (player.attr("src") != file)
-            player.attr("src", file);
-          else
-            player[0].currentTime = 0;
-          
-          player.trigger("play");
-
-          history.pushState(null, "", $(this).data("id"));
-        });
-      }
 
       function filterSamples(query)
       {
@@ -161,8 +91,106 @@
           $("#samplesContainer").addClass("empty");          
       }
 
-      //initial fill
-      populateSampleContainer();
+      function updatePlayerVisuals()
+      {
+        var player = $("#player");
+        var slider = $("#playerSlider");
+        var button = $("#playerPlayStop");
+        var position = $("#playerSampleInfo .position");
+        var duration = player.prop("duration");
+
+        //to prevent NaN from displaying
+        if (!duration)
+          duration = 0;
+
+        //play/stop button
+        if (player.prop("ended") || player.prop("paused"))
+          button.addClass("play").removeClass("stop");
+        else
+          button.addClass("stop").removeClass("play");
+
+        //slider
+        slider.prop("max", duration);
+        slider.val(player.prop("currentTime"));
+
+        //position
+        var durMins = ("0" + Math.floor(duration / 60)).slice(-2);
+        var durSecs = ("0" + Math.floor(duration)).slice(-2);
+        var curMins = ("0" + Math.floor(player.prop("currentTime") / 60)).slice(-2);
+        var curSecs = ("0" + Math.floor(player.prop("currentTime"))).slice(-2);
+        position.text(curMins + ":" + curSecs + " / " + durMins + ":" + durSecs);
+      }
+
+      //player visjul updates
+      $("#player").on("durationchange playing pause ended play timeupdate", updatePlayerVisuals);
+
+      //player play/stop
+      $("#playerPlayStop").click(function() {
+        if ($(this).hasClass("play"))
+          $("#player").trigger("play");
+        else
+        {
+          $("#player").trigger("pause");
+          $("#player").prop("currentTime", 0);
+        }
+      });
+
+      //player seek
+      $("#playerSlider").change(function() {
+        console.log($(this).val());
+      })
+
+      //search
+      $("#searchInput").on("search input keyup", function(e) {
+        //only filter if there has been a change in query
+        filterSamples($(this).val());
+
+        //play first shown sample on enter
+        if (e.keyCode == 13)
+          $(".sample:visible").first().click();
+      });
+
+      //play random
+      $("#playRandom").click(function() {
+        $(".sample:visible").random().click();
+      });
+
+      //initials
+      var samples = <?php echo $samplesJson; ?>;
+
+      //populate sample container
+      $("#samplesContainer").empty();
+
+      samples.forEach(function(sample) {
+        $("#samplesContainer").append(
+          '<div class="sample" data-file="' + encodeURI(sample.file) + '" data-id="' + sample.id + '" data-name="' + sample.name + '" data-location="' + sample.location + '">' +
+            "<div class='name'>" + sample.name + "</div>" +
+            "<div class='location'>" + sample.location + "</div>" +
+          "</div>");
+      });
+
+      //register for playback
+      $(".sample").click(function() {
+        var sample = $(this);
+        var file = "samples/" + sample.data("file");
+        var player = $("#player");
+
+        //dont change source if its the same, so it can be replayed instantly
+        if (player.attr("src") != file)
+        {
+          player.attr("src", file);
+
+          //update player sample info
+          $("#playerSampleInfo .name").text(sample.data("name"));
+          $("#playerSampleInfo .location").text(sample.data("location"));
+        }
+        else
+          player[0].currentTime = 0;
+        
+        player.trigger("play");
+
+        history.pushState(null, "", $(this).data("id"));
+      });
 
       //alter query based on initial url
       var initialQuery = decodeURI(location.href.substring(location.href.lastIndexOf("/") + 1));

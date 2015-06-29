@@ -345,7 +345,7 @@ body {
 }
 
 #playerSlider:active::-webkit-slider-thumb {
-    transform: scale(2, 2);
+    /*transform: scale(2, 2); only if seeking is a thing*/
 }
 
 #playerSlider::-webkit-slider-runnable-track {      
