@@ -58,7 +58,7 @@
           <div class="location"></div>
           <div class="position">00:00 / 00:00</div>
         </div>
-        <input type="range" id="playerSlider" value="0" step="0.001" disabled>
+        <div id="playerSlider"><div id="playerSliderBar"></div></div>
       </div>
       <audio id="player"></audio>
     </div>
@@ -94,14 +94,17 @@
       function updatePlayerVisuals()
       {
         var player = $("#player");
-        var slider = $("#playerSlider");
+        var slider = $("#playerSliderBar");
         var button = $("#playerPlayStop");
         var position = $("#playerSampleInfo .position");
         var duration = player.prop("duration");
+        var percentage;
 
         //to prevent NaN from displaying
         if (!duration)
-          duration = 0;
+          duration = percentage = 0;
+        else
+          percentage = 100 / duration * player.prop("currentTime");
 
         //play/stop button
         if (player.prop("ended") || player.prop("paused"))
@@ -110,8 +113,7 @@
           button.addClass("stop").removeClass("play");
 
         //slider
-        slider.prop("max", duration);
-        slider.val(player.prop("currentTime"));
+        slider.css("width", percentage + "%");
 
         //position
         var durMins = ("0" + Math.floor(duration / 60)).slice(-2);
@@ -134,11 +136,6 @@
           $("#player").prop("currentTime", 0);
         }
       });
-
-      //player seek
-      $("#playerSlider").change(function() {
-        console.log($(this).val());
-      })
 
       //search
       $("#searchInput").on("search input keyup", function(e) {
