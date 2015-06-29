@@ -6,6 +6,11 @@
  
 html {
     height: 100%;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
  
 body {
@@ -366,11 +371,6 @@ body {
             justify-content: flex-start;
  
     padding: 10px;
-
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 #samplesContainer.empty {
