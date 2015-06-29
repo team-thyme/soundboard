@@ -115,9 +115,9 @@
 
         //position
         var durMins = ("0" + Math.floor(duration / 60)).slice(-2);
-        var durSecs = ("0" + Math.floor(duration)).slice(-2);
+        var durSecs = ("0" + Math.floor(duration % 60)).slice(-2);
         var curMins = ("0" + Math.floor(player.prop("currentTime") / 60)).slice(-2);
-        var curSecs = ("0" + Math.floor(player.prop("currentTime"))).slice(-2);
+        var curSecs = ("0" + Math.floor(player.prop("currentTime") % 60)).slice(-2);
         position.text(curMins + ":" + curSecs + " / " + durMins + ":" + durSecs);
       }
 
