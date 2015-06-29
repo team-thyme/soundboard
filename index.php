@@ -52,6 +52,14 @@
 
     <div id="playerContainer">
       <div id="playerPlayStop" class="play"></div>
+      <div id="playerSliderContainer">
+        <div id="playerSampleInfo">
+          <div class="name">placeholder naampjes</div>
+          <div class="location">placeholder/location</div>
+          <div class="position">00:02 / 00:12</div>
+        </div>
+        <input type="range" id="playerSlider">
+      </div>
       <audio id="player"></audio>
     </div>
 
