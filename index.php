@@ -83,9 +83,8 @@
 
           $(".sample").each(function () {
             $(this).toggle(
-              ($(this).data("file").toLowerCase().indexOf(query) >= 0) ||
-              ($(this).data("id").toLowerCase() == query)
-            );
+              $(this).data("file").toLowerCase().indexOf(query) >= 0 ||
+              $(this).data("id").toString().toLowerCase() == query);
           });
         }
 
