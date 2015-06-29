@@ -79,10 +79,14 @@
           $(".sample").show();
         else
         {
-          query = encodeURI(query.trim());
+          query = encodeURI(query.trim()).toLowerCase();
 
-          $('.sample:not([data-file*="' + query + '"])').hide();
-          $('.sample[data-file*="' + query + '"],.sample[data-id="' + query + '"]').show();
+          $(".sample").each(function () {
+            $(this).toggle(
+              ($(this).data("file").toLowerCase().indexOf(query) >= 0) ||
+              ($(this).data("id").toLowerCase() == query)
+            );
+          });
         }
 
         if ($(".sample:visible").length)
