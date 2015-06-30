@@ -224,6 +224,7 @@ body {
  
 #playerContainer {
     display: flex;
+    position: relative;
 
     -webkit-box-ordinal-group: 4;
     -webkit-order: 3;

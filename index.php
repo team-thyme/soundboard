@@ -229,12 +229,15 @@
           player[0].currentTime = 0;
         
         player.trigger("play");
-        
-        $("#playerContainer").addClass("disabled");
 
         //only push state if not the current one
         if (id != getIdFromUrl())
           history.pushState({ id: id }, "", id);
+      });
+
+      //enable controls on play
+      $("#player").on("play", function() {
+        $("#playerContainer").removeClass("disabled");
       });
 
       //play from url on popstate
