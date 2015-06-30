@@ -241,10 +241,22 @@ body {
     box-shadow: 0 0 20px rgba(0,0,0,0.1), 0 0 8px rgba(0,0,0,0.1);
     background: #444;
 }
- 
-#player {
+
+#playerContainer.disabled:before {
+    position: absolute;
+    content: "";
     width: 100%;
     height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+
+    background: #444;
+    opacity: 0.8;
+}
+
+#player {
+    display: none;
 }
 
 #playerPlayStop {
