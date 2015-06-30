@@ -351,6 +351,7 @@ body {
 #playerSliderBar {
     height: 100%;
     min-width: 6px;
+    width: 0%;
 
     border-radius: 3px;
     background: #fff;
