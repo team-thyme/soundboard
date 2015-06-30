@@ -50,7 +50,7 @@
       <?php echo $message; ?>
     </div>
 
-    <div id="playerContainer">
+    <div id="playerContainer" class="disabled">
       <div id="playerPlayStop" class="play"></div>
       <div id="playerSliderContainer">
         <div id="playerSampleInfo">
@@ -229,6 +229,8 @@
           player[0].currentTime = 0;
         
         player.trigger("play");
+        
+        $("#playerContainer").addClass("disabled");
 
         //only push state if not the current one
         if (id != getIdFromUrl())
