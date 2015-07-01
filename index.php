@@ -36,13 +36,13 @@
     <meta charset="utf-8"/>
     <title>Viller's Soundboard copyright no stealerinos</title>
     <link rel="stylesheet" href="styles.css" />
-    <meta name='viewport' content='initial-scale=1' />
+    <meta name="viewport" content="initial-scale=1" />
     <link rel="shortcut icon" href="favicon.ico" />
   </head>
 
   <body>
     <div id="searchContainer">
-      <input type="search" id="searchInput" placeholder="Cook, Search, Delicious!" autofocus/>
+      <input type="search" id="searchInput" placeholder="Cook, Search, Delicious!" autofocus />
       <div id="playRandom"></div>
     </div>
 
