@@ -61,7 +61,7 @@
         <div id="playerSlider"><div id="playerSliderBar"></div></div>
       </div>
       <div id="playerVolumeContainer">
-        <input type="range" id="playerVolume">
+        <input type="range" id="playerVolume" step="0.01" max="1">
         <div id="playerVolumeIcon"></div>
       </div>
       <audio id="player"></audio>
@@ -186,6 +186,11 @@
         }
       });
 
+      //volume change
+      $("#playerVolume").on("input", function() {
+        $("#player").prop("volume", $(this).val());
+      });
+
       //search; keyup accounts for backspace, search for pressing the 'x', and input for everything else
       $("#searchInput").on("search input keyup", function(e) {
         //only filter if there has been a change in query
@@ -253,6 +258,9 @@
 
       //initial play from url (replacing state if launched with argument)
       playFromUrl(true);
+
+      //initial volume
+      $("#playerVolume").val($("#player").prop("volume"));
     </script>
   </body>
 </html>
