@@ -215,7 +215,6 @@ body {
  
 #playerContainer {
     display: flex;
-    position: relative;
 
     -webkit-box-ordinal-group: 4;
     -webkit-order: 3;
@@ -234,19 +233,6 @@ body {
     background: #444;
 }
 
-#playerContainer.disabled:before {
-    position: absolute;
-    content: "";
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 10;
-
-    background: #444;
-    opacity: 0.8;
-}
-
 #player {
     display: none;
 }
@@ -256,9 +242,9 @@ body {
     margin-right: 15px;
     width: 60px;
     height: 60px;
+    cursor: pointer;
 
     border-radius: 50%;
-    cursor: pointer;
 
     transition: background-color 200ms ease, transform 500ms ease;
 }
@@ -306,11 +292,21 @@ body {
     border-width: 0 0 0 22px;
 }
 
+.disabled #playerPlayStop {
+    background-color: initial;
+    cursor: initial;
+    opacity: 0.3;
+}
+
 #playerSliderContainer {
     flex: 1 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+}
+
+.disabled #playerSliderContainer {
+  opacity: 0.3;
 }
 
 #playerSampleInfo > div {

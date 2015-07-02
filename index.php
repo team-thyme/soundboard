@@ -165,12 +165,15 @@
 
       //player play/stop
       $("#playerPlayStop").click(function() {
-        if ($(this).hasClass("play"))
-          $("#player").trigger("play");
-        else
+        if (!$(this).parent().hasClass("disabled"))
         {
-          $("#player").trigger("pause");
-          $("#player").prop("currentTime", 0);
+          if ($(this).hasClass("play"))
+            $("#player").trigger("play");
+          else
+          {
+            $("#player").trigger("pause");
+            $("#player").prop("currentTime", 0);
+          }
         }
       });
 
