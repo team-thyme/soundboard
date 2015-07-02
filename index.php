@@ -61,8 +61,8 @@
         <div id="playerSlider"><div id="playerSliderBar"></div></div>
       </div>
       <div id="playerVolumeContainer">
-        <input type="range" id="playerVolume" step="0.01" max="1">
         <div id="playerVolumeIcon"></div>
+        <input type="range" id="playerVolume" step="0.01" max="1">
       </div>
       <audio id="player"></audio>
     </div>
