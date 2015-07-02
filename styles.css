@@ -213,15 +213,6 @@ body {
             transform: rotate(135deg);
 }
  
-#message {
-    display: none;
-    margin: 15px 0 5px;
- 
-    text-align: center;
-    font-style: italic;
-    color: #AAA;
-}
- 
 #playerContainer {
     display: flex;
     position: relative;

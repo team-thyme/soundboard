@@ -1,12 +1,4 @@
 <?php
-  $messages = [
-    "All buttons are made out of solid gold!",
-    "Press enter to play the first sample!",
-    "Wave files were created by Microsoft and are therefore not supported by Internet Explorer!",
-    "<a href='https://docs.google.com/document/d/1qkIPAPU5D3eXhud6-7dDbTrve0oniytJuE1jpAvP9Gg/edit' target='_blank'>Contribute</a>"];
-
-  $message = $messages[mt_rand(0, count($messages) - 1)];
-
   $files = iterator_to_array(
     new RegexIterator(
       new RecursiveIteratorIterator(
@@ -20,7 +12,7 @@
   foreach($files as $file)
   {
     $pathInfo = pathinfo($file);
-    $name = preg_replace("/\d+$/", "", $pathInfo["filename"]);
+    $name = preg_replace("/[1-9]$/", "", $pathInfo["filename"]);
     $location = substr($pathInfo["dirname"], strpos($pathInfo["dirname"], "/") + 1);
     $file = substr($file, strpos($file, "/") + 1);
 
@@ -44,10 +36,6 @@
     <div id="searchContainer">
       <input type="search" id="searchInput" placeholder="Cook, Search, Delicious!" autofocus />
       <div id="playRandom"></div>
-    </div>
-
-    <div id="message">
-      <?php echo $message; ?>
     </div>
 
     <div id="playerContainer" class="disabled">
@@ -188,7 +176,9 @@
 
       //volume change
       $("#playerVolume").on("input", function() {
-        $("#player").prop("volume", $(this).val());
+        var volume = $(this).val();
+        $("#player").prop("volume", volume);
+        localStorage.soundboard_volume = volume;
       });
 
       //search; keyup accounts for backspace, search for pressing the 'x', and input for everything else
@@ -260,7 +250,11 @@
       playFromUrl(true);
 
       //initial volume
-      $("#playerVolume").val($("#player").prop("volume"));
+      var storedVolume = localStorage.soundboard_volume;
+      if (storedVolume == undefined)
+        storedVolume = 1;
+
+      $("#playerVolume").val(storedVolume).trigger("input");
     </script>
   </body>
 </html>
