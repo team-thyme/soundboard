@@ -358,6 +358,70 @@ body {
     background: #fff;
 }
 
+#playerVolumeContainer {
+    margin-left: 15px;
+    
+    display: flex;
+    align-items: center;
+}
+
+#playerVolumeContainer #playerVolume {
+    opacity: 0;
+    width: 0;
+
+    transition: all 200ms ease;
+}
+
+#playerVolumeContainer:hover #playerVolume {
+    opacity: 1;
+    width: 120px;
+    margin-right: 10px;
+}
+
+#playerVolumeIcon {
+    margin: 7px 18px 7px 10px;
+    width: 20px;
+    height: 12px;
+
+    background: #fff;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+#playerVolumeIcon:before,
+#playerVolumeIcon:after {
+    content: "";
+    display: block;
+    position: absolute;
+
+    width: 0;
+    height: 0;
+}
+
+#playerVolumeIcon:before {
+    margin-top: -7px;
+    margin-left: 2px;
+
+    height: 6px;
+
+    border-style: solid;
+    border-color: transparent #fff transparent transparent;
+    border-width: 10px 14px 10px 0px;
+}
+
+#playerVolumeIcon:after {    
+    margin-top: -9px;
+    margin-left: -4px;
+
+    width: 26px;
+    height: 24px;
+
+    border: 3px solid transparent;
+    border-right-color: #fff;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+}
+
 #samplesContainer {
     -webkit-box-ordinal-group: 3;
     -webkit-order: 2;
