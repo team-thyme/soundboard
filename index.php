@@ -13,7 +13,7 @@
         new RecursiveDirectoryIterator("samples")),
       "/\.(wav|mp3|ogg)$/"));
 
-  shuffle($files);
+  usort($files, function($file1, $file2) { return filemtime($file1) < filemtime($file2); });
 
   $samples = [];
 
@@ -185,9 +185,9 @@
         //only filter if there has been a change in query
         filterSamples($(this).val());
 
-        //play first shown sample on enter
+        //play random shown sample on enter
         if (e.keyCode == 13)
-          $(".sample:visible").first().click();
+          $(".sample:visible").random().click();
       });
 
       //play random
