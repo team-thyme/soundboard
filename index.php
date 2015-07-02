@@ -171,6 +171,8 @@
 
       //player visjul updates
       $("#player").on("durationchange playing pause ended play timeupdate", updatePlayerVisuals);
+
+      //start slider animation
       $("#player").on("play", updatePlayerSlider);
 
       //player play/stop
@@ -184,14 +186,14 @@
         }
       });
 
-      //search
+      //search; keyup accounts for backspace, search for pressing the 'x', and input for everything else
       $("#searchInput").on("search input keyup", function(e) {
         //only filter if there has been a change in query
         filterSamples($(this).val());
 
         //play random shown sample on enter
         if (e.keyCode == 13)
-          $(".sample:visible").random().click();
+          $(".sample:visible").first().click();
       });
 
       //play random
