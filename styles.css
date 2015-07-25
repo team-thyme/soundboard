@@ -154,7 +154,7 @@ body {
     display: block;
     width: 60px;
     height: 60px;
-    margin-left: 15px;
+    margin-right: 15px;
     border-radius: 50%;
     -webkit-transition: background-color 200ms ease, -webkit-transform 700ms ease-in-out;
             transition: background-color 200ms ease, transform 700ms ease-in-out;
@@ -217,9 +217,9 @@ body {
     display: flex;
 
     -webkit-box-ordinal-group: 4;
-    -webkit-order: 3;
-        -ms-flex-order: 3;
-            order: 3;
+    -webkit-order: 4;
+        -ms-flex-order: 4;
+            order: 4;
     z-index: 10;
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 auto;
@@ -527,4 +527,37 @@ body {
     opacity: 0.5;
     filter: alpha(opacity=50);
     font-size: 0.8em;
+}
+
+#contributionContainer {
+    display: flex;
+    order: 3;
+    border-width: 0;
+    flex: 1 1 auto;
+    display: none;
+}
+
+#contribute {
+    -webkit-box-flex: 0;
+        -webkit-flex: 0 0 auto;
+            -ms-flex: 0 0 auto;
+                flex: 0 0 auto;
+    position: relative;
+    display: block;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-left: 15px;
+    -webkit-transition: background-color 200ms ease, -webkit-transform 700ms ease-in-out;
+            transition: background-color 200ms ease, transform 700ms ease-in-out;
+    cursor: pointer;
+
+    text-align: center;
+    line-height: 60px;
+    font-size: 40px;
+    color: #fff;
+}
+
+#contribute:hover {
+    background-color: rgba(0,0,0,0.1);
 }

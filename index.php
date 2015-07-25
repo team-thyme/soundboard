@@ -12,7 +12,7 @@
   foreach($files as $file)
   {
     $pathInfo = pathinfo($file);
-    $name = preg_replace("/[1-9]$/", "", $pathInfo["filename"]);
+    $name = preg_replace("/([^0-9])[1-9]$/", "\\1", $pathInfo["filename"]);
     $location = substr($pathInfo["dirname"], strpos($pathInfo["dirname"], "/") + 1);
     $file = substr($file, strpos($file, "/") + 1);
 
@@ -34,8 +34,9 @@
 
   <body>
     <div id="searchContainer">
-      <input type="search" id="searchInput" placeholder="Cook, Search, Delicious!" autofocus />
       <div id="playRandom"></div>
+      <input type="search" id="searchInput" placeholder="Cook, Search, Delicious!" autofocus />
+      <div id="contribute">+</div>
     </div>
 
     <div id="playerContainer" class="disabled">
@@ -56,6 +57,8 @@
     </div>
 
     <div id="samplesContainer"></div>
+
+    <iframe id="contributionContainer"></iframe>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>
@@ -197,6 +200,22 @@
       //play random
       $("#playRandom").click(function() {
         $(".sample:visible").random().click();
+      });
+
+      //contribute button
+      $("#contribute").click(function() {
+        //set src here to prevent google from hogging all the resources
+        if (!$("#contributionContainer").attr("src"))
+          $("#contributionContainer").attr("src", "https://docs.google.com/document/d/1tDlWfX2TtczI5IHLmffY4LPya1J1Z9ZWHW4pYlD8toM/edit?usp=sharing");
+
+        $("#samplesContainer").toggle();
+        $("#contributionContainer").toggle();
+
+        //KEWN, I NEED A KEWN
+        if ($("#contributionContainer").is(":hidden")) 
+          $("#contribute").text("+");
+        else
+          $("#contribute").text("-");
       });
 
       //initials
