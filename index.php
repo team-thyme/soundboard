@@ -12,7 +12,7 @@
   foreach($files as $file)
   {
     $pathInfo = pathinfo($file);
-    $name = preg_replace("/([^0-9])[1-9]$/", "\\1", $pathInfo["filename"]);
+    $name = preg_replace("/([^\d])\d{0,2}$/", "\\1", $pathInfo["filename"]);
     $location = substr($pathInfo["dirname"], strpos($pathInfo["dirname"], "/") + 1);
     $file = substr($file, strpos($file, "/") + 1);
 
