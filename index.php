@@ -74,12 +74,12 @@
           $(".sample").show();
         else
         {
-          query = encodeURI(query.trim()).toLowerCase();
+          query = encodeURI(query.trim()).replace(/(%20|&)/g, ")(?=.*");
 
-          $(".sample").each(function () {
+          $(".sample").each(function() {
             $(this).toggle(
-              $(this).data("file").toLowerCase().indexOf(query) >= 0 ||
-              $(this).data("id").toString().toLowerCase() == query);
+              decodeURI($(this).data("file")).match(new RegExp("(?=.*" + query + ").+", "i")) != null ||
+              $(this).data("id") == query);
           });
         }
 
