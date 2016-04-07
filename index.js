@@ -10,7 +10,9 @@ $.fn.random = function() {
 
 function filterSamples(query)
 {
-	$("#searchInput").val(query);
+	if (!$("#searchInput").val()) {
+		$("#searchInput").val(query);
+	}
 
 	if (!query)
 		$(".sample").show();
