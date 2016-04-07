@@ -21,12 +21,12 @@
 
   $samplesJson = json_encode($samples);
 ?>
-
+<!-- if this doesn't work you're probably using an inferior browser -->
 <!doctype html>
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title>Viller's Soundboard copyright no stealerinos</title>
+    <title>More like musicboard, amirite?</title>
     <link rel="stylesheet" href="styles.css" />
     <meta name="viewport" content="initial-scale=1" />
     <link rel="shortcut icon" href="favicon.ico" />
@@ -35,7 +35,7 @@
   <body>
     <div id="searchContainer">
       <div id="playRandom"></div>
-      <input type="search" id="searchInput" placeholder="Cook, Search, Delicious!" autofocus />
+      <input type="search" id="searchInput" placeholder="Cook, Search, Delicious!" />
       <div id="contribute">+</div>
     </div>
 
@@ -64,29 +64,31 @@
     <script>
       //random element selection in jquery
       $.fn.random = function() {
-          var randomIndex = Math.floor(Math.random() * this.length);  
+          var randomIndex = Math.floor(Math.random() * this.length);
           return jQuery(this[randomIndex]);
       };
 
       function filterSamples(query)
       {
+        $("#searchInput").val(query);
+
         if (!query)
           $(".sample").show();
         else
         {
-          query = encodeURI(query.trim()).replace(/(%20|&)/g, ")(?=.*");
+          regexQuery = encodeURI(query.trim()).replace(/(%20|&)/g, ")(?=.*");
 
           $(".sample").each(function() {
             $(this).toggle(
-              decodeURI($(this).data("file")).match(new RegExp("(?=.*" + query + ").+", "i")) != null ||
-              $(this).data("id") == query);
+              decodeURI($(this).data("file")).match(new RegExp("(?=.*" + regexQuery + ").+", "i")) != null ||
+              $(this).data("id") == regexQuery);
           });
         }
 
         if ($(".sample:visible").length)
           $("#samplesContainer").removeClass("empty");
         else
-          $("#samplesContainer").addClass("empty");          
+          $("#samplesContainer").addClass("empty");
       }
 
       function updatePlayerVisuals()
@@ -119,45 +121,112 @@
         var player = $("#player");
         var slider = $("#playerSliderBar");
         var duration = player.prop("duration");
-        var percentage;    
-    
+        var percentage;
+
         if (!duration)
           percentage = 0;
         else
           percentage = 100 / duration * player.prop("currentTime");
-    
+
         slider.css("width", percentage + "%");
-    
+
         if (!player.prop("ended") && !player.prop("paused"))
           requestAnimationFrame(updatePlayerSlider);
       }
-      
-      function playFromUrl(initial)
+
+      function getQuery()
       {
-        var id = getIdFromUrl();
+        return decodeURI(location.href.substring(location.href.lastIndexOf("/") + 1));
+      }
 
-        //play if its a valid id
-        var matchedSamples = $('.sample[data-id="' + id + '"]');
-        if (matchedSamples.length)
+      function playSample(sampleElement)
+      {
+        var sample = $(sampleElement);
+        var file = "samples/" + sample.data("file");
+        var player = $("#player");
+        var id = $(sampleElement).data("id");
+
+        console.log("Playing " + id + ".");
+
+        //dont change source if its the same, so it can be replayed instantly
+        if (player.attr("src") != file)
         {
-          //add an empty state before playing, so that there can be returned to a no-sample point
-          if (initial)
-            history.replaceState(null, "", ".");
+          player.attr("src", file);
 
-          //trigger play
-          matchedSamples.random().click();
+          //update player sample info
+          $("#playerSampleInfo .name").text(sample.data("name"));
+          $("#playerSampleInfo .location").text(sample.data("location"));
         }
         else
-        {
-          //stop playing audio
-          $("#player").trigger("pause");
-          $("#player").prop("currentTime", 0);
+          player[0].currentTime = 0;
+
+        player.trigger("play");
+
+        if (history.state == undefined || history.state.id != id) {
+          console.log("Pushing state " + id + " to history.");
+          history.pushState({ id: id }, "", id);
         }
       }
 
-      function getIdFromUrl()
+      function playRandomSample(samples)
       {
-        return decodeURI(location.href.substring(location.href.lastIndexOf("/") + 1));
+        if (!samples) {
+          samples = $(".sample:visible");
+				}
+
+				if (!samples.length) {
+					ttsQuery();
+					return;
+				}
+
+        playSample(samples.random());
+      }
+
+			//load tts voices
+			var availableVoices = [];
+			var voicesInitialized = false;
+			speechSynthesis.onvoiceschanged = function() {
+				availableVoices = speechSynthesis.getVoices();
+				voicesInitialized = true;
+			};
+
+			/**
+			 * TTS's the query. Obviously in JP's language where possible.
+			 */
+			function ttsQuery(retries = 1) {
+				var query = $("#searchInput").val();
+
+				if (query) {
+					//wait till voices become available
+					if (!voicesInitialized && retries < 5) {
+						setTimeout(function() {
+							ttsQuery(++retries);
+						}, 200);
+						return;
+					}
+
+					var voice = availableVoices.find(function (voice) {
+						return voice.lang == "ja-JP";
+					});
+
+					//alright, you win. we'll use a random voice
+					if (!voice) {
+						voice = availableVoices[Math.floor(Math.random() * availableVoices.length)];
+					}
+
+					var utterance = new SpeechSynthesisUtterance();
+
+					utterance.text = query;
+					utterance.voice = voice;
+					speechSynthesis.speak(utterance);
+				}
+			}
+
+      function mute()
+      {
+        var player = $("#player");
+        player[0].pause();
+        player[0].currentTime = 0;
       }
 
       //player visjul updates
@@ -188,18 +257,25 @@
       });
 
       //search; keyup accounts for backspace, search for pressing the 'x', and input for everything else
-      $("#searchInput").on("search input keyup", function(e) {
+      $("#searchInput").on("search input keyup focus", function(e) {
         //only filter if there has been a change in query
         filterSamples($(this).val());
 
-        //play random shown sample on enter
-        if (e.keyCode == 13)
-          $(".sample:visible").first().click();
+        //play first shown sample on enter (or tts when there is no result)
+        if (e.keyCode == 13) {
+					var visibleSamples = $(".sample:visible");
+					if (visibleSamples.length) {
+          	playSample(visibleSamples.first());
+					}
+					else {
+						ttsQuery();
+					}
+				}
       });
 
       //play random
       $("#playRandom").click(function() {
-        $(".sample:visible").random().click();
+        playRandomSample();
       });
 
       //contribute button
@@ -212,7 +288,7 @@
         $("#contributionContainer").toggle();
 
         //KEWN, I NEED A KEWN
-        if ($("#contributionContainer").is(":hidden")) 
+        if ($("#contributionContainer").is(":hidden"))
           $("#contribute").text("+");
         else
           $("#contribute").text("-");
@@ -234,28 +310,7 @@
 
       //register for playback
       $(".sample").click(function() {
-        var sample = $(this);
-        var file = "samples/" + sample.data("file");
-        var player = $("#player");
-        var id = $(this).data("id");
-
-        //dont change source if its the same, so it can be replayed instantly
-        if (player.attr("src") != file)
-        {
-          player.attr("src", file);
-
-          //update player sample info
-          $("#playerSampleInfo .name").text(sample.data("name"));
-          $("#playerSampleInfo .location").text(sample.data("location"));
-        }
-        else
-          player[0].currentTime = 0;
-        
-        player.trigger("play");
-
-        //only push state if not the current one
-        if (id != getIdFromUrl())
-          history.pushState({ id: id }, "", id);
+        playSample(this);
       });
 
       //enable controls on play
@@ -265,13 +320,26 @@
 
       //play from url on popstate
       $(window).on("popstate", function(e) {
-        playFromUrl();
+        mute();
+
+        if (query = getQuery())
+        {
+          filterSamples(query);
+          playRandomSample();
+        }
       });
 
-      //initial play from url (replacing state if launched with argument)
-      playFromUrl(true);
+      //initial play from url
+      if (query = getQuery())
+      {
+        //add an empty state before initial play, so that there can be returned to a no-sample point
+        history.replaceState(null, "", ".");
 
-      //initial volume
+        filterSamples(query);
+        playRandomSample();
+      }
+
+      //initial (stored) volume
       var storedVolume = localStorage.soundboard_volume;
       if (storedVolume == undefined)
         storedVolume = 1;

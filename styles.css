@@ -3,7 +3,7 @@
 * {
     box-sizing: border-box;
 }
- 
+
 html {
     height: 100%;
 
@@ -12,7 +12,7 @@ html {
     -ms-user-select: none;
     user-select: none;
 }
- 
+
 body {
     display: -webkit-box;
     display: -webkit-flex;
@@ -23,15 +23,15 @@ body {
     -webkit-flex-direction: column;
         -ms-flex-direction: column;
             flex-direction: column;
- 
+
     height: 100%;
     overflow: hidden;
     margin: 0;
- 
+
     font: 16px 'Roboto';
     background-color: #EEE;
 }
- 
+
 #searchContainer {
     display: -webkit-box;
     display: -webkit-flex;
@@ -47,99 +47,99 @@ body {
             flex: 0 0 auto;
     padding: 15px;
     z-index: 10;
- 
+
     background-color: #4CAF50;
     box-shadow: 0 3px 15px rgba(0,0,0,0.2), 0 0 5px rgba(0,0,0,0.3);
 }
- 
+
 #searchInput {
     width: 100%;
     height: 60px;
     padding: 20px;
- 
+
     font: inherit;
     color: #FFF;
- 
+
     border: 0;
     border-radius: 3px;
     background-color: rgba(0,0,0,0.1);
- 
+
     -webkit-transition: box-shadow 300ms ease, background-color 300ms ease;
             transition: box-shadow 300ms ease, background-color 300ms ease;
 }
- 
+
 #searchInput::-webkit-input-placeholder {
     color: rgba(255,255,255,0.6);
     -webkit-transition: color 300ms ease;
             transition: color 300ms ease;
 }
- 
+
 #searchInput::-moz-placeholder {
     color: rgba(255,255,255,0.6);
     transition: color 300ms ease;
 }
- 
+
 #searchInput:-ms-input-placeholder {
     color: rgba(255,255,255,0.6);
     transition: color 300ms ease;
 }
- 
+
 #searchInput::placeholder {
     color: rgba(255,255,255,0.6);
     -webkit-transition: color 300ms ease;
             transition: color 300ms ease;
 }
- 
+
 #searchInput:focus {
     outline: 0;
     color: #222;
     background-color: #FFF;
     box-shadow: 0 2px 7px 0 rgba(0,0,0,0.3), 0 0 10px rgba(0,0,0,0.1);
 }
- 
+
 #searchInput:focus::-webkit-input-placeholder {
     color: rgba(0,0,0,0.5);
 }
- 
+
 #searchInput:focus::-moz-placeholder {
     color: rgba(0,0,0,0.5);
 }
- 
+
 #searchInput:focus:-ms-input-placeholder {
     color: rgba(0,0,0,0.5);
 }
- 
+
 #searchInput:focus::placeholder {
     color: rgba(0,0,0,0.5);
 }
- 
+
 #searchInput::-webkit-search-cancel-button {
     -webkit-appearance: none;
             appearance: none;
- 
+
     width: 34px;
     height: 34px;
     border-radius: 50%;;
     text-align: center;
- 
+
     color: rgba(0,0,0,0.4);
     background-color: rgba(0,0,0,0);
- 
+
     -webkit-transition: background-color 200ms ease, color 200ms ease;
             transition: background-color 200ms ease, color 200ms ease;
 }
- 
+
 #searchInput::-webkit-search-cancel-button:after {
     content: '×';
     font-size: 27px;
     line-height: 36px
 }
- 
+
 #searchInput::-webkit-search-cancel-button:hover {
     color: rgba(0,0,0,0.6);
     background-color: rgba(0,0,0,0.1);
 }
- 
+
 #searchInput::-webkit-search-cancel-button:active {
     color: rgba(0,0,0,0.7);
     background-color: rgba(0,0,0,0.2);
@@ -158,7 +158,7 @@ body {
     border-radius: 50%;
     -webkit-transition: background-color 200ms ease, -webkit-transform 700ms ease-in-out;
             transition: background-color 200ms ease, transform 700ms ease-in-out;
-    
+
     cursor: pointer;
 }
 
@@ -169,10 +169,10 @@ body {
 #playRandom:active {
     background-color: rgba(0,0,0,0.2);
 
-    -webkit-transform: rotate(-720deg);  
+    -webkit-transform: rotate(-720deg);
         -ms-transform: rotate(-720deg);
             transform: rotate(-720deg);
-    
+
     -webkit-transition: background-color 200ms ease;
             transition: background-color 200ms ease;
 }
@@ -212,7 +212,7 @@ body {
         -ms-transform: rotate(135deg);
             transform: rotate(135deg);
 }
- 
+
 #playerContainer {
     display: flex;
 
@@ -225,10 +225,10 @@ body {
     -webkit-flex: 0 0 auto;
         -ms-flex: 0 0 auto;
             flex: 0 0 auto;
- 
+
     width: 100%;
     padding: 15px;
- 
+
     box-shadow: 0 0 20px rgba(0,0,0,0.1), 0 0 8px rgba(0,0,0,0.1);
     background: #444;
 }
@@ -269,7 +269,7 @@ body {
     content: "";
     display: block;
     width: 0;
-    
+
     border-style: solid;
     border-color: transparent transparent transparent #FFF;
 
@@ -279,7 +279,7 @@ body {
 #playerPlayStop.play:before {
     margin-top: 17px;
     margin-left: 22px;
-    
+
     height: 0;
     border-width: 13px 0 13px 22px;
 }
@@ -287,7 +287,7 @@ body {
 #playerPlayStop.stop:before {
     margin-top: 19px;
     margin-left: 19px;
-    
+
     height: 22px;
     border-width: 0 0 0 22px;
 }
@@ -347,7 +347,7 @@ body {
 
 #playerVolumeContainer {
     margin-left: 15px;
-    
+
     display: flex;
     align-items: center;
 
@@ -413,7 +413,7 @@ body {
     box-shadow: 3px 0 0 0 #555;
 }
 
-#playerVolumeIcon:after {    
+#playerVolumeIcon:after {
     margin-top: -7px;
     margin-left: 2px;
 
@@ -454,7 +454,7 @@ body {
     -webkit-justify-content: flex-start;
         -ms-flex-pack: start;
             justify-content: flex-start;
- 
+
     padding: 10px;
 }
 
@@ -495,19 +495,19 @@ body {
     -webkit-flex: 1 0 auto;
         -ms-flex: 1 0 auto;
             flex: 1 0 auto;
- 
+
     margin: 5px;
     padding: 8px 10px;
     max-width: calc(100% - 10px);
- 
+
     text-align: center;
     cursor: pointer;
- 
+
     color: #222;
     border-radius: 3px;
     background-color: #FFF;
     box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 0 5px rgba(0,0,0,0.1);
-  
+
     -webkit-transition: box-shadow 300ms ease, background-color 300ms ease;
             transition: box-shadow 300ms ease, background-color 300ms ease;
 }
@@ -560,4 +560,25 @@ body {
 
 #contribute:hover {
     background-color: rgba(0,0,0,0.1);
+}
+
+#playerSlider {
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+#playerSlider:focus {
+  outline: none;
+}
+
+#playerSlider::-webkit-slider-runnable-track {
+}
+
+#playerSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border-radius: 50%;
+
 }
