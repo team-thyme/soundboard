@@ -88,6 +88,30 @@ function playSample(sampleElement)
 	var player = $("#player");
 	var id = $(sampleElement).data("id");
 
+	//create a new audio element to play if the current one is still playing
+	if (!player.prop("paused")) {
+		var newPlayer = $("<audio id='player'></audio>");
+		$("#playerContainer").append(newPlayer);
+
+		//set previous player to destroy itself when it's done
+		player.on("ended" , function() {
+			$(this).remove();
+		});
+
+		player.removeAttr("id");
+
+		player.off("durationchange playing pause ended play timeupdate", updatePlayerVisuals);
+		//we don't need to unbind the slider animation, as it will update to the right player each frame
+
+		player = newPlayer;
+
+		//player visjul updates
+		player.on("durationchange playing pause ended play timeupdate", updatePlayerVisuals);
+
+		//start slider animation
+		player.on("play", updatePlayerSlider);
+	}
+
 	console.log("Playing " + id + ".");
 
 	//dont change source if its the same, so it can be replayed instantly
