@@ -97,7 +97,8 @@ function playSample(sampleElement)
 
 	//create a new audio element to play if the current one is still playing
 	if (!player.prop("paused")) {
-		var newPlayer = $("<audio id='player'></audio>");
+		var newPlayer = player.clone();
+		newPlayer.removeProp("id").prop("volume", player.prop("volume"));
 		$("#playerContainer").append(newPlayer);
 
 		//set previous player to destroy itself when it's done
