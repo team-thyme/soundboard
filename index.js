@@ -104,7 +104,7 @@ function playSample(sampleElement)
 
 	player.trigger("play");
 
-	if (history.state === undefined || history.state.id != id) {
+	if (history.state === null || history.state.id != id) {
 		console.log("Pushing state " + id + " to history.");
 		history.pushState({ id: id }, "", id);
 	}
