@@ -46,10 +46,17 @@ function updatePlayerVisuals()
 		duration = 0;
 
 	//play/stop button
-	if (player.prop("ended") || player.prop("paused"))
-		button.addClass("play").removeClass("stop");
-	else
+	var players = $("audio");
+	var playing = false;
+	players.each(function() {
+		if (!$(this).prop("paused"))
+			playing = true;
+	});
+
+	if (playing)
 		button.addClass("stop").removeClass("play");
+	else
+		button.addClass("play").removeClass("stop");
 
 	//position
 	var durMins = ("0" + Math.floor(duration / 60)).slice(-2);
@@ -94,13 +101,13 @@ function playSample(sampleElement)
 		$("#playerContainer").append(newPlayer);
 
 		//set previous player to destroy itself when it's done
-		player.on("ended" , function() {
+		player.on("pause" , function() {
 			$(this).remove();
 		});
 
 		player.removeAttr("id");
 
-		player.off("durationchange playing pause ended play timeupdate", updatePlayerVisuals);
+		//player.off("durationchange playing pause ended play timeupdate", updatePlayerVisuals);
 		//we don't need to unbind the slider animation, as it will update to the right player each frame
 
 		player = newPlayer;
@@ -209,8 +216,9 @@ $("#playerPlayStop").click(function() {
 			$("#player").trigger("play");
 		else
 		{
-			$("#player").trigger("pause");
-			$("#player").prop("currentTime", 0);
+			//stop all players
+			$("audio:not(#player)").remove()
+			$("#player").trigger("pause").prop("currentTime", 0);
 		}
 	}
 });
