@@ -2,6 +2,15 @@ if (typeof samples !== "object") {
 	throw "Variable \"samples\" must be defined before running this script!";
 }
 
+var pressedKeys = [];
+
+$(document).on("keydown", function(event) {
+	pressedKeys[event.which] = true;
+});
+$(document).on("keyup", function(event) {
+	pressedKeys[event.which] = false;
+});
+
 //random element selection in jquery
 $.fn.random = function() {
 		var randomIndex = Math.floor(Math.random() * this.length);
@@ -95,8 +104,8 @@ function playSample(sampleElement)
 	var player = $("#player");
 	var id = $(sampleElement).data("id");
 
-	//create a new audio element to play if the current one is still playing
-	if (!player.prop("paused")) {
+	//create a new audio element to play if the current one is still playing (and shift is held down)
+	if (pressedKeys[16] && !player.prop("paused")) {
 		var newPlayer = player.clone();
 		newPlayer.removeProp("id").prop("volume", player.prop("volume"));
 		$("#playerContainer").append(newPlayer);
