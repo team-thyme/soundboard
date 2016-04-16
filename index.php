@@ -1,4 +1,5 @@
 <?php
+	//create list of samples
   $files = iterator_to_array(
     new RegexIterator(
       new RecursiveIteratorIterator(
@@ -20,13 +21,34 @@
   }
 
   $samplesJson = json_encode($samples);
+
+	//create random page title
+	$boardNames = [
+		"music",
+		"spam",
+		"crack",
+		"shit",
+		"originality"
+	];
+
+	$postNames  = [
+		"amirite",
+		"correct",
+		"no",
+		"you see",
+		"eh",
+		"hmm"
+	];
+
+	$title = "More like " . $boardNames[mt_rand(0, count($boardNames) - 1)] .
+		"board, " . $postNames[mt_rand(0, count($postNames) - 1)]	. "?";
 ?>
 <!-- if this doesn't work you're probably using an inferior browser -->
 <!doctype html>
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title>More like musicboard, amirite?</title>
+    <title><?php echo $title ?></title>
     <link rel="stylesheet" href="styles.css" />
     <meta name="viewport" content="initial-scale=1" />
     <link rel="shortcut icon" href="favicon.ico" />
