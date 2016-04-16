@@ -10,11 +10,12 @@
   $samples = [];
 
   // Whats a Villermen app without some randomness
-  $boardNames = ["musicboard", "spamboard", "crackboard", "shitboard", "originalityboard"];
-  $postNames = ["amirite", "no", "ya see", "eh", "hm", "hmm", "hmmm", "hmmmm"];
+  $boardNames = ["music", "spam", "crack", "shit", "originality"];
+  $postNames  = ["amirite", "correct", "no", "noh", "ya see", "you see",
+                 "u c", "eh", "hm", "hmm", "hmmm", "hmmmm", "hmmmmm", "hmmmmmm"];
   $title = "More like " 
     . $boardNames[rand(0, count($boardNames) - 1)] 
-    . ", " 
+    . "board, " 
     . $postNames[rand(0, count($postNames) - 1)] 
     . "?";
 
