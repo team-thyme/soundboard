@@ -9,6 +9,16 @@
 
   $samples = [];
 
+  // Whats a Villermen app without some randomness
+  $boardNames = ["music", "spam", "crack", "shit", "originality"];
+  $postNames  = ["amirite", "correct", "no", "noh", "ya see", "you see",
+                 "u c", "eh", "hm", "hmm", "hmmm", "hmmmm", "hmmmmm", "hmmmmmm"];
+  $title = "More like " 
+    . $boardNames[rand(0, count($boardNames) - 1)] 
+    . "board, " 
+    . $postNames[rand(0, count($postNames) - 1)] 
+    . "?";
+
   foreach($files as $file)
   {
     $pathInfo = pathinfo($file);
@@ -26,7 +36,7 @@
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title>More like musicboard, amirite?</title>
+    <title><?php echo $title ?></title>
     <link rel="stylesheet" href="styles.css" />
     <meta name="viewport" content="initial-scale=1" />
     <link rel="shortcut icon" href="favicon.ico" />
