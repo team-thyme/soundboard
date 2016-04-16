@@ -12,9 +12,16 @@
 
   foreach($files as $file)
   {
+		//windows ¯\_(ツ)_/¯
+		$file = str_replace("\\", "/", $file);
+
     $pathInfo = pathinfo($file);
     $name = preg_replace("/([^\d])\d{0,2}$/", "\\1", $pathInfo["filename"]);
-    $location = substr($pathInfo["dirname"], strpos($pathInfo["dirname"], "/") + 1);
+
+		//remove first directory from path
+		$dirChain = explode("/", $pathInfo["dirname"]);
+		unset($dirChain[0]);
+    $location = implode("/", $dirChain);
     $file = substr($file, strpos($file, "/") + 1);
 
     $samples[] = (object)[ "file" => (string)$file , "name" => $name, "id" => hash("crc32", $name), "location" => $location ];
