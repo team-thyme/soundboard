@@ -285,7 +285,7 @@ samples.forEach(function(sample) {
 	$("#samplesContainer").append(
 		'<div class="sample" data-file="' + encodeURI(sample.file) + '" data-id="' + sample.id + '" data-name="' + sample.name + '" data-location="' + sample.location + '">' +
 			"<div class='name'>" + sample.name + "</div>" +
-			"<div class='location'>" + sample.location + "</div>" +
+			"<div class='location'>" + (sample.location || "&nbsp;") + "</div>" +
 		"</div>");
 });
 
