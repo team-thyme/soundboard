@@ -166,20 +166,27 @@ function playRandomSample(samples)
 }
 
 //load tts voices
+var speechSupported = "speechSynthesis" in window;
 var availableVoices = [];
 var voicesInitialized = false;
-speechSynthesis.onvoiceschanged = function() {
-	availableVoices = speechSynthesis.getVoices();
-	voicesInitialized = true;
-};
+if (speechSupported) {
+	speechSynthesis.onvoiceschanged = function() {
+		availableVoices = speechSynthesis.getVoices();
+		voicesInitialized = true;
+	};
+}
 
 /**
  * TTS's the query. Obviously in JP's language where possible.
  */
-function ttsQuery(retries = 1) {
+function ttsQuery(retries) {
+	if (!retries) {
+		retries = 0;
+	}
+
 	var query = $("#searchInput").val();
 
-	if (query) {
+	if (query && speechSupported) {
 		//wait till voices become available
 		if (!voicesInitialized && retries < 5) {
 			setTimeout(function() {
