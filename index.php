@@ -1,4 +1,5 @@
 <?php
+	//create list of samples
   $files = iterator_to_array(
     new RegexIterator(
       new RecursiveIteratorIterator(
@@ -8,16 +9,6 @@
   usort($files, function($file1, $file2) { return filemtime($file1) < filemtime($file2); });
 
   $samples = [];
-
-  // Whats a Villermen app without some randomness
-  $boardNames = ["music", "spam", "crack", "shit", "originality"];
-  $postNames  = ["amirite", "correct", "no", "noh", "ya see", "you see",
-                 "u c", "eh", "hm", "hmm", "hmmm", "hmmmm", "hmmmmm", "hmmmmmm"];
-  $title = "More like " 
-    . $boardNames[rand(0, count($boardNames) - 1)] 
-    . "board, " 
-    . $postNames[rand(0, count($postNames) - 1)] 
-    . "?";
 
   foreach($files as $file)
   {
@@ -30,6 +21,27 @@
   }
 
   $samplesJson = json_encode($samples);
+
+	//create random page title
+	$boardNames = [
+		"music",
+		"spam",
+		"crack",
+		"shit",
+		"originality"
+	];
+
+	$postNames  = [
+		"amirite",
+		"correct",
+		"no",
+		"you see",
+		"eh",
+		"hmm"
+	];
+
+	$title = "More like " . $boardNames[mt_rand(0, count($boardNames) - 1)] .
+		"board, " . $postNames[mt_rand(0, count($postNames) - 1)]	. "?";
 ?>
 <!-- if this doesn't work you're probably using an inferior browser -->
 <!doctype html>
