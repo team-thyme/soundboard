@@ -6,7 +6,20 @@
         new RecursiveDirectoryIterator("samples")),
       "/\.(wav|mp3|ogg)$/"));
 
-  usort($files, function($file1, $file2) { return filemtime($file1) < filemtime($file2); });
+	//sort by time modified when it is within the last two weeks
+	$sortLimit = time() - 14 * 24 * 60 * 60;
+
+  usort($files, function($file1, $file2) use ($sortLimit) {
+		$mtime1 = filemtime($file1);
+		$mtime2 = filemtime($file2);
+
+		if ($mtime1 > $sortLimit || $mtime2 > $sortLimit)
+		{
+			return $mtime2 - $mtime1;
+		}
+
+		return 2 * mt_rand(0, 1) - 1;
+	});
 
   $samples = [];
 
