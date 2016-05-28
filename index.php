@@ -63,21 +63,24 @@
   $title = "More like " . $boardNames[mt_rand(0, count($boardNames) - 1)] .
     "board, " . $postNames[mt_rand(0, count($postNames) - 1)]	. "?";
 ?>
-<!-- if this doesn't work you're probably using an inferior browser -->
+<!-- If this doesn't work you're probably using an inferior browser. -->
 <!doctype html>
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title><?php echo $title ?></title>
-    <link rel="stylesheet" href="styles.css" />
     <meta name="viewport" content="initial-scale=1" />
+
+    <title><?php echo $title ?></title>
+
+    <link rel="stylesheet" href="styles.css" />
     <link rel="shortcut icon" href="favicon.ico" />
+
     <script>
-      //set samples for the script
-      var samples = <?php echo $samplesJson; ?>;
+      // Set samples for the script
+      var samples = <?php echo $samplesJson ?>;
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js" defer></script>
-    <script src="index.js" defer /></script>
+    <script src="index.js" defer></script>
   </head>
 
   <body>
