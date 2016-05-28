@@ -7,7 +7,7 @@
 
     <title><?php echo $title ?></title>
 
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="build/style.css" />
     <link rel="shortcut icon" href="favicon.ico" />
 
     <script>

@@ -3,6 +3,8 @@
 *.wav
 *.mp3
 
+public/build/
+
 # IntellIJ
 .idea/
 
