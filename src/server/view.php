@@ -12,10 +12,9 @@
 
     <script>
       // Set samples for the script
-      var samples = <?php echo json_encode($samples) ?>;
+      window.SAMPLES = <?php echo json_encode($samples) ?>;
     </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js" defer></script>
-    <script src="index.js" defer></script>
+    <script src="build/script.js" defer></script>
   </head>
 
   <body>

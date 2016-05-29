@@ -1,12 +1,22 @@
 import gulp from 'gulp';
 import { argv } from 'yargs';
 import { spawn } from 'child_process';
+
 import sass from 'gulp-sass';
 import postcss from 'gulp-postcss';
 import rename from 'gulp-rename';
+import gulpif from 'gulp-if';
+import { log, colors } from 'gulp-util';
+
+import browserify from 'browserify';
+import babelify from 'babelify';
+import watchify from 'watchify';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import del from 'del';
+import sourceStream from 'vinyl-source-stream';
+import buffer from 'vinyl-buffer';
+import uglify from 'gulp-uglify';
 
 const buildDir = `${__dirname}/public/build`;
 
@@ -36,7 +46,7 @@ gulp.task('php-server', (callback) => {
 gulp.task('clean:styles', () => del([`${buildDir}/**/*.css`]));
 
 gulp.task('build:styles', ['clean:styles'], () => {
-  const { compress = false } = argv;
+  const { compress = true } = argv;
 
   const processors = [
     autoprefixer({ browsers: ['last 1 version'] }),
@@ -55,4 +65,43 @@ gulp.task('build:styles', ['clean:styles'], () => {
 
 gulp.task('watch:styles', () => {
   gulp.watch('./src/client/styles/**/*.scss', ['build:styles']);
+});
+
+gulp.task('clean:scripts', () => del([`${buildDir}/**/*.js`]));
+
+function bundle(bundler) {
+  const { compress = true } = argv;
+
+  log('[browserify] Bundle start');
+
+  return bundler.bundle(() => log('[browserify] Bundle completed'))
+    .pipe(sourceStream('main.js'))
+    .pipe(buffer())
+    .pipe(gulpif(compress, uglify()))
+    .pipe(rename('script.js'))
+    .pipe(gulp.dest(buildDir));
+}
+
+gulp.task('build:scripts', ['clean:scripts'], () => {
+  const options = {
+    entries: ['./src/client/scripts/main.js'],
+  };
+
+  const bundler = browserify(options)
+    .transform(babelify);
+
+  return bundle(bundler);
+});
+
+gulp.task('watch:scripts', (callback) => {
+  const options = Object.assign({}, watchify.args, {
+    entries: ['./src/client/scripts/main.js'],
+  });
+
+  const bundler = browserify(options)
+    .transform(babelify)
+    .plugin(watchify);
+
+  bundler.on('update', () => bundle(bundler));
+  bundle(bundler);
 });
