@@ -76,14 +76,14 @@ export default class Sample {
   bindEvents() {
     const { $sample } = this;
 
-    // Preload sound when the user hovers over the sample for more than 100ms
+    // Preload sound when the user hovers over the sample for more than 150ms
     let hoverTimer;
 
     $sample.on('mouseenter', () => {
       if (this.howl.state() === 'unloaded') {
         hoverTimer = setTimeout(() => {
           this.howl.load();
-        }, 100);
+        }, 150);
       }
     });
 
