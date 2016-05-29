@@ -66,7 +66,7 @@ gulp.task('build:styles', ['clean:styles'], () => {
     .pipe(gulp.dest(buildDir));
 });
 
-gulp.task('watch:styles', () => {
+gulp.task('watch:styles', (callback) => {
   gulp.watch('./src/client/styles/**/*.scss', ['build:styles']);
 });
 
