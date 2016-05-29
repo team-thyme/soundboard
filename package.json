@@ -2,8 +2,11 @@
   "name": "soundboard",
   "version": "1.0.0",
   "description": "Web-based soundboard",
-  "homepage": "http://viller.men/soundboard",
+  "homepage": "https://viller.men/soundboard",
   "private": true,
+  "scripts": {
+    "postinstall": "gulp build"
+  },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
     "babel-core": "^6.9.0",
