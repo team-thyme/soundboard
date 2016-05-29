@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import { Howl } from 'howler';
 
+const playing = [];
+
 export default class Sample {
 
   constructor({ id, file, name, location }) {
@@ -37,7 +39,14 @@ export default class Sample {
     });
 
     howl.on('play', () => {
+      playing.push(howl);
+      this.$sample.addClass('sample--playing');
       requestAnimationFrame(this.boundProgressStep);
+    });
+
+    howl.on('stop', () => {
+      playing.splice(playing.indexOf(howl));
+      this.$sample.removeClass('sample--playing');
     });
   }
 
@@ -90,7 +99,13 @@ export default class Sample {
     });
 
     // Play the sound on click
-    $sample.on('click', () => {
+    $sample.on('click', (e) => {
+      // Stop all other playing sounds unless the shift key was pressed
+      if (!e.shiftKey) {
+        playing.forEach((howl) => howl.stop());
+        playing.length = 0;
+      }
+
       this.howl.play();
     });
   }
