@@ -43,6 +43,9 @@ gulp.task('php-server', (callback) => {
   });
 });
 
+gulp.task('build', ['build:scripts', 'build:styles']);
+gulp.task('watch', ['watch:scripts', 'watch:styles']);
+
 gulp.task('clean:styles', () => del([`${buildDir}/**/*.css`]));
 
 gulp.task('build:styles', ['clean:styles'], () => {
@@ -102,6 +105,9 @@ gulp.task('watch:scripts', (callback) => {
     .transform(babelify)
     .plugin(watchify);
 
-  bundler.on('update', () => bundle(bundler));
+  bundler.on('update', () => {
+    log('[watch:scripts] Scripts changed, starting build');
+    bundle(bundler);
+  });
   bundle(bundler);
 });
