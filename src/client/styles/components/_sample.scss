@@ -8,12 +8,17 @@
 
   color: $color-text-default;
   background: $color-card;
+  border-radius: 2px;
 
   cursor: pointer;
   transition: background 150ms ease;
 
   &:hover {
     background: lighten($color-card, 5%);
+  }
+
+  &:active {
+    background: lighten($color-card, 10%);
   }
 }
 
@@ -22,7 +27,11 @@
   text-shadow: 0 1px 1px rgba(0,0,0,0.3);
 
   &:hover {
-    background: lighten($color-primary, 5%);
+    background: lighten($color-primary, 2%);
+  }
+
+  &:active {
+    background: lighten($color-primary, 4%);
   }
 }
 
