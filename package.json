@@ -24,6 +24,7 @@
     "gulp": "^3.9.1",
     "gulp-cli": "^1.2.1",
     "gulp-if": "^2.0.1",
+    "gulp-livereload": "^3.8.1",
     "gulp-postcss": "^6.1.1",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.1",

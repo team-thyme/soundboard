@@ -7,6 +7,7 @@ import postcss from 'gulp-postcss';
 import rename from 'gulp-rename';
 import gulpif from 'gulp-if';
 import { log, colors } from 'gulp-util';
+import gulpLivereload from 'gulp-livereload';
 
 import browserify from 'browserify';
 import babelify from 'babelify';
@@ -49,7 +50,7 @@ gulp.task('watch', ['watch:scripts', 'watch:styles']);
 gulp.task('clean:styles', () => del([`${buildDir}/**/*.css`]));
 
 gulp.task('build:styles', ['clean:styles'], () => {
-  const { compress = true } = argv;
+  const { compress = true, livereload } = argv;
 
   const processors = [
     autoprefixer({ browsers: ['last 1 version'] }),
@@ -63,17 +64,24 @@ gulp.task('build:styles', ['clean:styles'], () => {
     .pipe(sass().on('error', sass.logError))
     .pipe(postcss(processors))
     .pipe(rename('style.css'))
-    .pipe(gulp.dest(buildDir));
+    .pipe(gulp.dest(buildDir))
+    .pipe(gulpif(livereload, gulpLivereload()));
 });
 
 gulp.task('watch:styles', (callback) => {
+  const { livereload = false } = argv;
+
+  if (livereload) {
+    gulpLivereload.listen();
+  }
+
   gulp.watch('./src/client/styles/**/*.scss', ['build:styles']);
 });
 
 gulp.task('clean:scripts', () => del([`${buildDir}/**/*.js`]));
 
 function bundle(bundler) {
-  const { compress = true } = argv;
+  const { compress = true, livereload = false } = argv;
 
   log('[browserify] Bundle start');
 
@@ -82,7 +90,8 @@ function bundle(bundler) {
     .pipe(buffer())
     .pipe(gulpif(compress, uglify()))
     .pipe(rename('script.js'))
-    .pipe(gulp.dest(buildDir));
+    .pipe(gulp.dest(buildDir))
+    .pipe(gulpif(livereload, gulpLivereload()));
 }
 
 gulp.task('build:scripts', ['clean:scripts'], () => {
@@ -97,6 +106,12 @@ gulp.task('build:scripts', ['clean:scripts'], () => {
 });
 
 gulp.task('watch:scripts', (callback) => {
+  const { livereload = false } = argv;
+
+  if (livereload) {
+    gulpLivereload.listen();
+  }
+
   const options = Object.assign({}, watchify.args, {
     entries: ['./src/client/scripts/main.js'],
   });
