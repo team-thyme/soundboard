@@ -4,5 +4,14 @@
   padding: $spacing-base / 2;
   flex-direction: row;
   flex-wrap: wrap;
+
+  &::after {
+    content: '';
+    flex: 9999 0 auto;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
 }
 
