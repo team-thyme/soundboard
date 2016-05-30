@@ -48,6 +48,9 @@ export default class Sample {
       playing.splice(playing.indexOf(howl));
       this.$sample.removeClass('sample--playing');
     });
+    howl.on('end', () => {
+      howl.stop();
+    });
   }
 
   createElements() {
