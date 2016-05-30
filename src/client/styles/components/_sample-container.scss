@@ -1,0 +1,8 @@
+@import '../variables';
+
+.sample-container {
+  padding: $spacing-base / 2;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+

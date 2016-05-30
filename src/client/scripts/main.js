@@ -6,7 +6,7 @@ if (typeof window.SAMPLES === 'undefined') {
   throw new Error('Variable "window.SAMPLES" must be defined before running this script!');
 }
 
-const $sampleContainer = $('#samplesContainer');
+const $sampleContainer = $('.sample-container');
 
 window.SAMPLES.forEach((data) => {
   const sample = new Sample(data);
