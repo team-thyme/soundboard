@@ -1,0 +1,8 @@
+slim:
+  settings:
+    displayErrorDetails: true
+
+routes:
+  samples_list:
+    path: /samples
+    action: Villermen\Soundboard\SamplesController::listAction

@@ -1,25 +1,8 @@
 <?php
 
-use Slim\App;
+use Villermen\Soundboard\App;
 
-define("CODEBASE", __DIR__ . "/../../src/server");
+require("../../src/server/vendor/autoload.php");
 
-require(CODEBASE . "/vendor/autoload.php");
-
-session_start();
-
-// Instantiate the app
-$settings = require CODEBASE . '/src/settings.php';
-$app = new App($settings);
-
-// Set up dependencies
-require CODEBASE . '/src/dependencies.php';
-
-// Register middleware
-require CODEBASE . '/src/middleware.php';
-
-// Register routes
-require CODEBASE . '/src/routes.php';
-
-// Run app
+$app = new App();
 $app->run();
