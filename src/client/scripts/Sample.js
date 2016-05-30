@@ -1,9 +1,7 @@
 import $ from 'jquery';
-import { Howl } from 'howler';
+import Player from './Player';
 
-const playing = [];
-
-export default class Sample {
+class Sample {
 
   constructor({ id, file, name, location }) {
     this.id = id;
@@ -11,49 +9,21 @@ export default class Sample {
     this.name = name;
     this.location = location;
 
-    this.boundProgressStep = this.progressStep.bind(this);
-
-    this.initSound();
+    this.playerId = Player.registerSample({
+      file,
+      onPlay: () => {
+        this.$sample.addClass('sample--playing');
+      },
+      onStop: () => {
+        this.$sample.removeClass('sample--playing');
+      },
+      onProgress: (progress) => {
+        this.$progress.css('flex-basis', `${progress}%`);
+      },
+    });
 
     this.createElements();
     this.bindEvents();
-  }
-
-  progressStep() {
-    const { howl, $progress } = this;
-
-    const seek = howl.seek() || 0;
-    const progress = (seek / howl.duration()) * 100;
-    $progress.css('flex-basis', `${progress}%`);
-
-    if (howl.playing()) {
-      requestAnimationFrame(this.boundProgressStep);
-    }
-  }
-
-  initSound() {
-    const howl = this.howl = new Howl({
-      src: [encodeURI(`samples/${this.file}`)],
-      //html5: true, // Use HTML5 Audio, so large files can be streamed
-      preload: false,
-    });
-
-    howl.on('play', () => {
-      playing.push(howl);
-      this.$sample.addClass('sample--playing');
-      requestAnimationFrame(this.boundProgressStep);
-    });
-
-    howl.on('stop', () => {
-      playing.splice(playing.indexOf(howl));
-      this.$sample.removeClass('sample--playing');
-    });
-    howl.on('end', (id) => {
-      // Don't call stop when the instance is looping
-      if (!howl.loop(id)) {
-        howl.stop(id);
-      }
-    });
   }
 
   createElements() {
@@ -86,9 +56,9 @@ export default class Sample {
     let hoverTimer;
 
     $sample.on('mouseenter', () => {
-      if (this.howl.state() === 'unloaded') {
+      if (Player.isUnloaded(this.playerId)) {
         hoverTimer = setTimeout(() => {
-          this.howl.load();
+          Player.load(this.playerId);
         }, 150);
       }
     });
@@ -99,29 +69,18 @@ export default class Sample {
 
     // Preload the sound when the user presses down on the sample
     $sample.on('mousedown touchstart', () => {
-      if (this.howl.state() === 'unloaded') {
-        this.howl.load();
-      }
+      Player.load(this.playerId);
     });
 
     // Play the sound on click
     $sample.on('click', (e) => {
-      // Stop all other playing sounds unless the shift key was pressed
-      if (!e.shiftKey) {
-        playing.forEach((howl) => howl.stop());
-        playing.length = 0;
-      }
+      const multiple = e.shiftKey;
+      const loop = e.ctrlKey;
 
-      // Loop sound if ctrl key is pressed
-      this.howl.loop(e.ctrlKey);
-
-      // Start the sound from the beginning
-      if (this.howl.playing()) {
-        this.howl.seek(0);
-      } else {
-        this.howl.play();
-      }
+      Player.play(this.playerId, multiple, loop);
     });
   }
 
 }
+
+export default Sample;
