@@ -1,9 +1,28 @@
 <?php
 
-// Allow files with certain extensions to pass through, all other requests will be internally
-// redirected to index.php.
-if (preg_match('/\.(?:wav|mp3|ogg|js|css|ico|eot|svg|ttf|woff|woff2)(?:\?.+)?$/', $_SERVER['REQUEST_URI'])) {
-  return false;
-} else {
-  include __DIR__ . '/public/index.php';
+// Router script for PHP's built-in development server
+
+// Resolve to requested file without query part
+$requestedFile = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['REQUEST_URI'];
+
+$queryStart = strpos($requestedFile, '?');
+if ($queryStart !== false)
+{
+	$requestedFile = substr($requestedFile, 0, $queryStart);
+}
+
+// Serve the requested file if it exists
+if (file_exists($requestedFile))
+{
+	return false;
+}
+
+// Serve the soundboard or api depending on request
+if (substr($_SERVER['REQUEST_URI'], 0, 4) != '/api')
+{
+	include('public/index.html');
+}
+else
+{
+	include('public/api/index.php');
 }

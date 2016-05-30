@@ -2,7 +2,7 @@
 
 use Villermen\Soundboard\App;
 
-require("../../src/server/vendor/autoload.php");
+require(__DIR__ . "/../../src/server/vendor/autoload.php");
 
 $app = new App();
 $app->run();
