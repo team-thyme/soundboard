@@ -48,8 +48,11 @@ export default class Sample {
       playing.splice(playing.indexOf(howl));
       this.$sample.removeClass('sample--playing');
     });
-    howl.on('end', () => {
-      howl.stop();
+    howl.on('end', (id) => {
+      // Don't call stop when the instance is looping
+      if (!howl.loop(id)) {
+        howl.stop(id);
+      }
     });
   }
 
@@ -109,7 +112,15 @@ export default class Sample {
         playing.length = 0;
       }
 
-      this.howl.play();
+      // Loop sound if ctrl key is pressed
+      this.howl.loop(e.ctrlKey);
+
+      // Start the sound from the beginning
+      if (this.howl.playing()) {
+        this.howl.seek(0);
+      } else {
+        this.howl.play();
+      }
     });
   }
 
