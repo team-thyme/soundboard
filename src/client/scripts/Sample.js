@@ -34,7 +34,7 @@ export default class Sample {
   initSound() {
     const howl = this.howl = new Howl({
       src: [encodeURI(`samples/${this.file}`)],
-      html5: true, // Use HTML5 Audio, so large files can be streamed
+      //html5: true, // Use HTML5 Audio, so large files can be streamed
       preload: false,
     });
 
