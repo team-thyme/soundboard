@@ -44,10 +44,10 @@ gulp.task('php-server', (callback) => {
   });
 });
 
-gulp.task('build', ['build:scripts', 'build:styles']);
+gulp.task('build', ['build:scripts', 'build:styles', 'build:fontello']);
 gulp.task('watch', ['watch:scripts', 'watch:styles']);
 
-gulp.task('clean:styles', () => del([`${buildDir}/**/*.css`]));
+gulp.task('clean:styles', () => del([`${buildDir}/*.css`]));
 
 gulp.task('build:styles', ['clean:styles'], () => {
   const { compress = true, livereload } = argv;
@@ -78,7 +78,7 @@ gulp.task('watch:styles', (callback) => {
   gulp.watch('./src/client/styles/**/*.scss', ['build:styles']);
 });
 
-gulp.task('clean:scripts', () => del([`${buildDir}/**/*.js`]));
+gulp.task('clean:scripts', () => del([`${buildDir}/*.js`]));
 
 function bundle(bundler) {
   const { compress = true, livereload = false } = argv;
@@ -125,4 +125,11 @@ gulp.task('watch:scripts', (callback) => {
     bundle(bundler);
   });
   bundle(bundler);
+});
+
+gulp.task('clean:fontello', () => del([`${buildDir}/fontello/`]));
+
+gulp.task('build:fontello', ['clean:fontello'], () => {
+  return gulp.src('./src/client/fontello/**/*.{css,eot,svg,ttf,woff,woff2}')
+    .pipe(gulp.dest(`${buildDir}/fontello`));
 });
