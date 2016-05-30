@@ -10,3 +10,6 @@ public/build/
 
 # NodeJS
 node_modules/
+
+# Composer
+vendor/

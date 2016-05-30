@@ -5,7 +5,7 @@
   "homepage": "https://viller.men/soundboard",
   "private": true,
   "scripts": {
-    "postinstall": "gulp build"
+    "postinstall": "gulp build && composer install"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
