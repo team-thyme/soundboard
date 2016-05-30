@@ -1,9 +1,15 @@
+soundboard:
+  sampleLocation: ../../public/samples
+  publicSampleLocation: samples
+
 slim:
   settings:
     displayErrorDetails: true
 
 router:
-  samples_list:
-    path: /samples
-    action: Villermen\Soundboard\SamplesController::listAction
-    methods: [ get ]
+  routes:
+    samples_list:
+      path: /samples
+      controller: Villermen\Soundboard\Controllers\SamplesController
+      action: listAction
+      methods: [ get ]
