@@ -2,7 +2,8 @@ slim:
   settings:
     displayErrorDetails: true
 
-routes:
+router:
   samples_list:
     path: /samples
     action: Villermen\Soundboard\SamplesController::listAction
+    methods: [ get ]

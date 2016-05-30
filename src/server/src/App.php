@@ -4,9 +4,8 @@ namespace Villermen\Soundboard;
 
 use Symfony\Component\Yaml\Yaml;
 
-class App
+class App extends \Slim\App
 {
-	private $slim;
 	private $config;
 	private $router;
 
@@ -15,12 +14,24 @@ class App
 		chdir(dirname(__FILE__) . "/..");
 
 		$this->config = Yaml::parse(file_get_contents($configFile));
-		
-		$this->slim = new \Slim\App($this->config["slim"]);
+
+		parent::__construct($this->config["slim"]);
+
+		$this->router = new Router($this);
 	}
 
-	public function run()
+	public function run($silent = false)
 	{
-		$this->slim->run();
+		parent::run($silent);
+	}
+
+	public function getConfig($section = null)
+	{
+		if (!$section)
+		{
+			return $this->config;
+		}
+
+		return $this->config[$section];
 	}
 }
