@@ -8,7 +8,7 @@
 
   color: $color-text-default;
   background: $color-card;
-  border-radius: 2px;
+  border-radius: $border-radius-base;
 
   cursor: pointer;
   transition: background 150ms ease;
@@ -47,6 +47,16 @@
   right: 0;
   bottom: 0;
   flex-direction: row;
+
+  overflow: hidden;
+  border-radius: $border-radius-base;
+
+  opacity: 0;
+  transition: opacity 150ms ease;
+
+  .sample--playing & {
+    opacity: 1;
+  }
 }
 
 .sample__progress {
