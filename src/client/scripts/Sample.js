@@ -3,11 +3,13 @@ import Player from './Player';
 
 class Sample {
 
-  constructor({ file, name, id, mtime }) {
-    this.id = id;
-    this.file = file;
-    this.name = name;
-    this.mtime = mtime;
+  constructor(data) {
+    this.id = data.id;
+    this.file = data.file;
+    this.name = data.name;
+    this.mtime = data.mtime;
+
+    const file = this.file;
 
     this.playerId = Player.registerSample({
       file,
