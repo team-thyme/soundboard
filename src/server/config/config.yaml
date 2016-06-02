@@ -1,6 +1,5 @@
 soundboard:
-  sampleLocation: ../../public/samples
-  publicSampleLocation: samples
+  sampleLocation: ../../samples
 
 slim:
   settings:
@@ -9,7 +8,13 @@ slim:
 router:
   routes:
     samples_list:
-      path: /samples
+      path: /samples/list
       controller: Villermen\Soundboard\Controllers\SamplesController
       action: listAction
+      methods: [ get ]
+
+    samples_get:
+      path: /samples/get/{file:.+}
+      controller: Villermen\Soundboard\Controllers\SamplesController
+      action: getAction
       methods: [ get ]
