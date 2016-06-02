@@ -3,11 +3,11 @@ import Player from './Player';
 
 class Sample {
 
-  constructor({ id, file, name, location }) {
+  constructor({ file, name, id, mtime }) {
     this.id = id;
     this.file = file;
     this.name = name;
-    this.location = location;
+    this.mtime = mtime;
 
     this.playerId = Player.registerSample({
       file,
@@ -35,10 +35,10 @@ class Sample {
       .text(this.name)
     );
 
-    $sample.append($('<div />')
-      .addClass('sample__location')
-      .text(this.location)
-    );
+    // $sample.append($('<div />')
+    //   .addClass('sample__location')
+    //   .text(this.location)
+    // );
 
     const $progress = this.$progress = $('<div />')
       .addClass('sample__progress');

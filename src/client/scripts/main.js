@@ -1,14 +1,12 @@
 import $ from 'jquery';
-import { Howl, Howler } from 'howler';
-import Sample from './Sample';
-
-if (typeof window.SAMPLES === 'undefined') {
-  throw new Error('Variable "window.SAMPLES" must be defined before running this script!');
-}
+import ApiClient from './ApiClient';
 
 const $sampleContainer = $('.sample-container');
 
-window.SAMPLES.forEach((data) => {
-  const sample = new Sample(data);
-  $sampleContainer.append(sample.$sample);
+const apiClient = new ApiClient();
+
+apiClient.getSamples().then((samples) => {
+  samples.forEach((sample) => {
+    $sampleContainer.append(sample.$sample);
+  });
 });
