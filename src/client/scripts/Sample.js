@@ -9,10 +9,8 @@ class Sample {
     this.name = data.name;
     this.mtime = data.mtime;
 
-    const file = this.file;
-
     this.playerId = Player.registerSample({
-      file,
+      file: this.file,
       onPlay: () => {
         this.$sample.addClass('sample--playing');
       },
