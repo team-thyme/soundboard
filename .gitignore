@@ -1,7 +1,6 @@
 # Sample files (we got that sweet copyright on our own voices)
-*.ogg
-*.wav
-*.mp3
+samples/*
+!samples/.gitkeep
 
 public/build/
 
