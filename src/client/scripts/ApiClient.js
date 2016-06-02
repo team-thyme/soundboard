@@ -13,12 +13,10 @@ class ApiClient {
             const samples = [];
 
             json.forEach((data) => {
-              const modifiedData = data;
-
               // Make the file point back to the used api url
-              modifiedData.file = `${this.baseUrl}/samples/get${modifiedData.file}`;
+              data.file = `${this.baseUrl}/samples/get${data.file}`; // eslint-disable-line
 
-              samples.push(new Sample(modifiedData));
+              samples.push(new Sample(data));
             });
 
             resolve(samples);
