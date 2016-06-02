@@ -25,7 +25,7 @@ class Router
 			$controller = new $route['controller'];
 
 			//todo: account for methods
-			$this->app->get($route['path'], [ $controller, $route['action'] ]);
+			$this->app->map($route['methods'], $route['path'], [ $controller, $route['action'] ]);
 		}
 	}
 }
