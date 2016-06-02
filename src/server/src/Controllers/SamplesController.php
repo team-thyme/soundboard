@@ -20,9 +20,7 @@ class SamplesController
 	{
 		$samples = $this->getSamples();
 
-		$response->withJson(new JsonResult([
-			'samples' => $samples
-		]));
+		$response->withJson($samples);
 	}
 
 	public function getSamples()
