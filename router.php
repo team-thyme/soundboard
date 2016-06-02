@@ -24,5 +24,7 @@ if (substr($_SERVER['REQUEST_URI'], 0, 4) != '/api')
 }
 else
 {
+	// Slim relies on SCRIPT_NAME to be set up correctly, and PHP's built-in server doesn't do this right, so fix it
+	$_SERVER['SCRIPT_NAME'] = '/api/index.php';
 	include('public/api/index.php');
 }
