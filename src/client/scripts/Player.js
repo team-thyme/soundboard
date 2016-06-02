@@ -19,7 +19,7 @@ const Player = {
 
     // Prepare sound
     const howl = new Howl({
-      src: [encodeURI(`samples/${file}`)],
+      src: [encodeURI(file)],
       // html5: true, // Use HTML5 Audio, so large files can be streamed
       preload: false,
     });
