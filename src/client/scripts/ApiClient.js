@@ -7,13 +7,18 @@ class ApiClient {
 
   getSamples() {
     return new Promise((resolve) => {
-      fetch(`${this.baseUrl}/samples`).then((response) => {
+      fetch(`${this.baseUrl}/samples/list`).then((response) => {
         if (response.status === 200) {
           response.json().then((json) => {
             const samples = [];
 
             json.forEach((data) => {
-              samples.push(new Sample(data));
+              const modifiedData = data;
+
+              // Make the file point back to the used api url
+              modifiedData.file = `${this.baseUrl}/samples/get${modifiedData.file}`;
+
+              samples.push(new Sample(modifiedData));
             });
 
             resolve(samples);
