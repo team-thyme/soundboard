@@ -18,3 +18,26 @@ apiClient.getSamples().then((samples) => {
     $sampleContainer.append(sample.$sample);
   });
 });
+
+const boardNames = [
+  'music',
+  'spam',
+  'crack',
+  'shit',
+  'originality',
+];
+
+const postNames = [
+  'amirite',
+  'correct',
+  'no',
+  'you see',
+  'eh',
+  'hmm',
+];
+
+const $title = $('title');
+$title.text(
+  `More like ${boardNames[Math.floor(Math.random() * boardNames.length)]}board, \
+  ${postNames[Math.floor(Math.random() * postNames.length)]}?`
+);
