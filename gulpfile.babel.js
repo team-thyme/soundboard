@@ -132,9 +132,10 @@ gulp.task('watch:scripts', (callback) => {
   bundle(bundler);
 });
 
-gulp.task('clean:fontello', () => del([`${buildDir}/fontello/`]));
+gulp.task('clean:iconfont', () => del([`${buildDir}/iconfont/`]));
 
-gulp.task('build:fontello', ['clean:fontello'], () => {
-  return gulp.src('./src/client/fontello/**/*.{css,eot,svg,ttf,woff,woff2}')
-    .pipe(gulp.dest(`${buildDir}/fontello`));
+gulp.task('build:iconfont', ['clean:iconfont'], () => {
+  return gulp.src('./src/client/iconfont/**/*.{css,eot,svg,ttf,woff,woff2}')
+    .pipe(gulp.dest(`${buildDir}/iconfont`));
 });
+

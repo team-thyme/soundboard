@@ -19,8 +19,12 @@ class Search {
 
     this.$search = $('.search');
     this.$input = $('.search__input');
+    this.$clear = $('.search__clear');
+
+    this.$search.addClass('search--empty');
 
     this.$input.on('input', this.handleChange.bind(this));
+    this.$clear.on('click', () => this.$input.val('').trigger('input').focus());
   }
 
   handleChange() {
@@ -30,6 +34,8 @@ class Search {
       this.onChange(newQuery);
       this.query = newQuery;
     }
+
+    this.$search.toggleClass('search--empty', this.query === '');
   }
 
 }
