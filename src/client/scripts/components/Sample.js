@@ -97,6 +97,11 @@ class Sample {
 
       Player.play(this.playerId, multiple, loop);
     });
+
+    $sample.on('contextmenu', (e) => {
+      e.preventDefault();
+      Player.stop(this.playerId);
+    });
   }
 
 }

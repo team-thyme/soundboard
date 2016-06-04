@@ -98,6 +98,11 @@ const Player = {
     }
   },
 
+  stop(id) {
+    const sample = this.samples[id];
+    sample.howl.stop();
+  },
+
   progressStep() {
     const { playing } = this;
 
