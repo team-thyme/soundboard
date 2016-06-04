@@ -8,15 +8,18 @@ use \Slim\App as SlimApp;
 class App extends SlimApp
 {
 	private $config;
-	private $router;
+	protected $router;
 
-	public function __construct($configFile = 'config/config.yaml')
+	const CONFIG_FILE = '../../config/server.yml';
+
+	public function __construct()
 	{
 		chdir(dirname(__FILE__) . '/..');
 
-		$this->config = Yaml::parse(file_get_contents($configFile));
+		$config = Yaml::parse(file_get_contents(self::CONFIG_FILE));
+		$this->config = $config['server'];
 
-		parent::__construct($this->config['slim']);
+		parent::__construct($this->getConfig('slim'));
 
 		$this->router = new Router($this);
 	}

@@ -19,6 +19,7 @@ import del from 'del';
 import sourceStream from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import uglify from 'gulp-uglify';
+import yamlify from 'yamlify';
 
 const buildDir = `${__dirname}/public/build`;
 
@@ -106,6 +107,7 @@ function bundle(bundler) {
 
 gulp.task('build:scripts', ['clean:scripts'], () => {
   const bundler = browserify(browserifyOptions)
+    .transform(yamlify)
     .transform(babelify);
 
   return bundle(bundler);

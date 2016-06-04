@@ -1,9 +1,12 @@
 import $ from 'jquery';
 import ApiClient from './ApiClient';
+import clientConfig from '../../../config/client.yml';
 
+const config = clientConfig.client;
+
+// Obtain and insert samples
 const $sampleContainer = $('.sample-container');
-
-const apiClient = new ApiClient();
+const apiClient = new ApiClient(config.apiBaseUrl);
 
 apiClient.getSamples().then((samples) => {
   const sortLimit = new Date().getTime() - 14 * 24 * 60 * 60 * 1000;
@@ -19,6 +22,7 @@ apiClient.getSamples().then((samples) => {
   });
 });
 
+// Random page title
 const boardNames = [
   'music',
   'spam',
