@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import ApiClient from './ApiClient';
-import SampleContainer from './SampleContainer';
+import ApiClient from './helpers/ApiClient';
+import SampleContainer from './components/SampleContainer';
 import config from './config';
 
 // Init API client

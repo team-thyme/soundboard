@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Player from './Player';
+import Player from '../helpers/Player';
 
 class Sample {
 
