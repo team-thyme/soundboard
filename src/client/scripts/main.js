@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import ApiClient from './ApiClient';
-import clientConfig from '../../../config/client.yml';
-
-const config = clientConfig.client;
+import config from './config';
 
 // Obtain and insert samples
 const $sampleContainer = $('.sample-container');
