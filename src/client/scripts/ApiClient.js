@@ -1,6 +1,5 @@
-import Sample from './Sample';
-
 class ApiClient {
+
   constructor(baseUrl = 'api') {
     this.baseUrl = baseUrl;
   }
@@ -23,11 +22,12 @@ class ApiClient {
         // Javascript's timestamp uses milliseconds
         data.mtime = 1000 * data.mtime;
 
-        return new Sample(data);
+        return data;
 
         /* eslint-enable no-param-reassign */
       }));
   }
+
 }
 
 export default ApiClient;

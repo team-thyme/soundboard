@@ -1,23 +1,16 @@
 import $ from 'jquery';
 import ApiClient from './ApiClient';
+import SampleContainer from './SampleContainer';
 import config from './config';
 
-// Obtain and insert samples
-const $sampleContainer = $('.sample-container');
+// Init API client
 const apiClient = new ApiClient(config.apiBaseUrl);
 
+// Add samples to the container
+const sampleContainer = new SampleContainer();
+
 apiClient.getSamples().then((samples) => {
-  const sortLimit = new Date().getTime() - 14 * 24 * 60 * 60 * 1000;
-
-  samples.sort((sample1, sample2) => {
-    if (sample1.mtime > sortLimit || sample2.mtime > sortLimit) {
-      return sample2.mtime - sample1.mtime;
-    }
-
-    return 2 * Math.floor(2 * Math.random()) - 1;
-  }).forEach((sample) => {
-    $sampleContainer.append(sample.$sample);
-  });
+  sampleContainer.setSamples(samples);
 });
 
 // Random page title
