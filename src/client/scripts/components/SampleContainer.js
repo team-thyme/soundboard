@@ -1,13 +1,26 @@
 import $ from 'jquery';
 import Sample from './Sample';
 
-const sortFunctions = {
+class SampleContainer {
 
-  /**
-   * Sort samples by date.
-   * @param {Sample[]} samples
-   */
-  recent: (samples) => {
+  /** @type jQuery */
+  $sampleContainer;
+
+  /** @type Sample[] */
+  samples = [];
+
+  /** @type string */
+  sortType = 'recent';
+
+  /** @type string */
+  query = '';
+
+  constructor() {
+    this.$sampleContainer = $('.sample-container');
+  }
+
+  setSamples(samples) {
+    // Sort samples
     const sortLimit = new Date().getTime() - 14 * 24 * 60 * 60 * 1000;
 
     samples.sort((sample1, sample2) => {
@@ -17,46 +30,45 @@ const sortFunctions = {
 
       return 2 * Math.floor(2 * Math.random()) - 1;
     });
-  },
 
-  /**
-   * Sort samples by name.
-   * @param {Sample[]} samples
-   */
-  name: (samples) => {
-    samples.sort((sample1, sample2) => sample1.name.localeCompare(sample2.name));
-  },
-
-};
-
-class SampleContainer {
-
-  $sampleContainer = $('.sample-container');
-
-  /** @type Sample[] */
-  samples = [];
-
-  sortType = 'recent';
-
-  setSamples(samples) {
     // Create Sample objects
     this.samples = samples.map((data) => new Sample(data));
 
     // Add the samples to the DOM
-    this.sortSamples();
+    this.samples.forEach((sample) => {
+      this.$sampleContainer.append(sample.$sample);
+    });
+
+    this.update();
   }
 
-  sortSamples() {
-    if (typeof sortFunctions[this.sortType] === 'function') {
-      // Sort the samples
-      sortFunctions[this.sortType](this.samples);
+  update() {
+    const $prev = this.$sampleContainer.prev();
 
-      // Detach and re-attach samples in the correct order
-      this.$sampleContainer.detach('.sample');
-      this.samples.forEach((sample) => this.$sampleContainer.append(sample.$sample));
+    this.$sampleContainer.detach();
+
+    if (this.query.trim() === '') {
+      this.samples.forEach((sample) => {
+        sample.$sample.removeClass('sample--filtered');
+      });
     } else {
-      throw new Error(`Unknown sort type "${this.sortType}"`);
+      // Prepare regex
+      const terms = this.query.split(' ');
+      const regex = new RegExp(`.*${
+        terms.map(term => `(?=.*${term}.*)`).join('')
+      }.*`, 'i');
+
+      // Filter samples
+      this.samples.forEach((sample) => {
+        sample.$sample.toggleClass('sample--filtered', !regex.test(sample.name));
+      });
     }
+
+    this.$sampleContainer.insertAfter($prev);
+  }
+
+  setQuery(query) {
+    this.query = query;
   }
 
 }

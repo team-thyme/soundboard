@@ -3,6 +3,24 @@ import Player from '../helpers/Player';
 
 class Sample {
 
+  /** @type string */
+  id;
+
+  /** @type string */
+  file;
+
+  /** @type string */
+  name;
+
+  /** @type number */
+  mtime;
+
+  /** @type jQuery */
+  $sample;
+
+  /** @type jQuery */
+  $progress;
+
   constructor(data) {
     this.id = data.id;
     this.file = data.file;

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import ApiClient from './helpers/ApiClient';
 import SampleContainer from './components/SampleContainer';
+import Search from './components/Search';
 import config from './config';
 
 // Init API client
@@ -11,6 +12,14 @@ const sampleContainer = new SampleContainer();
 
 apiClient.getSamples().then((samples) => {
   sampleContainer.setSamples(samples);
+});
+
+// Init search
+const search = new Search({
+  onChange: (query) => {
+    sampleContainer.setQuery(query);
+    sampleContainer.update();
+  },
 });
 
 // Random page title
