@@ -16,3 +16,28 @@
   margin: $spacing-base;
   flex: 1 1 auto;
 }
+
+.header__button {
+  align-self: center;
+  margin-right: $spacing-base;
+  width: 40px;
+  height: 40px;
+
+  justify-content: center;
+  align-items: center;
+
+  color: $color-text-default;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition: background 200ms ease;
+
+  &:hover {
+    background: rgba(0,0,0,0.1);
+  }
+
+  &:active {
+    background: rgba(0,0,0,0.2);
+  }
+}
