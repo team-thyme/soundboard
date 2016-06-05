@@ -50,7 +50,7 @@ class SamplesController
 	{
 		// Get files
 		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator($this->sampleLocation)
+			new RecursiveDirectoryIterator($this->sampleLocation, RecursiveDirectoryIterator::FOLLOW_SYMLINKS)
 		);
 
 		// Filter sound files
