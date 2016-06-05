@@ -31,7 +31,8 @@
   flex: 0 1 540px;
   margin: $spacing-base * 2;
 
-  border-radius: $border-radius-base;
+  background: #fff;
+  border-radius: $border-radius-base * 2;
 
   transform: scale(0.8);
   transition: transform 200ms $easeInQuad;
