@@ -57,7 +57,7 @@ gulp.task('php-server', (callback) => {
   });
 });
 
-gulp.task('build', ['build:scripts', 'build:styles', 'build:fontello']);
+gulp.task('build', ['build:scripts', 'build:styles', 'build:iconfont']);
 gulp.task('watch', ['watch:scripts', 'watch:styles']);
 
 gulp.task('clean:styles', () => del([`${buildDir}/*.{css,css.map}`]));
