@@ -1,3 +1,4 @@
+@import '../themes';
 @import '../variables';
 
 .button {
@@ -27,15 +28,21 @@
   }
 }
 
-.button--primary {
-  background: $color-primary;
-  color: $color-text-default;
+@each $theme, $colors in $themes {
+  $color-primary: map-get($colors, primary);
 
-  &:hover {
-    background: darken($color-primary, 4%);
-  }
+  .theme--#{$theme} {
+    .button--primary {
+      background: $color-primary;
+      color: $color-text-default;
 
-  &:active {
-    background: darken($color-primary, 8%);
+      &:hover {
+        background: darken($color-primary, 4%);
+      }
+
+      &:active {
+        background: darken($color-primary, 8%);
+      }
+    }
   }
 }

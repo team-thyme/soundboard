@@ -1,4 +1,5 @@
 @import '../easings';
+@import '../themes';
 @import '../variables';
 
 .modal {
@@ -58,8 +59,17 @@
 }
 
 .modal__header {
-  background: $color-primary;
   color: $color-text-default;
+}
+
+@each $theme, $colors in $themes {
+  $color-primary: map-get($colors, primary);
+
+  .theme--#{$theme} {
+    .modal__header {
+      background: $color-primary;
+    }
+  }
 }
 
 .modal__content {
