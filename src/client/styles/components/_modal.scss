@@ -66,6 +66,9 @@
 }
 
 .modal__footer {
+  flex-direction: row;
+  justify-content: flex-end;
+
   background: darken(#fff, 2%);
   border-top: 1px solid darken(#fff, 5%);
 }

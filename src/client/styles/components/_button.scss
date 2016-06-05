@@ -1,0 +1,41 @@
+@import '../variables';
+
+.button {
+  margin-right: $spacing-base;
+  padding: $spacing-base $spacing-base * 2;
+
+  border-radius: $border-radius-base;
+  cursor: pointer;
+
+  transition: background 200ms ease, color 200ms ease;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.button--default {
+  background: rgba(0,0,0,0.05);
+  color: $color-text-search;
+
+  &:hover {
+    background: rgba(0,0,0,0.08);
+  }
+
+  &:active {
+    background: rgba(0,0,0,0.11);
+  }
+}
+
+.button--primary {
+  background: $color-primary;
+  color: $color-text-default;
+
+  &:hover {
+    background: darken($color-primary, 4%);
+  }
+
+  &:active {
+    background: darken($color-primary, 8%);
+  }
+}

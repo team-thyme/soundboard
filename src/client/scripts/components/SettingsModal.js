@@ -10,6 +10,17 @@ class SettingsModal extends Modal {
     super('#settings-modal');
 
     this.settingsManager = settingsManager;
+
+    this.$cancel = this.$modal.find('[data-action=cancel]');
+    this.$save = this.$modal.find('[data-action=save]');
+
+    this.$cancel.on('click', () => {
+      this.hide();
+    });
+
+    this.$save.on('click', () => {
+      this.hide();
+    });
   }
 
 }
