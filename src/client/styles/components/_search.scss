@@ -1,0 +1,61 @@
+@import '../variables';
+@import '../easings';
+
+.search {
+  flex: 1 1 auto;
+}
+
+.search__input {
+  flex: 1 1 auto;
+  padding: $spacing-base * 2;
+
+  background: $color-background-search;
+  border: 0;
+  border-radius: $border-radius-base;
+
+  font: inherit;
+  color: $color-text-search;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &::placeholder {
+    color: transparentize($color-text-search, 0.5);
+  }
+}
+
+.search__clear {
+  position: absolute;
+  top: $spacing-base;
+  right: $spacing-base;
+  width: 40px;
+  height: 40px;
+
+  justify-content: center;
+  align-items: center;
+
+  color: $color-text-search;
+  background: rgba(0,0,0,0);
+  border-radius: 50%;
+  opacity: 0.5;
+
+  cursor: pointer;
+  transition: background 200ms ease, opacity 200ms ease, transform 200ms ease;
+
+  &:hover {
+    background: rgba(0,0,0,0.1);
+    opacity: 0.6;
+  }
+
+  &:active {
+    background: rgba(0,0,0,0.15);
+    opacity: 0.8;
+  }
+
+  .search--empty & {
+    opacity: 0;
+    transform: scale(0.5);
+    pointer-events: none;
+  }
+}

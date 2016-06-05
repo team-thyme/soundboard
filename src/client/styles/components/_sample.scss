@@ -1,3 +1,4 @@
+@import '../themes';
 @import '../variables';
 
 .sample {
@@ -22,17 +23,27 @@
   }
 }
 
-.sample--playing {
-  background: $color-primary;
-  text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+@each $theme, $colors in $themes {
+  $color-primary: map-get($colors, primary);
 
-  &:hover {
-    background: lighten($color-primary, 2%);
-  }
+  .theme--#{$theme} {
+    .sample--playing {
+      background: $color-primary;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.3);
 
-  &:active {
-    background: lighten($color-primary, 4%);
+      &:hover {
+        background: lighten($color-primary, 2%);
+      }
+
+      &:active {
+        background: lighten($color-primary, 4%);
+      }
+    }
   }
+}
+
+.sample--filtered {
+  display: none;
 }
 
 .sample__location {

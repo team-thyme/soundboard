@@ -1,6 +1,10 @@
-@import url('fontello/css/icons.css');
+@import url('iconfont/material-icons.css');
 
 @import 'base';
 
+@import 'components/button';
+@import 'components/header';
+@import 'components/modal';
 @import 'components/sample';
 @import 'components/sample-container';
+@import 'components/search';

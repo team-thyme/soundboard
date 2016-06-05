@@ -1,25 +1,33 @@
 import $ from 'jquery';
-import ApiClient from './ApiClient';
-import clientConfig from '../../../config/client.yml';
+import ApiClient from './helpers/ApiClient';
+import SettingsManager from './helpers/SettingsManager';
+import SampleContainer from './components/SampleContainer';
+import Search from './components/Search';
+import SettingsModal from './components/SettingsModal';
+import config from './config';
 
-const config = clientConfig.client;
-
-// Obtain and insert samples
-const $sampleContainer = $('.sample-container');
 const apiClient = new ApiClient(config.apiBaseUrl);
+const settingsManager = new SettingsManager();
+const settingsModal = new SettingsModal(settingsManager);
+
+// Add samples to the container
+const sampleContainer = new SampleContainer();
 
 apiClient.getSamples().then((samples) => {
-  const sortLimit = new Date().getTime() - 14 * 24 * 60 * 60 * 1000;
+  sampleContainer.setSamples(samples);
+});
 
-  samples.sort((sample1, sample2) => {
-    if (sample1.mtime > sortLimit || sample2.mtime > sortLimit) {
-      return sample2.mtime - sample1.mtime;
-    }
+// Init search
+const search = new Search({
+  onChange: (query) => {
+    sampleContainer.setQuery(query);
+    sampleContainer.update();
+  },
+});
 
-    return 2 * Math.floor(2 * Math.random()) - 1;
-  }).forEach((sample) => {
-    $sampleContainer.append(sample.$sample);
-  });
+// Settings button
+$('[data-action="show-settings-modal"]').on('click', () => {
+  settingsModal.show();
 });
 
 // Random page title

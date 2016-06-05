@@ -91,6 +91,12 @@ gulp.task('watch:styles', (callback) => {
 
 gulp.task('clean:scripts', () => del([`${buildDir}/*.{js,js.map}`]));
 
+function createBundler(options = {}) {
+  return browserify(Object.assign({}, browserifyOptions, options))
+    .transform(yamlify)
+    .transform(babelify);
+}
+
 function bundle(bundler) {
   log('[browserify] Bundle start');
 
@@ -106,9 +112,7 @@ function bundle(bundler) {
 }
 
 gulp.task('build:scripts', ['clean:scripts'], () => {
-  const bundler = browserify(browserifyOptions)
-    .transform(yamlify)
-    .transform(babelify);
+  const bundler = createBundler();
 
   return bundle(bundler);
 });
@@ -118,10 +122,7 @@ gulp.task('watch:scripts', (callback) => {
     gulpLivereload.listen();
   }
 
-  const options = Object.assign({}, watchify.args, browserifyOptions);
-
-  const bundler = browserify(options)
-    .transform(babelify)
+  const bundler = createBundler(watchify.args)
     .plugin(watchify);
 
   bundler.on('update', () => {
@@ -131,9 +132,10 @@ gulp.task('watch:scripts', (callback) => {
   bundle(bundler);
 });
 
-gulp.task('clean:fontello', () => del([`${buildDir}/fontello/`]));
+gulp.task('clean:iconfont', () => del([`${buildDir}/iconfont/`]));
 
-gulp.task('build:fontello', ['clean:fontello'], () => {
-  return gulp.src('./src/client/fontello/**/*.{css,eot,svg,ttf,woff,woff2}')
-    .pipe(gulp.dest(`${buildDir}/fontello`));
+gulp.task('build:iconfont', ['clean:iconfont'], () => {
+  return gulp.src('./src/client/iconfont/**/*.{css,eot,svg,ttf,woff,woff2}')
+    .pipe(gulp.dest(`${buildDir}/iconfont`));
 });
+

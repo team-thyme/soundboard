@@ -12,16 +12,52 @@
 		<script src="build/script.js" defer></script>
 	</head>
 
-	<body>
-		<header class="header">
+	<body class="theme--default">
+		<div class="header">
 			<div class="header__search">
 				<div class="search">
-					<div class="search__placeholder">Cook, Search, Delicious!</div>
-					<input class="search__input" type="text" />
+					<input class="search__input" type="text" placeholder="Cook, Search, Delicious!" />
+          <div class="search__clear">
+            <i class="material-icons">close</i>
+          </div>
 				</div>
 			</div>
-		</header>
+      <div class="header__button" data-action="show-settings-modal">
+        <i class="material-icons">settings</i>
+      </div>
+		</div>
 
-		<div class="sample-container"></div>
+		<div class="sample-container">
+      <div class="sample-container__empty">
+        <div class="sample-container__empty-icon material-icons">search</div>
+        <div class="sample-container__empty-label">
+          Of je zoekt naar dingen die&nbsp;wel&nbsp;iets&nbsp;zijn...
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="settings-modal">
+      <div class="modal__dialog">
+        <div class="modal__header">
+          <div class="modal__title">
+            Settings
+          </div>
+        </div>
+        <div class="modal__content">
+          <div class="form">
+            <div class="form__item">
+              <div class="form__label">Theme</div>
+              <div class="form__input">
+                Input
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <div class="button button--default" data-action="cancel">Cancel</div>
+          <div class="button button--primary" data-action="save">Save</div>
+        </div>
+      </div>
+    </div>
 	</body>
 </html>

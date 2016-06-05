@@ -8,13 +8,13 @@ server:
   router:
     routes:
       samples_list:
-        path: /samples/list
+        path: /samples
         controller: Villermen\Soundboard\Controllers\SamplesController
         action: listAction
         methods: [ get ]
 
       samples_get:
-        path: /samples/get/{file:.+}
+        path: /samples/{file:.+}
         controller: Villermen\Soundboard\Controllers\SamplesController
         action: getAction
         methods: [ get ]
