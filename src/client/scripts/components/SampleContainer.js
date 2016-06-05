@@ -17,6 +17,7 @@ class SampleContainer {
 
   constructor() {
     this.$sampleContainer = $('.sample-container');
+    this.$empty = $('.sample-container__empty');
   }
 
   setSamples(samples) {
@@ -47,7 +48,11 @@ class SampleContainer {
 
     this.$sampleContainer.detach();
 
+    let empty = true;
+
     if (this.query.trim() === '') {
+      empty = false;
+
       this.samples.forEach((sample) => {
         sample.$sample.removeClass('sample--filtered');
       });
@@ -60,9 +65,13 @@ class SampleContainer {
 
       // Filter samples
       this.samples.forEach((sample) => {
-        sample.$sample.toggleClass('sample--filtered', !regex.test(sample.name));
+        const visible = regex.test(sample.name);
+        sample.$sample.toggleClass('sample--filtered', !visible);
+        if (visible) empty = false;
       });
     }
+
+    this.$sampleContainer.toggleClass('sample-container--empty', empty);
 
     this.$sampleContainer.insertAfter($prev);
   }
