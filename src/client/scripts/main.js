@@ -1,11 +1,14 @@
 import $ from 'jquery';
 import ApiClient from './helpers/ApiClient';
+import SettingsManager from './helpers/SettingsManager';
 import SampleContainer from './components/SampleContainer';
 import Search from './components/Search';
+import SettingsModal from './components/SettingsModal';
 import config from './config';
 
-// Init API client
 const apiClient = new ApiClient(config.apiBaseUrl);
+const settingsManager = new SettingsManager();
+const settingsModal = new SettingsModal(settingsManager);
 
 // Add samples to the container
 const sampleContainer = new SampleContainer();
@@ -20,6 +23,11 @@ const search = new Search({
     sampleContainer.setQuery(query);
     sampleContainer.update();
   },
+});
+
+// Settings button
+$('[data-action="show-settings-modal"]').on('click', () => {
+  settingsModal.show();
 });
 
 // Random page title

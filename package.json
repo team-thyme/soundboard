@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "howler": "^2.0.0-beta13",
-    "jquery": "^2.2.4"
+    "jquery": "^2.2.4",
+    "store2": "^2.3.2"
   }
 }

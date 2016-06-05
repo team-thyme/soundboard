@@ -22,11 +22,35 @@
           </div>
 				</div>
 			</div>
-      <div class="header__button">
-        <i class="material-icons">more_vert</i>
+      <div class="header__button" data-action="show-settings-modal">
+        <i class="material-icons">settings</i>
       </div>
 		</div>
 
 		<div class="sample-container"></div>
+
+    <div class="modal" id="settings-modal">
+      <div class="modal__dialog">
+        <div class="modal__header">
+          <div class="modal__title">
+            Settings
+          </div>
+        </div>
+        <div class="modal__content">
+          <div class="form">
+            <div class="form__item">
+              <div class="form__label">Theme</div>
+              <div class="form__input">
+                Input
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <div class="button">Cancel</div>
+          <div class="button button--primary">Save</div>
+        </div>
+      </div>
+    </div>
 	</body>
 </html>
