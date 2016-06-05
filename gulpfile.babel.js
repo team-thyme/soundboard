@@ -57,7 +57,7 @@ gulp.task('php-server', (callback) => {
   });
 });
 
-gulp.task('build', ['build:scripts', 'build:styles', 'build:fontello']);
+gulp.task('build', ['build:scripts', 'build:styles', 'build:iconfont']);
 gulp.task('watch', ['watch:scripts', 'watch:styles']);
 
 gulp.task('clean:styles', () => del([`${buildDir}/*.{css,css.map}`]));
@@ -138,4 +138,3 @@ gulp.task('build:iconfont', ['clean:iconfont'], () => {
   return gulp.src('./src/client/iconfont/**/*.{css,eot,svg,ttf,woff,woff2}')
     .pipe(gulp.dest(`${buildDir}/iconfont`));
 });
-
