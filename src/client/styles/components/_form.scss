@@ -5,30 +5,22 @@
 }
 
 .form__item {
-  margin-bottom: $spacing-base * 2;
+  margin-bottom: $spacing-base;
+  flex-direction: row;
+  flex-wrap: wrap;
 
   &:last-child {
-    margin-bottom: 0;
+    margin-bottom: -$spacing-base;
   }
-}
-
-.form__item--row {
-  flex-direction: row;
 }
 
 .form__label {
-  .form__item--row & {
-    flex: 0.2 0.2 auto;
-  }
+  margin-bottom: $spacing-base;
+  flex: 0 0 100px;
 }
 
 .form__control {
-  margin-top: $spacing-base;
-
-  .form__item--row & {
-    flex: 0.8 0.8 auto;
-    margin-top: 0;
-    margin-left: $spacing-base;
-    justify-content: center;
-  }
+  margin-bottom: $spacing-base;
+  flex: 1 1 auto;
+  justify-content: center;
 }

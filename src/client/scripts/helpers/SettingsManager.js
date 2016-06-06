@@ -12,7 +12,6 @@ export const settingManifest = {
   volume: {
     label: 'Volume',
     type: 'slider',
-    row: true,
     params: { min: 0, max: 100, step: 10, multiplier: 100 },
   },
   theme: {

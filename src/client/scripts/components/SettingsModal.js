@@ -70,15 +70,14 @@ class SettingsModal extends Modal {
       .addClass('form');
 
     Object.keys(settingManifest).forEach((key) => {
-      const { label, type, row = false, params } = settingManifest[key];
+      const { label, type, params } = settingManifest[key];
 
       const setting = this.buildSetting(type, SettingsManager.instance.get(key), params);
       this.settings[key] = setting;
 
       const $item = $('<div />')
         .appendTo($form)
-        .addClass('form__item')
-        .toggleClass('form__item--row', row);
+        .addClass('form__item');
 
       $('<div />')
         .appendTo($item)
@@ -116,21 +115,42 @@ class SettingsModal extends Modal {
 
     return {
       $element: themeSelector.$selector,
-      get value() { return themeSelector.value; },
-      set value(newValue) { themeSelector.value = newValue; },
+      get value() {
+        return themeSelector.value;
+      },
+      set value(newValue) {
+        themeSelector.value = newValue;
+      },
     };
   }
 
   buildSettingSlider(initialValue, { min, max, step, multiplier }) {
+    const $group = $('<div />')
+      .addClass('input-group input-group--range');
+
     const $input = $('<input />')
+      .appendTo($group)
+      .addClass('input-group__input')
       .attr({ type: 'range', min, max, step })
       .val(initialValue * multiplier)
       .on('touchmove', (e) => e.stopPropagation());
 
+    const $value = $('<div />')
+      .appendTo($group)
+      .addClass('input-group__value')
+      .text(initialValue * multiplier);
+
+    $input.on('input', () => $value.text($input.val()));
+
     return {
-      $element: $input,
-      get value() { return $input.val() / multiplier; },
-      set value(newValue) { $input.val(newValue * multiplier); },
+      $element: $group,
+      get value() {
+        return $input.val() / multiplier;
+      },
+      set value(newValue) {
+        $input.val(newValue * multiplier);
+        $value.text(newValue * multiplier)
+      },
     };
   }
 
