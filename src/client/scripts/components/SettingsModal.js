@@ -70,14 +70,15 @@ class SettingsModal extends Modal {
       .addClass('form');
 
     Object.keys(settingManifest).forEach((key) => {
-      const { label, type } = settingManifest[key];
+      const { label, type, row = false, params } = settingManifest[key];
 
-      const setting = this.buildSetting(type, SettingsManager.instance.get(key));
+      const setting = this.buildSetting(type, SettingsManager.instance.get(key), params);
       this.settings[key] = setting;
 
       const $item = $('<div />')
         .appendTo($form)
-        .addClass('form__item');
+        .addClass('form__item')
+        .toggleClass('form__item--row', row);
 
       $('<div />')
         .appendTo($item)
@@ -94,12 +95,16 @@ class SettingsModal extends Modal {
   /**
    * @param type
    * @param initialValue
+   * @param params
    * @returns {SettingsModal~Setting}
    */
-  buildSetting(type, initialValue) {
+  buildSetting(type, initialValue, params) {
     switch (type) {
       case 'theme':
-        return this.buildSettingTheme(initialValue);
+        return this.buildSettingTheme(initialValue, params);
+
+      case 'slider':
+        return this.buildSettingSlider(initialValue, params);
 
       default:
         throw new Error(`Unknown setting type ${type}`);
@@ -111,12 +116,20 @@ class SettingsModal extends Modal {
 
     return {
       $element: themeSelector.$selector,
-      get value() {
-        return themeSelector.value;
-      },
-      set value(newValue) {
-        themeSelector.value = newValue;
-      },
+      get value() { return themeSelector.value; },
+      set value(newValue) { themeSelector.value = newValue; },
+    };
+  }
+
+  buildSettingSlider(initialValue, { min, max, step, multiplier }) {
+    const $input = $('<input />')
+      .attr({ type: 'range', min, max, step })
+      .val(initialValue * multiplier);
+
+    return {
+      $element: $input,
+      get value() { return $input.val() / multiplier; },
+      set value(newValue) { $input.val(newValue * multiplier); },
     };
   }
 

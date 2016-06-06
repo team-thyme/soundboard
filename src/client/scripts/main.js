@@ -5,6 +5,7 @@ import config from './config';
 import ApiClient from './helpers/ApiClient';
 import SettingsManager from './helpers/SettingsManager';
 import ThemeManager from './helpers/ThemeManager';
+import Player from './helpers/Player';
 import SampleContainer from './components/SampleContainer';
 import Search from './components/Search';
 import SettingsModal from './components/SettingsModal';
@@ -13,11 +14,12 @@ const apiClient = new ApiClient(config.apiBaseUrl);
 
 SettingsManager.init();
 ThemeManager.init();
+Player.init();
 
 const settingsModal = new SettingsModal();
 
 // TODO: Remove debug code
-settingsModal.show();
+// settingsModal.show();
 
 // Add samples to the container
 const sampleContainer = new SampleContainer();

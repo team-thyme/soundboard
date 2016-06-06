@@ -4,11 +4,21 @@ import EventEmitter from 'events';
 const STORE_NAMESPACE = 'soundboard';
 
 const DEFAULT_SETTINGS = {
+  volume: 1.0,
   theme: 'default',
 };
 
 export const settingManifest = {
-  theme: { label: 'Theme', type: 'theme' },
+  volume: {
+    label: 'Volume',
+    type: 'slider',
+    row: true,
+    params: { min: 0, max: 100, step: 10, multiplier: 100 },
+  },
+  theme: {
+    label: 'Theme',
+    type: 'theme',
+  },
 };
 
 class SettingsManager extends EventEmitter {

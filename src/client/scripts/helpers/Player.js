@@ -1,11 +1,25 @@
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
+import SettingsManager from './SettingsManager';
 
-const Player = {
+class Player {
 
-  samples: [],
-  playing: [],
+  static instance;
 
-  frameRequested: false,
+  samples = [];
+  playing = [];
+
+  frameRequested = false;
+
+  static init() {
+    this.instance = new Player();
+
+    SettingsManager.instance.on('volume', (volume) => Howler.volume(volume));
+    Howler.volume(SettingsManager.instance.get('volume'));
+  }
+
+  constructor() {
+    this.progressStep = this.progressStep.bind(this);
+  }
 
   registerSample({ file, onPlay, onStop, onProgress }) {
     const id = this.samples.length;
@@ -60,17 +74,17 @@ const Player = {
 
     // Return the ID
     return id;
-  },
+  }
 
   isUnloaded(id) {
     return this.samples[id].howl.state() === 'unloaded';
-  },
+  }
 
   load(id) {
     if (this.isUnloaded(id)) {
       this.samples[id].howl.load();
     }
-  },
+  }
 
   play(id, multiple = false, loop = false) {
     const sample = this.samples[id];
@@ -96,12 +110,12 @@ const Player = {
       sample.howl.play();
       this.playing.push(id);
     }
-  },
+  }
 
   stop(id) {
     const sample = this.samples[id];
     sample.howl.stop();
-  },
+  }
 
   progressStep() {
     const { playing } = this;
@@ -120,10 +134,8 @@ const Player = {
     } else {
       this.frameRequested = false;
     }
-  },
+  }
 
-};
-
-Player.progressStep = Player.progressStep.bind(Player);
+}
 
 export default Player;

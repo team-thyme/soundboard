@@ -31,7 +31,7 @@ class Sample {
     this.categories = data.categories;
     this.mtime = data.mtime;
 
-    this.playerId = Player.registerSample({
+    this.playerId = Player.instance.registerSample({
       file: this.file,
       onPlay: () => {
         this.$sample.addClass('sample--playing');
@@ -78,9 +78,9 @@ class Sample {
     let hoverTimer;
 
     $sample.on('mouseenter', () => {
-      if (Player.isUnloaded(this.playerId)) {
+      if (Player.instance.isUnloaded(this.playerId)) {
         hoverTimer = setTimeout(() => {
-          Player.load(this.playerId);
+          Player.instance.load(this.playerId);
         }, 150);
       }
     });
@@ -91,7 +91,7 @@ class Sample {
 
     // Preload the sound when the user presses down on the sample
     $sample.on('mousedown touchstart', () => {
-      Player.load(this.playerId);
+      Player.instance.load(this.playerId);
     });
 
     // Play the sound on click
@@ -99,16 +99,16 @@ class Sample {
       const multiple = e.shiftKey || extraParams.shiftKey;
       const loop = e.ctrlKey || extraParams.ctrlKey;
 
-      if (Player.isUnloaded(this.playerId)) {
-        Player.load(this.playerId);
+      if (Player.instance.isUnloaded(this.playerId)) {
+        Player.instance.load(this.playerId);
       }
 
-      Player.play(this.playerId, multiple, loop);
+      Player.instance.play(this.playerId, multiple, loop);
     });
 
     $sample.on('contextmenu', (e) => {
       e.preventDefault();
-      Player.stop(this.playerId);
+      Player.instance.stop(this.playerId);
     });
   }
 
