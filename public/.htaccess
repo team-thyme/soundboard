@@ -1,1 +1,4 @@
-RewriteRule ^([^/\.\?]+(/?[^/\.\?]*)*(\?.*)?)$ index.php/$1
+RewriteEngine on
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.html [QSA,L]
