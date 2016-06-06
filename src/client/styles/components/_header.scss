@@ -11,16 +11,6 @@
   flex-direction: row;
 }
 
-@each $theme, $colors in $themes {
-  $color-primary: map-get($colors, primary);
-
-  .theme--#{$theme} {
-    .header {
-      background: $color-primary;
-    }
-  }
-}
-
 .header__search {
   margin: $spacing-base;
   flex: 1 1 auto;
@@ -35,7 +25,6 @@
   justify-content: center;
   align-items: center;
 
-  color: $color-text-default;
   border-radius: 50%;
 
   cursor: pointer;
@@ -48,5 +37,20 @@
 
   &:active {
     background: rgba(0,0,0,0.2);
+  }
+}
+
+@each $theme, $colors in $themes {
+  $color-primary: map-get($colors, primary);
+  $color-primary-text: map-get($colors, primary-text);
+
+  .theme--#{$theme} {
+    .header {
+      background: $color-primary;
+    }
+
+    .header__button {
+      color: $color-primary-text;
+    }
   }
 }

@@ -1,11 +1,27 @@
 $themes: (
 
   default: (
-    primary: red
+    primary: #25b192,
+    primary-text: #fff,
+
+    search: #fff,
+    search-text: #2d3e4c,
+
+    sample-container: #232323,
+    sample: #2d2d2d,
+    sample-text: #fff,
   ),
 
   classic: (
-    primary: blue
-  )
+    primary: red,
+    primary-text: #fff,
+
+    search: #fff,
+    search-text: blue,
+
+    sample-container: #fff,
+    sample: #eee,
+    sample-text: #222,
+  ),
 
 );

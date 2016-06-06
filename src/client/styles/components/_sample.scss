@@ -7,28 +7,36 @@
   padding: $spacing-base $spacing-base * 1.5;
   text-align: center;
 
-  color: $color-text-default;
-  background: $color-card;
   border-radius: $border-radius-base;
 
   cursor: pointer;
   transition: background 150ms ease;
-
-  &:hover {
-    background: lighten($color-card, 5%);
-  }
-
-  &:active {
-    background: lighten($color-card, 10%);
-  }
 }
 
 @each $theme, $colors in $themes {
+  $color-sample: map-get($colors, sample);
+  $color-sample-text: map-get($colors, sample-text);
+
   $color-primary: map-get($colors, primary);
+  $color-primary-text: map-get($colors, primary-text);
 
   .theme--#{$theme} {
+    .sample {
+      background: $color-sample;
+      color: $color-sample-text;
+
+      &:hover {
+        background: lighten($color-sample, 5%);
+      }
+
+      &:active {
+        background: lighten($color-sample, 10%);
+      }
+    }
+
     .sample--playing {
       background: $color-primary;
+      color: $color-primary-text;
       text-shadow: 0 1px 1px rgba(0,0,0,0.3);
 
       &:hover {

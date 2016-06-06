@@ -1,3 +1,4 @@
+@import '../themes';
 @import '../variables';
 
 .sample-container {
@@ -34,8 +35,6 @@
   align-items: center;
   justify-content: center;
 
-  color: mix($color-background, $color-text-default, 70%);
-
   .sample-container--empty & {
     display: flex;
   }
@@ -48,4 +47,19 @@
 .sample-container__empty-label {
   margin-top: $spacing-base;
   text-align: center;
+}
+
+@each $theme, $colors in $themes {
+  $color-sample-container: map-get($colors, sample-container);
+  $color-sample-text: map-get($colors, sample-text);
+
+  .theme--#{$theme} {
+    .sample-container {
+      background: $color-sample-container;
+    }
+
+    .sample-container__empty {
+      color: mix($color-sample-container, $color-sample-text, 70%);
+    }
+  }
 }
