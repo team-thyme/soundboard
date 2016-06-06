@@ -7,7 +7,7 @@ use \JsonSerializable;
 class Sample implements JsonSerializable
 {
 	// Todo: injection of these variables from config
-	private $sampleLocation = '../../samples';
+	private $sampleLocation = 'samples';
 
 	private $file;
 
