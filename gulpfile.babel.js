@@ -101,6 +101,9 @@ function bundle(bundler) {
   log('[browserify] Bundle start');
 
   return bundler.bundle(() => log('[browserify] Bundle completed'))
+    .on('error', (err) => {
+      log('[browserify]', err.toString());
+    })
     .pipe(sourceStream('main.js'))
     .pipe(rename('script.js'))
     .pipe(buffer())
