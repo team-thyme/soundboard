@@ -17,7 +17,6 @@
 
 .button--default {
   background: rgba(0,0,0,0.05);
-  color: $color-text-search;
 
   &:hover {
     background: rgba(0,0,0,0.08);
@@ -30,11 +29,12 @@
 
 @each $theme, $colors in $themes {
   $color-primary: map-get($colors, primary);
+  $color-primary-text: map-get($colors, primary-text);
 
   .theme--#{$theme} {
     .button--primary {
       background: $color-primary;
-      color: $color-text-default;
+      color: $color-primary-text;
 
       &:hover {
         background: darken($color-primary, 4%);

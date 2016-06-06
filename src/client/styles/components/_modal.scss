@@ -58,16 +58,14 @@
   }
 }
 
-.modal__header {
-  color: $color-text-default;
-}
-
 @each $theme, $colors in $themes {
   $color-primary: map-get($colors, primary);
+  $color-primary-text: map-get($colors, primary-text);
 
   .theme--#{$theme} {
     .modal__header {
       background: $color-primary;
+      color: $color-primary-text;
     }
   }
 }
