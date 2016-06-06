@@ -1,0 +1,17 @@
+@import '../variables';
+
+.input-group {
+  flex-direction: row;
+}
+
+.input-group__input {
+  flex: 1 1 auto;
+}
+
+.input-group__value {
+  margin-left: $spacing-base;
+  flex: 0 0 1.6rem;
+  text-align: center;
+  font-size: 0.8em;
+  color: $color-text-secondary;
+}
