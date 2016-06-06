@@ -20,8 +20,7 @@ class Router
 
 	public function configureRoutes()
 	{
-		foreach($this->config['routes'] as $name => $route)
-		{
+		foreach ($this->config['routes'] as $name => $route) {
 			$controller = new $route['controller'];
 
 			//todo: account for methods

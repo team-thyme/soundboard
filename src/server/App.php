@@ -10,12 +10,10 @@ class App extends SlimApp
 	private $config;
 	protected $router;
 
-	const CONFIG_FILE = '../../config/server.yml';
+	const CONFIG_FILE = 'config/server.yml';
 
 	public function __construct()
 	{
-		chdir(__DIR__ . '/..');
-
 		$config = Yaml::parse(file_get_contents(self::CONFIG_FILE));
 		$this->config = $config['server'];
 
@@ -31,8 +29,7 @@ class App extends SlimApp
 
 	public function getConfig($section = null)
 	{
-		if (!$section)
-		{
+		if (!$section) {
 			return $this->config;
 		}
 

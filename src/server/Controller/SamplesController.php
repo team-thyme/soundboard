@@ -1,12 +1,11 @@
 <?php
 
-namespace Villermen\Soundboard\Controllers;
+namespace Villermen\Soundboard\Controller;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Exception\NotFoundException;
-use Villermen\Soundboard\Models\JsonResult;
-use Villermen\Soundboard\Models\Sample;
+use Villermen\Soundboard\Model\Sample;
 use \RecursiveIteratorIterator;
 use \RegexIterator;
 use \RecursiveDirectoryIterator;
@@ -15,7 +14,7 @@ use \finfo;
 class SamplesController
 {
 	// Todo: injection of these variables from config
-	private $sampleLocation = '../../samples';
+	private $sampleLocation = 'samples';
 
 	public function listAction(Request $request, Response $response)
 	{
@@ -33,8 +32,7 @@ class SamplesController
 
 		$path = $this->sampleLocation . $file;
 
-		if (!file_exists($path))
-		{
+		if (!file_exists($path)) {
 			throw new NotFoundException($request, $response);
 		}
 
@@ -60,7 +58,7 @@ class SamplesController
 		);
 
 		// Map to sample objects
-		$samples = array_map(function($file) {
+		$samples = array_map(function ($file) {
 			return new Sample($file);
 		}, iterator_to_array($iterator, false));
 

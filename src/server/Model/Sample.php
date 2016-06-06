@@ -1,6 +1,6 @@
 <?php
 
-namespace Villermen\Soundboard\Models;
+namespace Villermen\Soundboard\Model;
 
 use \JsonSerializable;
 
@@ -25,8 +25,11 @@ class Sample implements JsonSerializable
 		$this->path = str_replace($this->sampleLocation, '', $pathname);
 
 		// Conjure a name out of the filename
-		$this->name = preg_replace('/([^\d])\d{0,2}$/', '\1',
-			$file->getBasename('.' . $file->getExtension()));
+		$this->name = preg_replace(
+			'/([^\d])\d{0,2}$/',
+			'\1',
+			$file->getBasename('.' . $file->getExtension())
+		);
 	}
 
 	public function jsonSerialize()
