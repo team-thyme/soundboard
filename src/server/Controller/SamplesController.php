@@ -16,8 +16,7 @@ class SamplesController extends Controller
 {
 	public function listAction(Request $request, Response $response, $arguments)
 	{
-		if ($request->getQueryParam('query'))
-		{
+		if ($request->getQueryParam('query')) {
 			return $this->queryAction($request, $response, $arguments);
 		}
 
