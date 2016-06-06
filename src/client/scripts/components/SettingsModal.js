@@ -1,11 +1,9 @@
 import $ from 'jquery';
 import Modal from './Modal';
 import ThemeSelector from './ThemeSelector';
+import SettingsManager from '../helpers/SettingsManager';
 
 class SettingsModal extends Modal {
-
-  /** @type SettingsManager */
-  settingsManager;
 
   /** @type jQuery */
   $cancel;
@@ -16,10 +14,8 @@ class SettingsModal extends Modal {
   /** @type Object */
   settings
 
-  constructor(settingsManager) {
+  constructor() {
     super('#settings-modal');
-
-    this.settingsManager = settingsManager;
 
     this.buildSettings(this.$modal.find('.modal__content'));
 
@@ -44,7 +40,7 @@ class SettingsModal extends Modal {
       settings[key] = this.settings[key].value;
     });
 
-    this.settingsManager.setAll(settings);
+    SettingsManager.instance.setAll(settings);
   }
 
   show() {
@@ -59,7 +55,7 @@ class SettingsModal extends Modal {
    */
 
   updateSettings() {
-    const settings = this.settingsManager.getAll();
+    const settings = SettingsManager.instance.getAll();
 
     Object.keys(settings).forEach((key) => {
       this.settings[key].value = settings[key];
@@ -67,7 +63,7 @@ class SettingsModal extends Modal {
   }
 
   buildSettings($content) {
-    const settings = this.settingsManager.getAll();
+    const settings = SettingsManager.instance.getAll();
     this.settings = {};
 
     Object.keys(settings).forEach((key) => {

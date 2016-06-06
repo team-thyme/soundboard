@@ -1,25 +1,17 @@
 import $ from 'jquery';
-
 import config from './config';
 import ApiClient from './helpers/ApiClient';
 import SettingsManager from './helpers/SettingsManager';
+import ThemeManager from './helpers/ThemeManager';
 import SampleContainer from './components/SampleContainer';
 import Search from './components/Search';
 import SettingsModal from './components/SettingsModal';
 
 const apiClient = new ApiClient(config.apiBaseUrl);
-const settingsManager = new SettingsManager();
-const settingsModal = new SettingsModal(settingsManager);
+SettingsManager.init();
+ThemeManager.init();
 
-// TODO: Move this to separate ThemeManager class
-function setTheme(theme) {
-  $('body')
-    .toggleClass('theme--default', theme === 'default')
-    .toggleClass('theme--classic', theme === 'classic');
-}
-
-settingsManager.on('theme', setTheme);
-setTheme(settingsManager.get('theme'));
+const settingsModal = new SettingsModal();
 
 // Add samples to the container
 const sampleContainer = new SampleContainer();
@@ -40,10 +32,6 @@ const search = new Search({
 $('[data-action="show-settings-modal"]').on('click', () => {
   settingsModal.show();
 });
-
-// TODO: remove debug code
-// settingsModal.show();
-// sampleContainer.setQuery('asd');
 
 // Random page title
 const boardNames = [

@@ -9,9 +9,18 @@ const DEFAULT_SETTINGS = {
 
 class SettingsManager extends EventEmitter {
 
+  /** @type SettingsManager */
+  static instance;
+
   store;
 
+  static init() {
+    this.instance = new SettingsManager();
+  }
+
   constructor() {
+    super();
+
     // Init store with namespace
     this.store = store2.namespace(STORE_NAMESPACE);
     // Set default settings, without overwrite
@@ -19,8 +28,9 @@ class SettingsManager extends EventEmitter {
   }
 
   set(key, value, overwrite = true) {
+    this.store.set(key, value, overwrite);
+
     this.emit(key, value);
-    return this.store.set(key, value, overwrite);
   }
 
   get(key) {
@@ -32,11 +42,11 @@ class SettingsManager extends EventEmitter {
   }
 
   setAll(settings) {
+    this.store.setAll(settings);
+
     Object.keys(settings).forEach((key) => {
       this.emit(key, settings[key]);
     });
-
-    this.store.setAll(settings);
   }
 
 }
