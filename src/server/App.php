@@ -11,6 +11,8 @@ class App extends SlimApp
 
 	public function __construct()
 	{
+		chdir(__DIR__ . '/../..');
+		
 		// Load configuration.
 		$config = Yaml::parse(file_get_contents(self::CONFIG_FILE));
 		$config = $config['server'];
