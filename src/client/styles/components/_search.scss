@@ -15,6 +15,10 @@
 
   font: inherit;
 
+  transition:
+    background $transition-base ease,
+    color $transition-base ease;
+
   &:focus {
     outline: 0;
   }
@@ -35,7 +39,11 @@
   opacity: 0.5;
 
   cursor: pointer;
-  transition: background 200ms ease, opacity 200ms ease, transform 200ms ease;
+  transition:
+    background $transition-base ease,
+    opacity $transition-base ease,
+    transform $transition-base ease,
+    color $transition-base ease;
 
   &:hover {
     background: rgba(0,0,0,0.1);
