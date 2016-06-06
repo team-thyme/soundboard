@@ -58,16 +58,10 @@
   }
 }
 
-@each $theme, $colors in $themes {
-  $color-primary: map-get($colors, primary);
-  $color-primary-text: map-get($colors, primary-text);
-
-  .theme--#{$theme} {
-    .modal__header {
-      background: $color-primary;
-      color: $color-primary-text;
-    }
-  }
+.modal__header {
+  transition:
+    background $transition-base ease,
+    color $transition-base ease;
 }
 
 .modal__content {
@@ -80,4 +74,16 @@
 
   background: darken(#fff, 2%);
   border-top: 1px solid darken(#fff, 5%);
+}
+
+@each $theme, $colors in $themes {
+  $color-primary: map-get($colors, primary);
+  $color-primary-text: map-get($colors, primary-text);
+
+  .theme--#{$theme} {
+    .modal__header {
+      background: $color-primary;
+      color: $color-primary-text;
+    }
+  }
 }

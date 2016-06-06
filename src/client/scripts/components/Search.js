@@ -5,6 +5,9 @@ class Search {
   /** @type {function} */
   onChange;
 
+  /** @type {function} */
+  onSubmit;
+
   /** @type {jQuery} */
   $search;
 
@@ -14,8 +17,9 @@ class Search {
   /** @type {string} */
   query = '';
 
-  constructor({ onChange }) {
+  constructor({ onChange, onSubmit }) {
     this.onChange = onChange;
+    this.onSubmit = onSubmit;
 
     this.$search = $('.search');
     this.$input = $('.search__input');
@@ -23,8 +27,12 @@ class Search {
 
     this.$search.addClass('search--empty');
 
-    this.$input.on('input', this.handleChange.bind(this));
-    this.$clear.on('click', () => this.$input.val('').trigger('input').focus());
+    this.$input
+      .on('input', this.handleChange.bind(this))
+      .on('keydown', this.handleKeydown.bind(this));
+
+    this.$clear
+      .on('click', () => this.$input.val('').trigger('input'));
   }
 
   handleChange() {
@@ -36,6 +44,14 @@ class Search {
     }
 
     this.$search.toggleClass('search--empty', this.query === '');
+  }
+
+  handleKeydown(e) {
+    e.stopPropagation();
+
+    if (e.which === 13) {
+      this.onSubmit(e);
+    }
   }
 
 }

@@ -80,6 +80,12 @@ class SampleContainer {
     this.query = query;
   }
 
+  playRandom({ shiftKey = false, ctrlKey = false }) {
+    const $visibleSamples = $('.sample:not(.sample--filtered)');
+    const index = Math.floor(Math.random() * $visibleSamples.length);
+    $visibleSamples.eq(index).trigger('click', { shiftKey, ctrlKey });
+  }
+
 }
 
 export default SampleContainer;

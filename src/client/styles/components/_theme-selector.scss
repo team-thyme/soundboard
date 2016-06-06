@@ -3,6 +3,7 @@
 
 .theme-selector {
   flex-direction: row;
+  margin: 0 -2px;
 }
 
 .theme-selector__item {
@@ -16,7 +17,7 @@
   border: 2px solid transparent;
   border-radius: $border-radius-base + 2;
 
-  transition: border-color 100ms ease;
+  transition: border-color $transition-fast ease;
 
   .theme-selector__item:hover & {
     border-color: rgba(0,0,0,0.1);
@@ -36,4 +37,13 @@
 .theme-selector__label {
   margin-top: $spacing-base / 2;
   text-align: center;
+
+  color: $color-text-secondary;
+  font-size: 0.8rem;
+
+  transition: color $transition-fast ease;
+
+  .theme-selector__item--selected & {
+    color: $color-text-default;
+  }
 }

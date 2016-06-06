@@ -1,9 +1,5 @@
 import $ from 'jquery';
-
-const themes = {
-  default: 'Default',
-  classic: 'Classic',
-};
+import { themes } from '../helpers/ThemeManager';
 
 class ThemeSelector {
 

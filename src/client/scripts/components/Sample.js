@@ -12,6 +12,9 @@ class Sample {
   /** @type string */
   name;
 
+  /** @type string[] */
+  categories;
+
   /** @type number */
   mtime;
 
@@ -25,9 +28,10 @@ class Sample {
     this.id = data.id;
     this.file = data.file;
     this.name = data.name;
+    this.categories = data.categories;
     this.mtime = data.mtime;
 
-    this.playerId = Player.registerSample({
+    this.playerId = Player.instance.registerSample({
       file: this.file,
       onPlay: () => {
         this.$sample.addClass('sample--playing');
@@ -53,10 +57,10 @@ class Sample {
       .text(this.name)
     );
 
-    // $sample.append($('<div />')
-    //   .addClass('sample__location')
-    //   .text(this.location)
-    // );
+    $sample.append($('<div />')
+      .addClass('sample__categories')
+      .text(this.categories.join(' / '))
+    );
 
     const $progress = this.$progress = $('<div />')
       .addClass('sample__progress');
@@ -74,9 +78,9 @@ class Sample {
     let hoverTimer;
 
     $sample.on('mouseenter', () => {
-      if (Player.isUnloaded(this.playerId)) {
+      if (Player.instance.isUnloaded(this.playerId)) {
         hoverTimer = setTimeout(() => {
-          Player.load(this.playerId);
+          Player.instance.load(this.playerId);
         }, 150);
       }
     });
@@ -87,20 +91,24 @@ class Sample {
 
     // Preload the sound when the user presses down on the sample
     $sample.on('mousedown touchstart', () => {
-      Player.load(this.playerId);
+      Player.instance.load(this.playerId);
     });
 
     // Play the sound on click
-    $sample.on('click', (e) => {
-      const multiple = e.shiftKey;
-      const loop = e.ctrlKey;
+    $sample.on('click', (e, extraParams = {}) => {
+      const multiple = e.shiftKey || extraParams.shiftKey;
+      const loop = e.ctrlKey || extraParams.ctrlKey;
 
-      Player.play(this.playerId, multiple, loop);
+      if (Player.instance.isUnloaded(this.playerId)) {
+        Player.instance.load(this.playerId);
+      }
+
+      Player.instance.play(this.playerId, multiple, loop);
     });
 
     $sample.on('contextmenu', (e) => {
       e.preventDefault();
-      Player.stop(this.playerId);
+      Player.instance.stop(this.playerId);
     });
   }
 

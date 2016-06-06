@@ -1,44 +1,66 @@
 import store2 from 'store2';
-import { EventEmitter } from 'events';
+import EventEmitter from 'events';
 
 const STORE_NAMESPACE = 'soundboard';
 
-class SettingsManager {
+const DEFAULT_SETTINGS = {
+  volume: 1.0,
+  theme: 'default',
+};
+
+export const settingManifest = {
+  volume: {
+    label: 'Volume',
+    type: 'slider',
+    row: true,
+    params: { min: 0, max: 100, step: 10, multiplier: 100 },
+  },
+  theme: {
+    label: 'Theme',
+    type: 'theme',
+  },
+};
+
+class SettingsManager extends EventEmitter {
+
+  /** @type SettingsManager */
+  static instance;
 
   store;
 
-  eventEmitter;
+  static init() {
+    this.instance = new SettingsManager();
+  }
 
   constructor() {
+    super();
+
+    // Init store with namespace
     this.store = store2.namespace(STORE_NAMESPACE);
-    this.eventEmitter = new EventEmitter();
+    // Set default settings, without overwrite
+    this.store.setAll(DEFAULT_SETTINGS, false);
   }
 
   set(key, value, overwrite = true) {
-    this.eventEmitter.emit(key, value);
-    return this.store.set(key, value, overwrite);
+    this.store.set(key, value, overwrite);
+
+    this.emit(key, value);
   }
 
-  get(key, alt) {
-    return this.store.get(key, alt);
+  get(key) {
+    return this.store.get(key);
   }
 
   getAll() {
-    return {
-      theme: this.store.get('theme', 'default'),
-    };
+    return this.store.getAll();
   }
 
   setAll(settings) {
-    Object.keys(settings).forEach((key) => {
-      this.eventEmitter.emit(key, settings[key]);
-    });
-
     this.store.setAll(settings);
-  }
 
-  on(key, callback) {
-    this.eventEmitter.on(key, callback);
+    Object.keys(settings).forEach((key) => {
+      this.emit(key, settings[key]);
+    });
   }
 
 }

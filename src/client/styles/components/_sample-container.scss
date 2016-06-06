@@ -9,6 +9,8 @@
   flex-wrap: wrap;
   align-items: flex-start;
 
+  transition: background $transition-base ease;
+
   &::after {
     content: '';
     flex: 9999 0 auto;
@@ -22,6 +24,8 @@
 
 .sample-container--empty {
   align-items: center;
+
+  transition: color $transition-base ease;
 
   &::after {
     display: none;

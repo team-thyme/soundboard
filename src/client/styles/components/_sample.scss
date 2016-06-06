@@ -10,12 +10,49 @@
   border-radius: $border-radius-base;
 
   cursor: pointer;
-  transition: background 150ms ease;
+  transition:
+    background $transition-base ease,
+    color $transition-base ease,
+    text-shadow $transition-base ease,
+    box-shadow $transition-base ease;
+}
+
+.sample--filtered {
+  display: none;
+}
+
+.sample__categories {
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+.sample__progress-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  flex-direction: row;
+
+  overflow: hidden;
+  border-radius: $border-radius-base;
+
+  opacity: 0;
+  transition: opacity $transition-base ease;
+
+  .sample--playing & {
+    opacity: 1;
+  }
+}
+
+.sample__progress {
+  background: rgba(255,255,255,0.3);
 }
 
 @each $theme, $colors in $themes {
   $color-sample: map-get($colors, sample);
   $color-sample-text: map-get($colors, sample-text);
+  $color-sample-shadow: map-get($colors, sample-shadow);
 
   $color-primary: map-get($colors, primary);
   $color-primary-text: map-get($colors, primary-text);
@@ -25,12 +62,34 @@
       background: $color-sample;
       color: $color-sample-text;
 
-      &:hover {
-        background: lighten($color-sample, 5%);
+      @if (lightness($color-sample) > 50%) {
+        &:hover {
+          background: darken($color-sample, 3%);
+        }
+
+        &:active {
+          background: darken($color-sample, 6%);
+        }
+      } @else {
+        &:hover {
+          background: lighten($color-sample, 5%);
+        }
+
+        &:active {
+          background: lighten($color-sample, 10%);
+        }
       }
 
-      &:active {
-        background: lighten($color-sample, 10%);
+      @if ($color-sample-shadow) {
+        box-shadow: 0 1px 4px $color-sample-shadow;
+
+        &:hover {
+          box-shadow: 0 2px 6px opacify($color-sample-shadow, 0.05);
+        }
+
+        &:active {
+          box-shadow: 0 2px 8px opacify($color-sample-shadow, 0.1);
+        }
       }
     }
 
@@ -48,36 +107,4 @@
       }
     }
   }
-}
-
-.sample--filtered {
-  display: none;
-}
-
-.sample__location {
-  font-size: 0.9em;
-  opacity: 0.7;
-}
-
-.sample__progress-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  flex-direction: row;
-
-  overflow: hidden;
-  border-radius: $border-radius-base;
-
-  opacity: 0;
-  transition: opacity 150ms ease;
-
-  .sample--playing & {
-    opacity: 1;
-  }
-}
-
-.sample__progress {
-  background: rgba(255,255,255,0.3);
 }

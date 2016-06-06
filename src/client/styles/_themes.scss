@@ -13,15 +13,16 @@ $themes: (
   ),
 
   classic: (
-    primary: red,
+    primary: #4CAF50,
     primary-text: #fff,
 
     search: #fff,
-    search-text: blue,
+    search-text: #222,
 
-    sample-container: #fff,
-    sample: #eee,
+    sample-container: #eee,
+    sample: #fff,
     sample-text: #222,
+    sample-shadow: rgba(0,0,0,0.15)
   ),
 
 );

@@ -1,11 +1,9 @@
 import $ from 'jquery';
 import Modal from './Modal';
 import ThemeSelector from './ThemeSelector';
+import SettingsManager, { settingManifest } from '../helpers/SettingsManager';
 
 class SettingsModal extends Modal {
-
-  /** @type SettingsManager */
-  settingsManager;
 
   /** @type jQuery */
   $cancel;
@@ -16,10 +14,8 @@ class SettingsModal extends Modal {
   /** @type Object */
   settings
 
-  constructor(settingsManager) {
+  constructor() {
     super('#settings-modal');
-
-    this.settingsManager = settingsManager;
 
     this.buildSettings(this.$modal.find('.modal__content'));
 
@@ -44,7 +40,7 @@ class SettingsModal extends Modal {
       settings[key] = this.settings[key].value;
     });
 
-    this.settingsManager.setAll(settings);
+    SettingsManager.instance.setAll(settings);
   }
 
   show() {
@@ -59,7 +55,7 @@ class SettingsModal extends Modal {
    */
 
   updateSettings() {
-    const settings = this.settingsManager.getAll();
+    const settings = SettingsManager.instance.getAll();
 
     Object.keys(settings).forEach((key) => {
       this.settings[key].value = settings[key];
@@ -67,37 +63,73 @@ class SettingsModal extends Modal {
   }
 
   buildSettings($content) {
-    const settings = this.settingsManager.getAll();
     this.settings = {};
 
-    Object.keys(settings).forEach((key) => {
-      const setting = this.buildSetting(key, settings[key]);
-      setting.$element.appendTo($content);
+    const $form = $('<div />')
+      .appendTo($content)
+      .addClass('form');
+
+    Object.keys(settingManifest).forEach((key) => {
+      const { label, type, row = false, params } = settingManifest[key];
+
+      const setting = this.buildSetting(type, SettingsManager.instance.get(key), params);
       this.settings[key] = setting;
+
+      const $item = $('<div />')
+        .appendTo($form)
+        .addClass('form__item')
+        .toggleClass('form__item--row', row);
+
+      $('<div />')
+        .appendTo($item)
+        .addClass('form__label')
+        .text(label);
+
+      $('<div />')
+        .appendTo($item)
+        .addClass('form__control')
+        .append(setting.$element);
     });
   }
 
-  buildSetting(key, value) {
-    switch (key) {
+  /**
+   * @param type
+   * @param initialValue
+   * @param params
+   * @returns {SettingsModal~Setting}
+   */
+  buildSetting(type, initialValue, params) {
+    switch (type) {
       case 'theme':
-        return this.buildThemeSelector(value);
+        return this.buildSettingTheme(initialValue, params);
+
+      case 'slider':
+        return this.buildSettingSlider(initialValue, params);
 
       default:
-        throw new Error(`Unknown setting ${key}`);
+        throw new Error(`Unknown setting type ${type}`);
     }
   }
 
-  buildThemeSelector(initialValue) {
+  buildSettingTheme(initialValue) {
     const themeSelector = new ThemeSelector(initialValue);
 
     return {
       $element: themeSelector.$selector,
-      get value() {
-        return themeSelector.value;
-      },
-      set value(newValue) {
-        themeSelector.value = newValue;
-      },
+      get value() { return themeSelector.value; },
+      set value(newValue) { themeSelector.value = newValue; },
+    };
+  }
+
+  buildSettingSlider(initialValue, { min, max, step, multiplier }) {
+    const $input = $('<input />')
+      .attr({ type: 'range', min, max, step })
+      .val(initialValue * multiplier);
+
+    return {
+      $element: $input,
+      get value() { return $input.val() / multiplier; },
+      set value(newValue) { $input.val(newValue * multiplier); },
     };
   }
 
