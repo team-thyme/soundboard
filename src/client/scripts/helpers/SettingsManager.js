@@ -7,6 +7,10 @@ const DEFAULT_SETTINGS = {
   theme: 'default',
 };
 
+export const settingManifest = {
+  theme: { label: 'Theme', type: 'theme' },
+};
+
 class SettingsManager extends EventEmitter {
 
   /** @type SettingsManager */

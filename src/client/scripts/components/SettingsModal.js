@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import Modal from './Modal';
 import ThemeSelector from './ThemeSelector';
-import SettingsManager from '../helpers/SettingsManager';
+import SettingsManager, { settingManifest } from '../helpers/SettingsManager';
 
 class SettingsModal extends Modal {
 
@@ -63,27 +63,46 @@ class SettingsModal extends Modal {
   }
 
   buildSettings($content) {
-    const settings = SettingsManager.instance.getAll();
     this.settings = {};
 
-    Object.keys(settings).forEach((key) => {
-      const setting = this.buildSetting(key, settings[key]);
-      setting.$element.appendTo($content);
+    Object.keys(settingManifest).forEach((key) => {
+      const { label, type } = settingManifest[key];
+
+      const setting = this.buildSetting(type, SettingsManager.instance.get(key));
       this.settings[key] = setting;
+
+      const $item = $('<div />')
+        .appendTo($content)
+        .addClass('form__item');
+
+      $('<div />')
+        .appendTo($item)
+        .addClass('form__label')
+        .text(label);
+
+      $('<div />')
+        .appendTo($item)
+        .addClass('form__control')
+        .append(setting.$element);
     });
   }
 
-  buildSetting(key, value) {
-    switch (key) {
+  /**
+   * @param type
+   * @param initialValue
+   * @returns {SettingsModal~Setting}
+   */
+  buildSetting(type, initialValue) {
+    switch (type) {
       case 'theme':
-        return this.buildThemeSelector(value);
+        return this.buildSettingTheme(initialValue);
 
       default:
-        throw new Error(`Unknown setting ${key}`);
+        throw new Error(`Unknown setting type ${type}`);
     }
   }
 
-  buildThemeSelector(initialValue) {
+  buildSettingTheme(initialValue) {
     const themeSelector = new ThemeSelector(initialValue);
 
     return {
