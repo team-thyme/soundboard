@@ -1,4 +1,6 @@
+import 'whatwg-fetch';
 import $ from 'jquery';
+
 import config from './config';
 import ApiClient from './helpers/ApiClient';
 import SettingsManager from './helpers/SettingsManager';
@@ -8,13 +10,14 @@ import Search from './components/Search';
 import SettingsModal from './components/SettingsModal';
 
 const apiClient = new ApiClient(config.apiBaseUrl);
+
 SettingsManager.init();
 ThemeManager.init();
 
 const settingsModal = new SettingsModal();
 
 // TODO: Remove debug code
-// settingsModal.show();
+settingsModal.show();
 
 // Add samples to the container
 const sampleContainer = new SampleContainer();

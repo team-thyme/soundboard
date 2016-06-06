@@ -44,6 +44,7 @@
   "dependencies": {
     "howler": "^2.0.0-beta13",
     "jquery": "^2.2.4",
-    "store2": "^2.3.2"
+    "store2": "^2.3.2",
+    "whatwg-fetch": "^1.0.0"
   }
 }
