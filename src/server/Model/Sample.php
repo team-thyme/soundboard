@@ -9,6 +9,7 @@ class Sample implements JsonSerializable
 	protected $file;
 	protected $name;
 	protected $mtime;
+	protected $categories;
 
 	public function __construct($file, $mtime)
 	{
@@ -25,6 +26,9 @@ class Sample implements JsonSerializable
 
 		// Replace trailing numbers, to allow files to obtain the same name.
 		$this->name = preg_replace('/([^\d])\d{0,2}$/', '\1', $name);
+
+		// Create categories for each of the relative directories.
+		$this->categories = array_slice(explode('/', $this->file), 1, -1);
 	}
 
 	public function jsonSerialize()
@@ -33,7 +37,8 @@ class Sample implements JsonSerializable
 			'file' => $this->file,
 			'name' => $this->name,
 			'id' => hash('crc32', $this->name),
-			'mtime' => $this->mtime
+			'mtime' => $this->mtime,
+			'categories' => $this->categories
 		];
 	}
 }
