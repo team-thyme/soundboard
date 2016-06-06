@@ -6,39 +6,34 @@ use \JsonSerializable;
 
 class Sample implements JsonSerializable
 {
-	// Todo: injection of these variables from config
-	private $sampleLocation = 'samples';
+	protected $file;
+	protected $name;
+	protected $mtime;
 
-	private $file;
-
-	private $path;
-	private $name;
-
-	public function __construct($file)
+	public function __construct($file, $mtime)
 	{
 		$this->file = $file;
+		$this->mtime = $mtime;
 
-		// Windows compatibility
-		$pathname = str_replace('\\', '/', $this->file->getPathname());
+		// Conjure a name out of the filename.
+		$name = substr($this->file, strrpos($this->file, '/') + 1);
 
-		// Make path relative
-		$this->path = str_replace($this->sampleLocation, '', $pathname);
+		$dotPosition = strrpos($name, '.');
+		if ($dotPosition) {
+			$name = substr($name, 0, $dotPosition);
+		}
 
-		// Conjure a name out of the filename
-		$this->name = preg_replace(
-			'/([^\d])\d{0,2}$/',
-			'\1',
-			$file->getBasename('.' . $file->getExtension())
-		);
+		// Replace trailing numbers, to allow files to obtain the same name.
+		$this->name = preg_replace('/([^\d])\d{0,2}$/', '\1', $name);
 	}
 
 	public function jsonSerialize()
 	{
 		return [
-			'file' => $this->path,
+			'file' => $this->file,
 			'name' => $this->name,
 			'id' => hash('crc32', $this->name),
-			'mtime' => $this->file->getMTime()
+			'mtime' => $this->mtime
 		];
 	}
 }

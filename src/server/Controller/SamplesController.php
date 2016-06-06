@@ -6,16 +6,14 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Exception\NotFoundException;
 use Villermen\Soundboard\Model\Sample;
+use Villermen\Soundboard\Controller;
 use \RecursiveIteratorIterator;
 use \RegexIterator;
 use \RecursiveDirectoryIterator;
 use \finfo;
 
-class SamplesController
+class SamplesController extends Controller
 {
-	// Todo: injection of these variables from config
-	private $sampleLocation = 'samples';
-
 	public function listAction(Request $request, Response $response)
 	{
 		$samples = $this->getSamples();
@@ -27,10 +25,10 @@ class SamplesController
 	{
 		$file = '/' . $arguments['file'];
 
-		// Directory traveral protection
+		// Directory traveral protection.
 		$file = str_replace('/../', '/', $file);
 
-		$path = $this->sampleLocation . $file;
+		$path = $this->getContainer()->get('config')['sampleLocation'] . $file;
 
 		if (!file_exists($path)) {
 			throw new NotFoundException($request, $response);
@@ -46,20 +44,28 @@ class SamplesController
 
 	public function getSamples()
 	{
-		// Get files
+		// Get files.
 		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator($this->sampleLocation, RecursiveDirectoryIterator::FOLLOW_SYMLINKS)
+			new RecursiveDirectoryIterator(
+				$this->getContainer()->get('config')['sampleLocation'],
+				RecursiveDirectoryIterator::FOLLOW_SYMLINKS
+			)
 		);
 
-		// Filter sound files
+		// Filter sound files.
 		$iterator = new RegexIterator(
 			$iterator,
 			'/\.(wav|mp3|ogg)$/'
 		);
 
-		// Map to sample objects
+		// Map to sample objects.
 		$samples = array_map(function ($file) {
-			return new Sample($file);
+			// Windows compatibility.
+			$pathname = str_replace('\\', '/', $file->getPathname());
+
+			// Make path relative.
+			$path = str_replace($this->getContainer()->get('config')['sampleLocation'], '', $pathname);
+			return new Sample($path, $file->getMTime());
 		}, iterator_to_array($iterator, false));
 
 		return $samples;
