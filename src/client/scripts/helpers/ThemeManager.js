@@ -15,7 +15,6 @@ class ThemeManager {
     this.instance = new ThemeManager();
 
     SettingsManager.instance.on('theme', () => {
-      console.log('theme');
       this.instance.updateTheme();
     });
 
