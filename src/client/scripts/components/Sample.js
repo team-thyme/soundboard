@@ -12,6 +12,9 @@ class Sample {
   /** @type string */
   name;
 
+  /** @type string[] */
+  categories;
+
   /** @type number */
   mtime;
 
@@ -25,6 +28,7 @@ class Sample {
     this.id = data.id;
     this.file = data.file;
     this.name = data.name;
+    this.categories = data.categories;
     this.mtime = data.mtime;
 
     this.playerId = Player.registerSample({
@@ -53,10 +57,10 @@ class Sample {
       .text(this.name)
     );
 
-    // $sample.append($('<div />')
-    //   .addClass('sample__location')
-    //   .text(this.location)
-    // );
+    $sample.append($('<div />')
+      .addClass('sample__categories')
+      .text(this.categories.join(' / '))
+    );
 
     const $progress = this.$progress = $('<div />')
       .addClass('sample__progress');
