@@ -3,17 +3,22 @@
 namespace Villermen\Soundboard;
 
 use Villermen\Soundboard\App;
+use Slim\Router as SlimRouter;
+use Interop\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
-class Router
+class Router extends SlimRouter
 {
-	protected $app;
+	protected $container;
 	protected $config;
 	protected $routes;
 
-	public function __construct(App $app)
+	public function __construct(ContainerInterface $container)
 	{
-		$this->app = $app;
-		$this->config = $this->app->getContainer()->get('config')['router'];
+		parent::__construct();
+
+		$this->container = $container;
+		$this->config = $this->container->get('config')['router'];
 
 		$this->configureRoutes();
 	}
@@ -21,9 +26,9 @@ class Router
 	public function configureRoutes()
 	{
 		foreach ($this->config['routes'] as $name => $route) {
-			$controller = new $route['controller']($this->app->getContainer());
+			$controller = new $route['controller']($this->container);
 
-			$this->app->map($route['methods'], $route['path'], [ $controller, $route['action'] ]);
+			$this->map($route['methods'], $route['path'], [ $controller, $route['action'] ]);
 		}
 	}
 }

@@ -14,8 +14,13 @@ use \finfo;
 
 class SamplesController extends Controller
 {
-	public function listAction(Request $request, Response $response)
+	public function listAction(Request $request, Response $response, $arguments)
 	{
+		if ($request->getQueryParam('query'))
+		{
+			return $this->queryAction($request, $response, $arguments);
+		}
+
 		$samples = $this->getSamples();
 
 		return $response->withJson($samples);
@@ -40,6 +45,23 @@ class SamplesController extends Controller
 		readfile($path);
 
 		return $response->withHeader('Content-Type', $mimeType);
+	}
+
+	public function queryAction(Request $request, Response $response, $arguments)
+	{
+		$query = $request->getQueryParam('query');
+		$samples = $this->getSamples();
+		$query = preg_quote($query);
+		$queryTerms = preg_split('/\s/', $query);
+		$regexQuery = '/^(?=.*' . implode(')(?=.*', $queryTerms) . ').*$/i';
+
+		$filteredSamples = array_values(array_filter($samples, function ($sample) use ($regexQuery) {
+			$searchString = $sample->getName() . implode(';', $sample->getCategories());
+
+			return preg_match($regexQuery, $searchString);
+		}));
+
+		return $response->withJson($filteredSamples);
 	}
 
 	public function getSamples()
