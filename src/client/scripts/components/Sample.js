@@ -95,9 +95,13 @@ class Sample {
     });
 
     // Play the sound on click
-    $sample.on('click', (e) => {
-      const multiple = e.shiftKey;
-      const loop = e.ctrlKey;
+    $sample.on('click', (e, extraParams = {}) => {
+      const multiple = e.shiftKey || extraParams.shiftKey;
+      const loop = e.ctrlKey || extraParams.ctrlKey;
+
+      if (Player.isUnloaded(this.playerId)) {
+        Player.load(this.playerId);
+      }
 
       Player.play(this.playerId, multiple, loop);
     });

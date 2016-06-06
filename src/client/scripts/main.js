@@ -13,6 +13,9 @@ ThemeManager.init();
 
 const settingsModal = new SettingsModal();
 
+// TODO: Remove debug code
+// settingsModal.show();
+
 // Add samples to the container
 const sampleContainer = new SampleContainer();
 
@@ -25,6 +28,10 @@ const search = new Search({
   onChange: (query) => {
     sampleContainer.setQuery(query);
     sampleContainer.update();
+  },
+
+  onSubmit: (e) => {
+    sampleContainer.playRandom(e);
   },
 });
 
