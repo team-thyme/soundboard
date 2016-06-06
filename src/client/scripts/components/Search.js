@@ -47,7 +47,9 @@ class Search {
   }
 
   handleKeydown(e) {
-    if (e.key === 'Enter') {
+    e.stopPropagation();
+
+    if (e.which === 13) {
       this.onSubmit(e);
     }
   }

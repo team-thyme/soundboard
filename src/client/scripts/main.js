@@ -40,6 +40,13 @@ $('[data-action="show-settings-modal"]').on('click', () => {
   settingsModal.show();
 });
 
+$(window).on('keydown', (e) => {
+  if (e.which === 32) {
+    e.preventDefault();
+    sampleContainer.playRandom(e);
+  }
+});
+
 // Random page title
 const boardNames = [
   'music',
