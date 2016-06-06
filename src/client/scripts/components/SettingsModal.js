@@ -65,6 +65,10 @@ class SettingsModal extends Modal {
   buildSettings($content) {
     this.settings = {};
 
+    const $form = $('<div />')
+      .appendTo($content)
+      .addClass('form');
+
     Object.keys(settingManifest).forEach((key) => {
       const { label, type } = settingManifest[key];
 
@@ -72,7 +76,7 @@ class SettingsModal extends Modal {
       this.settings[key] = setting;
 
       const $item = $('<div />')
-        .appendTo($content)
+        .appendTo($form)
         .addClass('form__item');
 
       $('<div />')

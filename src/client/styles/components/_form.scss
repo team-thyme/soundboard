@@ -1,0 +1,21 @@
+@import '../variables';
+
+.form {
+
+}
+
+.form__item {
+  margin-bottom:  $spacing-base;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.form__label {
+
+}
+
+.form__control {
+  margin-top: $spacing-base;
+}
