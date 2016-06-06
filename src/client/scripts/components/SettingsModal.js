@@ -124,7 +124,8 @@ class SettingsModal extends Modal {
   buildSettingSlider(initialValue, { min, max, step, multiplier }) {
     const $input = $('<input />')
       .attr({ type: 'range', min, max, step })
-      .val(initialValue * multiplier);
+      .val(initialValue * multiplier)
+      .on('touchmove', (e) => e.stopPropagation());
 
     return {
       $element: $input,
