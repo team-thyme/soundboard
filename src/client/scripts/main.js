@@ -40,11 +40,16 @@ const search = new Search({
   },
 });
 
-// Settings button
+// Action buttons
 $('[data-action="show-settings-modal"]').on('click', () => {
   settingsModal.show();
 });
 
+$('[data-action="show-contribution-modal"]').on('click', () => {
+  window.open(config.contributeUrl, '_blank');
+});
+
+// Play random sample on space
 $(window).on('keydown', (e) => {
   if (e.which === 32) {
     e.preventDefault();
