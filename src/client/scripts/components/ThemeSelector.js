@@ -30,7 +30,7 @@ class ThemeSelector {
       $('<div />')
         .appendTo($item)
         .addClass('theme-selector__label')
-        .text(themes[value]);
+        .text(themes[value].value);
     });
 
     this.value = initialValue;
