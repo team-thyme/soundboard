@@ -117,6 +117,10 @@ class Player {
     sample.howl.stop();
   }
 
+  stopAll() {
+    this.samples.forEach((sample) => sample.howl.stop());
+  }
+
   progressStep() {
     const { playing } = this;
 

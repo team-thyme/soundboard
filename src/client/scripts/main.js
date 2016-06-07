@@ -36,6 +36,8 @@ function updateFromHistoryState(state) {
     $('body').animate({
       scrollTop: sampleTop - 100,
     });
+  } else {
+    Player.instance.stopAll();
   }
 }
 
