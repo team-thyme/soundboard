@@ -41,6 +41,10 @@ function updateFromHistoryState(state) {
   }
 }
 
+function getIdFromUrl() {
+  return window.location.pathname.split('/').pop();
+}
+
 $(window).on('popstate', (e) => {
   updateFromHistoryState(e.originalEvent.state);
 });
@@ -48,6 +52,14 @@ $(window).on('popstate', (e) => {
 // Add samples to the container
 apiClient.getSamples().then((samples) => {
   sampleContainer.setSamples(samples);
+
+  if (history.state === null) {
+    const id = getIdFromUrl();
+    if (id) {
+      history.replaceState({ id }, '');
+    }
+  }
+
   updateFromHistoryState(history.state);
 });
 
