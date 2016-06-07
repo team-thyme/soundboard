@@ -70,6 +70,7 @@ class Sample {
 
     $sample.append($div()
       .addClass('sample__categories')
+      .toggleClass('sample__categories--empty', this.categories.length === 0)
       .text(this.categories.join(' / '))
     );
 

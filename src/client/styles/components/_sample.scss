@@ -26,6 +26,14 @@
   opacity: 0.7;
 }
 
+.sample__categories--empty {
+  opacity: 0.15;
+
+  &::before {
+    content: 'void';
+  }
+}
+
 .sample__progress-container {
   position: absolute;
   top: 0;
