@@ -87,7 +87,7 @@ class SampleContainer {
 
       // Filter samples
       this.samples.forEach((sample) => {
-        const visible = regex.test(sample.name);
+        const visible = regex.test(`${sample.name};${sample.categories.join(';')}`);
         sample.$sample.toggleClass('sample--filtered', !visible);
         if (visible) empty = false;
       });
