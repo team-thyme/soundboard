@@ -21,8 +21,8 @@ class SampleContainer {
 
     // Add events
     this.$sampleContainer
-      .on('click', '.sample', function (e) {
-        $(this).data('sample').handleClick(e);
+      .on('click', '.sample', function (e, params) {
+        $(this).data('sample').handleClick(e, params);
       })
       .on('contextmenu', '.sample', function (e) {
         $(this).data('sample').handleContextMenu(e);

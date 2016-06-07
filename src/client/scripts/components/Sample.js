@@ -83,9 +83,9 @@ class Sample {
     );
   }
 
-  handleClick(e) {
-    const multiple = e.shiftKey;
-    const loop = e.ctrlKey;
+  handleClick(e, params = {}) {
+    const multiple = e.shiftKey || params.shiftKey;
+    const loop = e.ctrlKey || params.ctrlKey;
 
     if (Player.instance.isUnloaded(this.playerId)) {
       Player.instance.load(this.playerId);
