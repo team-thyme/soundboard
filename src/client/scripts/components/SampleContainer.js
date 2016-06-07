@@ -112,6 +112,11 @@ class SampleContainer {
     const $filteredSamples = $('.sample').filter(function () {
       return $(this).data('sample').id === id;
     });
+
+    if ($filteredSamples.size() === 0) {
+      return null;
+    }
+
     const index = Math.floor(Math.random() * $filteredSamples.length);
     const $sample = $filteredSamples.eq(index);
     $sample.trigger('click', { addToHistory: false });

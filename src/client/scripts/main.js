@@ -31,6 +31,11 @@ if ('scrollRestoration' in history) {
 function updateFromHistoryState(state) {
   if (state !== null && state.id) {
     const $sample = sampleContainer.playRandomWithId(state.id);
+
+    if ($sample === null) {
+      return;
+    }
+
     const sampleTop = $sample.offset().top;
 
     $('body').animate({
