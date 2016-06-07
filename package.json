@@ -5,7 +5,7 @@
   "homepage": "https://viller.men/soundboard",
   "private": true,
   "scripts": {
-    "build": "gulp build",
+    "build": "gulp build --sourcemaps",
     "server": "gulp php-server"
   },
   "devDependencies": {
