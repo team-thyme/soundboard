@@ -55,7 +55,7 @@ class SamplesController extends Controller
 		$regexQuery = '/^(?=.*' . implode(')(?=.*', $queryTerms) . ').*$/i';
 
 		$filteredSamples = array_values(array_filter($samples, function ($sample) use ($regexQuery) {
-			$searchString = $sample->getName() . ';' . implode(';', $sample->getCategories());
+			$searchString = $sample->getName() . ' ' . implode(' ', $sample->getCategories());
 
 			return preg_match($regexQuery, $searchString);
 		}));
