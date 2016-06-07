@@ -93,7 +93,7 @@ class Sample {
 
     Player.instance.play(this.playerId, multiple, loop);
 
-    if (params.addToHistory) {
+    if (params.addToHistory && (history.state === null || history.state.id !== this.id)) {
       history.pushState({ id: this.id }, '', this.id);
     }
   }
