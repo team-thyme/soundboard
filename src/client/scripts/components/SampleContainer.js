@@ -18,6 +18,24 @@ class SampleContainer {
   constructor() {
     this.$sampleContainer = $('.sample-container');
     this.$empty = $('.sample-container__empty');
+
+    // Add events
+    this.$sampleContainer
+      .on('click', '.sample', function (e) {
+        $(this).data('sample').handleClick(e);
+      })
+      .on('contextmenu', '.sample', function (e) {
+        $(this).data('sample').handleContextMenu(e);
+      })
+      .on('mouseenter touchstart', '.sample', function (e) {
+        $(this).data('sample').handleMouseEnter(e);
+      })
+      .on('mouseleave touchend', '.sample', function (e) {
+        $(this).data('sample').handleMouseLeave(e);
+      })
+      .on('mousedown', '.sample', function (e) {
+        $(this).data('sample').handleMouseDown(e);
+      });
   }
 
   setSamples(samples) {
@@ -36,16 +54,20 @@ class SampleContainer {
     this.samples = samples.map((data) => new Sample(data));
 
     // Add the samples to the DOM
+    const $prev = this.$sampleContainer.prev();
+    this.$sampleContainer.detach();
+
     this.samples.forEach((sample) => {
       this.$sampleContainer.append(sample.$sample);
     });
+
+    this.$sampleContainer.insertAfter($prev);
 
     this.update();
   }
 
   update() {
     const $prev = this.$sampleContainer.prev();
-
     this.$sampleContainer.detach();
 
     let empty = true;

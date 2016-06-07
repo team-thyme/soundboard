@@ -46,7 +46,9 @@
 }
 
 .sample__progress {
+  flex: 1 1 auto;
   background: rgba(255,255,255,0.3);
+  transform-origin: 0 0;
 }
 
 @each $theme, $colors in $themes {

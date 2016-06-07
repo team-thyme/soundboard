@@ -1,5 +1,7 @@
 import $ from 'jquery';
+import fastBind from 'fast-bind';
 import Player from '../helpers/Player';
+import { $div } from '../helpers/jquery-utils';
 
 class Sample {
 
@@ -24,6 +26,9 @@ class Sample {
   /** @type jQuery */
   $progress;
 
+  /** @type number */
+  hoverTimer;
+
   constructor(data) {
     this.id = data.id;
     this.file = data.file;
@@ -33,83 +38,80 @@ class Sample {
 
     this.playerId = Player.instance.registerSample({
       file: this.file,
-      onPlay: () => {
-        this.$sample.addClass('sample--playing');
-      },
-      onStop: () => {
-        this.$sample.removeClass('sample--playing');
-      },
-      onProgress: (progress) => {
-        this.$progress.css('flex-basis', `${progress}%`);
-      },
+      onPlay: fastBind.call(this.handlePlay, this),
+      onStop: fastBind.call(this.handleStop, this),
+      onProgress: fastBind.call(this.handleProgress, this),
     });
 
     this.createElements();
-    this.bindEvents();
+  }
+
+  handlePlay() {
+    this.$sample.addClass('sample--playing');
+  }
+
+  handleStop() {
+    this.$sample.removeClass('sample--playing');
+  }
+
+  handleProgress(progress) {
+    this.$progress.css('transform', `scale(${progress / 100}, 1)`);
   }
 
   createElements() {
-    const $sample = this.$sample = $('<div />')
-      .addClass('sample');
+    const $sample = this.$sample = $div()
+      .addClass('sample')
+      .data('sample', this);
 
-    $sample.append($('<div />')
+    $sample.append($div()
       .addClass('sample__name')
       .text(this.name)
     );
 
-    $sample.append($('<div />')
+    $sample.append($div()
       .addClass('sample__categories')
       .text(this.categories.join(' / '))
     );
 
-    const $progress = this.$progress = $('<div />')
+    const $progress = this.$progress = $div()
       .addClass('sample__progress');
 
-    $sample.append($('<div />')
+    $sample.append($div()
       .addClass('sample__progress-container')
       .append($progress)
     );
   }
 
-  bindEvents() {
-    const { $sample } = this;
+  handleClick(e) {
+    const multiple = e.shiftKey;
+    const loop = e.ctrlKey;
 
-    // Preload sound when the user hovers over the sample for more than 150ms
-    let hoverTimer;
-
-    $sample.on('mouseenter', () => {
-      if (Player.instance.isUnloaded(this.playerId)) {
-        hoverTimer = setTimeout(() => {
-          Player.instance.load(this.playerId);
-        }, 150);
-      }
-    });
-
-    $sample.on('mouseleave', () => {
-      clearTimeout(hoverTimer);
-    });
-
-    // Preload the sound when the user presses down on the sample
-    $sample.on('mousedown touchstart', () => {
+    if (Player.instance.isUnloaded(this.playerId)) {
       Player.instance.load(this.playerId);
-    });
+    }
 
-    // Play the sound on click
-    $sample.on('click', (e, extraParams = {}) => {
-      const multiple = e.shiftKey || extraParams.shiftKey;
-      const loop = e.ctrlKey || extraParams.ctrlKey;
+    Player.instance.play(this.playerId, multiple, loop);
+  }
 
-      if (Player.instance.isUnloaded(this.playerId)) {
+  handleContextMenu(e) {
+    e.preventDefault();
+    Player.instance.stop(this.playerId);
+  }
+
+  handleMouseEnter() {
+    if (Player.instance.isUnloaded(this.playerId)) {
+      this.hoverTimer = setTimeout(() => {
         Player.instance.load(this.playerId);
-      }
+      }, 150);
+    }
+  }
 
-      Player.instance.play(this.playerId, multiple, loop);
-    });
+  handleMouseLeave() {
+    clearTimeout(this.hoverTimer);
+  }
 
-    $sample.on('contextmenu', (e) => {
-      e.preventDefault();
-      Player.instance.stop(this.playerId);
-    });
+  handleMouseDown() {
+    Player.instance.load(this.playerId);
   }
 
 }
