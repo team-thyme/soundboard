@@ -83,7 +83,7 @@ class Sample {
     );
   }
 
-  handleClick(e, params = {}) {
+  handleClick(e, params = { shiftKey: false, ctrlKey: false, addToHistory: true }) {
     const multiple = e.shiftKey || params.shiftKey;
     const loop = e.ctrlKey || params.ctrlKey;
 
@@ -92,6 +92,10 @@ class Sample {
     }
 
     Player.instance.play(this.playerId, multiple, loop);
+
+    if (params.addToHistory) {
+      history.pushState({ id: this.id }, '', this.id);
+    }
   }
 
   handleContextMenu(e) {

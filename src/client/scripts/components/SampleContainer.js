@@ -108,6 +108,16 @@ class SampleContainer {
     $visibleSamples.eq(index).trigger('click', { shiftKey, ctrlKey });
   }
 
+  playRandomWithId(id) {
+    const $filteredSamples = $('.sample').filter(function () {
+      return $(this).data('sample').id === id;
+    });
+    const index = Math.floor(Math.random() * $filteredSamples.length);
+    const $sample = $filteredSamples.eq(index);
+    $sample.trigger('click', { addToHistory: false });
+    return $sample;
+  }
+
 }
 
 export default SampleContainer;

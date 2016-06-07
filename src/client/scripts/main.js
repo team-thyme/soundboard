@@ -21,11 +21,32 @@ const settingsModal = new SettingsModal();
 // TODO: Remove debug code
 // settingsModal.show();
 
-// Add samples to the container
 const sampleContainer = new SampleContainer();
 
+// History
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+function updateFromHistoryState(state) {
+  if (state !== null && state.id) {
+    const $sample = sampleContainer.playRandomWithId(state.id);
+    const sampleTop = $sample.offset().top;
+
+    $('body').animate({
+      scrollTop: sampleTop - 100,
+    });
+  }
+}
+
+$(window).on('popstate', (e) => {
+  updateFromHistoryState(e.originalEvent.state);
+});
+
+// Add samples to the container
 apiClient.getSamples().then((samples) => {
   sampleContainer.setSamples(samples);
+  updateFromHistoryState(history.state);
 });
 
 // Init search
