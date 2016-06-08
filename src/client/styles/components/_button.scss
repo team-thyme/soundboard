@@ -1,0 +1,48 @@
+@import '../themes';
+@import '../variables';
+
+.button {
+  margin-right: $spacing-base;
+  padding: $spacing-base $spacing-base * 2;
+
+  border-radius: $border-radius-base;
+  cursor: pointer;
+
+  transition: background $transition-fast ease, color $transition-fast ease;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.button--default {
+  background: rgba(0,0,0,0.05);
+
+  &:hover {
+    background: rgba(0,0,0,0.08);
+  }
+
+  &:active {
+    background: rgba(0,0,0,0.11);
+  }
+}
+
+@each $theme, $colors in $themes {
+  $color-primary: map-get($colors, primary);
+  $color-primary-text: map-get($colors, primary-text);
+
+  .theme--#{$theme} {
+    .button--primary {
+      background: $color-primary;
+      color: $color-primary-text;
+
+      &:hover {
+        background: darken($color-primary, 4%);
+      }
+
+      &:active {
+        background: darken($color-primary, 8%);
+      }
+    }
+  }
+}

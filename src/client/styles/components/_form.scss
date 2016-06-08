@@ -1,0 +1,26 @@
+@import '../variables';
+
+.form {
+
+}
+
+.form__item {
+  margin-bottom: $spacing-base;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  &:last-child {
+    margin-bottom: -$spacing-base;
+  }
+}
+
+.form__label {
+  margin-bottom: $spacing-base;
+  flex: 0 0 100px;
+}
+
+.form__control {
+  margin-bottom: $spacing-base;
+  flex: 1 1 auto;
+  justify-content: center;
+}

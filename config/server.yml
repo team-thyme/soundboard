@@ -1,0 +1,20 @@
+server:
+  sampleLocation: samples
+
+  slim:
+    settings:
+      displayErrorDetails: true
+
+  router:
+    routes:
+      samples_list:
+        path: /samples
+        controller: Villermen\Soundboard\Controller\SamplesController
+        action: listAction
+        methods: [ get ]
+
+      samples_get:
+        path: /samples/{file:.+}
+        controller: Villermen\Soundboard\Controller\SamplesController
+        action: getAction
+        methods: [ get ]

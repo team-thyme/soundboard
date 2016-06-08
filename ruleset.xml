@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<ruleset name="Viller's almost PSR-2 ruleset">
+	<rule ref="PSR2" />
+	<rule ref="Generic.WhiteSpace.DisallowTabIndent.TabsUsed">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Generic.WhiteSpace.ScopeIndent">
+		<properties>
+			<property name="tabIndent" value="true"/>
+		</properties>
+	</rule>
+	<rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired" />
+	<rule ref="Squiz.Commenting.InlineComment" />
+</ruleset>

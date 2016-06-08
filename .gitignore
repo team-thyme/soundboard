@@ -1,3 +1,14 @@
-*.ogg
-*.wav
-*.mp3
+# Sample files (we got that sweet copyright on our own voices)
+samples/*
+!samples/.gitkeep
+
+public/build/
+
+# IntellIJ
+.idea/
+
+# NodeJS
+node_modules/
+
+# Composer
+vendor/
