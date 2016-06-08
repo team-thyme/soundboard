@@ -103,7 +103,7 @@ class Player {
     sample.howl.loop(loop);
 
     // Start playing the sample
-    if (sample.howl.playing()) {
+    if (this.playing.includes(id)) {
       // If the sample was already playing, just seek back to the start
       sample.howl.seek(0);
     } else {
