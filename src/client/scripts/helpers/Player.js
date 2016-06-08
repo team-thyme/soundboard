@@ -56,7 +56,7 @@ class Player {
     });
 
     howl.on('stop', () => {
-      if (this.playing.indexOf(id) > -1) {
+      if (this.playing.includes(id)) {
         this.playing.splice(this.playing.indexOf(id), 1);
       }
       onStop();
@@ -103,7 +103,7 @@ class Player {
     sample.howl.loop(loop);
 
     // Start playing the sample
-    if (sample.howl.playing()) {
+    if (this.playing.includes(id)) {
       // If the sample was already playing, just seek back to the start
       sample.howl.seek(0);
     } else {
@@ -114,11 +114,18 @@ class Player {
 
   stop(id) {
     const sample = this.samples[id];
-    sample.howl.stop();
+
+    if (sample.howl.state() !== 'unloaded') {
+      sample.howl.stop();
+    }
   }
 
   stopAll() {
-    this.samples.forEach((sample) => sample.howl.stop());
+    this.samples.forEach((sample) => {
+      if (sample.howl.state() !== 'unloaded') {
+        sample.howl.stop();
+      }
+    });
   }
 
   progressStep() {
