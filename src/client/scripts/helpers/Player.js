@@ -56,7 +56,7 @@ class Player {
     });
 
     howl.on('stop', () => {
-      if (this.playing.indexOf(id) > -1) {
+      if (this.playing.includes(id)) {
         this.playing.splice(this.playing.indexOf(id), 1);
       }
       onStop();
