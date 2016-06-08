@@ -87,9 +87,8 @@ class Sample {
     const multiple = e.shiftKey || params.shiftKey;
     const loop = e.ctrlKey || params.ctrlKey;
 
-    if (Player.instance.isUnloaded(this.playerId)) {
-      Player.instance.load(this.playerId);
-    }
+    // Last-resort load
+    Player.instance.load(this.playerId);
 
     Player.instance.play(this.playerId, multiple, loop);
 
