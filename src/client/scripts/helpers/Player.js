@@ -114,11 +114,18 @@ class Player {
 
   stop(id) {
     const sample = this.samples[id];
-    sample.howl.stop();
+
+    if (sample.howl.state() !== 'unloaded') {
+      sample.howl.stop();
+    }
   }
 
   stopAll() {
-    this.samples.forEach((sample) => sample.howl.stop());
+    this.samples.forEach((sample) => {
+      if (sample.howl.state() !== 'unloaded') {
+        sample.howl.stop();
+      }
+    });
   }
 
   progressStep() {
