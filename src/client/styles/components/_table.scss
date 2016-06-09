@@ -1,0 +1,25 @@
+@import '../themes';
+@import '../variables';
+
+.table {
+  width: 100%;
+  border-spacing: 0;
+}
+
+.table__head {
+  padding: $spacing-base * 1.25 $spacing-base * 2;
+  text-align: left;
+
+  font-weight: inherit;
+
+  background: darken(white, 5%);
+}
+
+.table__cell {
+  padding: $spacing-base * 1.25 $spacing-base * 2;
+  border-bottom: 1px solid darken(white, 5%);
+
+  .table__row:last-child & {
+    border-bottom: 0;
+  }
+}
