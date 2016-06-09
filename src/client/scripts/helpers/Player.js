@@ -22,7 +22,7 @@ class Player {
   }
 
   registerSample({ file, onPlay, onStop, onProgress }) {
-    const id = this.samples.length;
+    const sampleIndex = this.samples.length;
 
     const sample = {
       file,
@@ -40,44 +40,53 @@ class Player {
 
     sample.howl = howl;
 
-    howl.on('play', () => {
-      // Avoid race conditions by checking if this sound should be playing right now
-      if (!this.playing.includes(id)) {
-        howl.stop();
-      } else {
+    howl.on('play', (howlerId) => {
+      // Check if this sound should still play
+      if (this.playing[sampleIndex].includes(howlerId)) {
         onPlay();
+      } else {
+        howl.stop(howlerId);
+      }
 
-        // Request animation frame only once
-        if (!this.frameRequested) {
-          this.frameRequested = true;
-          requestAnimationFrame(this.progressStep);
+      // Request animation frame (only once)
+      if (!this.frameRequested) {
+        this.frameRequested = true;
+        requestAnimationFrame(this.progressStep);
+      }
+    });
+
+    howl.on('stop', (howlerId) => {
+      // NOTE: This event can trigger even when a sound was already stopped
+
+      // Remove the audio if it was registered as playing
+      if (this.playing[sampleIndex].includes(howlerId)) {
+        this.playing[sampleIndex].splice(this.playing[sampleIndex].indexOf(howlerId), 1);
+
+        // Only trigger onStop when the last sound has just been stopped
+        if (this.playing[sampleIndex].length === 0) {
+          onStop();
         }
       }
     });
 
-    howl.on('stop', () => {
-      if (this.playing.includes(id)) {
-        this.playing.splice(this.playing.indexOf(id), 1);
-      }
-      onStop();
-    });
-
-    howl.on('end', () => {
-      // Don't call stop when the sound is looping
+    howl.on('end', (howlerId) => {
+      // Don't stop when the sound is looping
       if (!howl.loop()) {
-        howl.stop();
+        // Stop only the corresponding instance of sound
+        howl.stop(howlerId);
       }
     });
 
     // Add to list
-    this.samples[id] = sample;
+    this.samples.push(sample);
+    this.playing.push([]);
 
     // Return the ID
-    return id;
+    return sampleIndex;
   }
 
-  isUnloaded(id) {
-    return this.samples[id].howl.state() === 'unloaded';
+  isUnloaded(sampleIndex) {
+    return this.samples[sampleIndex].howl.state() === 'unloaded';
   }
 
   load(id) {
@@ -86,59 +95,73 @@ class Player {
     }
   }
 
-  play(id, multiple = false, loop = false) {
-    const sample = this.samples[id];
+  play(sampleIndex, multiple = false, loop = false) {
+    const sample = this.samples[sampleIndex];
 
+    // Stop all sounds before playing if multiple are not allowed
     if (!multiple) {
-      // Stop all other playing sounds
-      this.playing = this.playing.filter((playingId) => {
-        if (id !== playingId) {
-          this.samples[playingId].howl.stop();
-          return false;
-        }
-        return true;
-      });
+      this.stopAll();
     }
 
+    // TODO: Set this individually for each play instead of for each sample (seems bugged in howler)
     sample.howl.loop(loop);
 
-    // Start playing the sample
-    if (this.playing.includes(id)) {
-      // If the sample was already playing, just seek back to the start
-      sample.howl.seek(0);
-    } else {
-      sample.howl.play();
-      this.playing.push(id);
+    // Last-resort load
+    this.load(sampleIndex);
+
+    const howlerId = sample.howl.play();
+
+    this.playing[sampleIndex].push(howlerId);
+  }
+
+  stop(sampleIndex, howlerId = undefined) {
+    if (this.samples[sampleIndex].howl.state() !== 'unloaded') {
+      this.samples[sampleIndex].howl.stop(howlerId);
     }
   }
 
-  stop(id) {
-    const sample = this.samples[id];
-
-    if (sample.howl.state() !== 'unloaded') {
-      sample.howl.stop();
-    }
-  }
-
+  // TODO: stop runs after add, take this into account
+  // play one, start slow loading and then another in rapid succession
   stopAll() {
-    this.samples.forEach((sample) => {
-      if (sample.howl.state() !== 'unloaded') {
-        sample.howl.stop();
+    this.playing.forEach((playing, sampleIndex) => {
+      if (playing.length > 0) {
+        // Array is re-indexed on splice, so loop in reverse
+        let i = playing.length;
+
+        while (i-- > 0) {
+          const howlerId = playing[i];
+
+          this.samples[sampleIndex].howl.stop(howlerId);
+
+          // Remove it from playing, so that the events can deal with the new state
+          this.playing[sampleIndex].splice(this.playing[sampleIndex].indexOf(howlerId), 1);
+
+          if (this.playing[sampleIndex].length === 0) {
+            this.samples[sampleIndex].onStop();
+          }
+        }
       }
     });
   }
 
   progressStep() {
-    const { playing } = this;
+    const playingIndexes = [];
+    this.playing.forEach((playing, sampleIndex) => {
+      if (playing.length > 0) {
+        playingIndexes.push(sampleIndex);
+      }
+    });
 
-    if (playing) {
-      // Call the onProgress callback for each playing sample
-      playing.forEach((id) => {
-        const { howl, onProgress } = this.samples[id];
+    if (playingIndexes.length > 0) {
+      playingIndexes.forEach((sampleIndex) => {
+        // Update using the latest howler id
+        const howlerId = this.playing[sampleIndex][this.playing[sampleIndex].length - 1];
 
-        const seek = howl.seek() || 0;
-        const progress = (seek / howl.duration()) * 100;
-        onProgress(progress);
+        const sample = this.samples[sampleIndex];
+        const seek = sample.howl.seek(undefined, howlerId) || 0;
+        const progress = (seek / sample.howl.duration()) * 100;
+
+        sample.onProgress(progress);
       });
 
       requestAnimationFrame(this.progressStep);
@@ -146,7 +169,6 @@ class Player {
       this.frameRequested = false;
     }
   }
-
 }
 
 export default Player;

@@ -93,7 +93,7 @@ $('[data-action="show-contribution-modal"]').on('click', () => {
 $(window).on('keydown', (e) => {
   if (e.which === 32) {
     e.preventDefault();
-    sampleContainer.playRandom(e);
+    Player.instance.stopAll();
   }
 });
 
