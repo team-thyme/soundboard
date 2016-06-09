@@ -9,7 +9,7 @@ class Modal {
     this.$modal = $(selector);
 
     this.$modal.on('touchmove wheel', (e) => {
-      if (e.isPropagationStopped) {
+      if (!e.isPropagationStopped()) {
         e.preventDefault();
       }
     });

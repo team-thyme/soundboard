@@ -14,32 +14,35 @@
 	</head>
 
 	<body>
-		<div class="header">
-			<div class="header__search">
-				<div class="search">
-					<input class="search__input" type="text" placeholder="Cook, Search, Delicious!" />
-          <div class="search__clear">
-            <i class="material-icons">close</i>
+    <div class="page-container">
+      <div class="header">
+        <div class="header__search">
+          <div class="search">
+            <input class="search__input" type="text" placeholder="Cook, Search, Delicious!" />
+            <div class="search__clear">
+              <i class="material-icons">close</i>
+            </div>
           </div>
-				</div>
-			</div>
-      <div class="header__button" data-action="show-settings-modal">
-        <i class="material-icons">settings</i>
+        </div>
+        <div class="header__button" data-action="show-settings-modal">
+          <i class="material-icons">settings</i>
+        </div>
+        <div class="header__button" data-action="show-contribution-modal">
+          <i class="material-icons">library_add</i>
+        </div>
       </div>
-      <div class="header__button" data-action="show-contribution-modal">
-        <i class="material-icons">library_add</i>
-      </div>
-		</div>
 
-		<div class="sample-container">
-      <div class="sample-container__empty">
-        <div class="sample-container__empty-icon material-icons">search</div>
-        <div class="sample-container__empty-label">
-          Of je zoekt naar dingen die&nbsp;wel&nbsp;iets&nbsp;zijn...
+      <div class="sample-container">
+        <div class="sample-container__empty">
+          <div class="sample-container__empty-icon material-icons">search</div>
+          <div class="sample-container__empty-label">
+            Of je zoekt naar dingen die&nbsp;wel&nbsp;iets&nbsp;zijn...
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Settings modal -->
     <div class="modal" id="settings-modal">
       <div class="modal__dialog">
         <div class="modal__header">
@@ -54,5 +57,24 @@
         </div>
       </div>
     </div>
+
+    <!-- Requests modal -->
+    <div class="modal" id="request-modal">
+      <div class="modal__dialog">
+        <div class="modal__header">
+          <div class="modal__title">
+            Requests
+          </div>
+          <div class="modal__actions">
+            <div class="button button--on-primary" data-action="add-request">
+              <i class="material-icons button__icon">add</i>
+              Add
+            </div>
+          </div>
+        </div>
+        <div class="modal__content"></div>
+      </div>
+    </div>
+
 	</body>
 </html>

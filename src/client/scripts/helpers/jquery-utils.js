@@ -1,10 +1,18 @@
 import $ from 'jquery';
 
 /**
+ * @param {string} type
+ * @returns {jQuery}
+ */
+export function $make(type) {
+  return $(document.createElement(type));
+}
+
+/**
  * @returns {jQuery}
  */
 export function $div() {
-  return $(document.createElement('div'));
+  return $make('div');
 }
 
 /**
