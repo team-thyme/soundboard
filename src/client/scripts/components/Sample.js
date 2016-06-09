@@ -87,9 +87,6 @@ class Sample {
     const multiple = e.shiftKey || params.shiftKey;
     const loop = e.ctrlKey || params.ctrlKey;
 
-    // Last-resort load
-    Player.instance.load(this.playerId);
-
     Player.instance.play(this.playerId, multiple, loop);
 
     if (params.addToHistory && (history.state === null || history.state.id !== this.id)) {
@@ -117,7 +114,6 @@ class Sample {
   handleMouseDown() {
     Player.instance.load(this.playerId);
   }
-
 }
 
 export default Sample;
