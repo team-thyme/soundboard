@@ -30,7 +30,7 @@ if ('scrollRestoration' in history) {
 
 function updateFromHistoryState(state) {
   if (state !== null && state.id) {
-    sampleContainer.playRandomWithId(state.id, true);
+    sampleContainer.playRandomWithId({ id: state.id, scroll: true, addToHistory: false });
   } else {
     Player.instance.stopAll();
   }
@@ -66,7 +66,7 @@ const search = new Search({
   },
 
   onSubmit: (e) => {
-    sampleContainer.playRandom({ e, scroll: true });
+    sampleContainer.playRandom({ e, scroll: true, addToHistory: true });
   },
 });
 

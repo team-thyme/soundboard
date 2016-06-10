@@ -102,11 +102,11 @@ class SampleContainer {
     this.query = query;
   }
 
-  playRandom({ shiftKey = false, ctrlKey = false, scroll = false }) {
+  playRandom({ shiftKey = false, ctrlKey = false, scroll = false, addToHistory = false }) {
     const $visibleSamples = $('.sample:not(.sample--filtered)');
     const index = Math.floor(Math.random() * $visibleSamples.length);
     const $sample = $visibleSamples.eq(index);
-    $sample.trigger('click', { shiftKey, ctrlKey });
+    $sample.trigger('click', { shiftKey, ctrlKey, addToHistory });
 
     if (scroll) {
       this.scrollToSample($sample);
@@ -115,7 +115,7 @@ class SampleContainer {
     return $sample;
   }
 
-  playRandomWithId(id, scroll = false) {
+  playRandomWithId({ id, scroll = false, addToHistory = false }) {
     const $filteredSamples = $('.sample').filter(function () {
       return $(this).data('sample').id === id;
     });
@@ -126,7 +126,7 @@ class SampleContainer {
 
     const index = Math.floor(Math.random() * $filteredSamples.length);
     const $sample = $filteredSamples.eq(index);
-    $sample.trigger('click', { addToHistory: false });
+    $sample.trigger('click', { addToHistory });
 
     if (scroll) {
       this.scrollToSample($sample);
