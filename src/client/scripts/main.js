@@ -30,17 +30,7 @@ if ('scrollRestoration' in history) {
 
 function updateFromHistoryState(state) {
   if (state !== null && state.id) {
-    const $sample = sampleContainer.playRandomWithId(state.id);
-
-    if ($sample === null) {
-      return;
-    }
-
-    const sampleTop = $sample.offset().top;
-
-    $('body').animate({
-      scrollTop: sampleTop - 100,
-    });
+    sampleContainer.playRandomWithId(state.id, true);
   } else {
     Player.instance.stopAll();
   }
@@ -76,7 +66,7 @@ const search = new Search({
   },
 
   onSubmit: (e) => {
-    sampleContainer.playRandom(e);
+    sampleContainer.playRandom({ e, scroll: true });
   },
 });
 
