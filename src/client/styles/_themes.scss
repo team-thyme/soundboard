@@ -25,4 +25,16 @@ $themes: (
     sample-shadow: rgba(0,0,0,0.15)
   ),
 
+  thyme: (
+    primary: #0f0,
+    primary-text: #000,
+
+    search: darken(#0f0, 5%),
+    search-text: #000,
+
+    sample-container: #000,
+    sample: #111,
+    sample-text: #ddd
+  ),
+
 );
