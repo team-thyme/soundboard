@@ -1,7 +1,6 @@
-import $ from 'jquery';
-import { $div } from '../helpers/jquery-utils';
 import Modal from './Modal';
 import Table from './Table';
+import VoteBox from './VoteBox';
 
 const requests = [
   {
@@ -50,8 +49,10 @@ const requests = [
 
 class RequestModal extends Modal {
 
+  /** @type jQuery */
   $add;
 
+  /** @type Table */
   table;
 
   constructor() {
@@ -59,12 +60,16 @@ class RequestModal extends Modal {
 
     this.$add = this.$modal.find('[data-action=add-request]');
 
-    this.table = new Table({
+    const table = this.table = new Table({
       columns: [
         {
           name: 'Request',
           renderCell($td, row) {
             $td.text(row.request);
+          },
+          sortable: true,
+          sort(row1, row2) {
+            return row1.request.localeCompare(row2.request);
           },
         },
         {
@@ -72,14 +77,33 @@ class RequestModal extends Modal {
           renderCell($td, row) {
             $td.text(row.date.toLocaleDateString());
           },
+          sortable: true,
+          sort(row1, row2) {
+            return row2.date - row1.date;
+          },
+          align: 'right',
+          autoWidth: true,
         },
         {
           name: 'Votes',
           renderCell($td, row) {
-            $td
-              .text(row.votes)
-              .css('color', row.voted ? 'green' : 'gray');
+            const voteBox = new VoteBox({
+              votes: row.votes,
+              voted: row.voted,
+              onChange(votes, voted) {
+                row.votes = votes;
+                row.voted = voted;
+                table.updateSort();
+              },
+            });
+            $td.append(voteBox.$root);
           },
+          sortable: true,
+          sort(row1, row2) {
+            return (row2.votes + (row2.voted ? 0.5 : 0)) - (row1.votes + (row1.voted ? 0.5 : 0));
+          },
+          align: 'right',
+          autoWidth: true,
         },
       ],
       data: requests,
