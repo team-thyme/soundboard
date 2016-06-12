@@ -79,8 +79,12 @@ $('[data-action="show-contribution-modal"]').on('click', () => {
   window.open(config.contributeUrl, '_blank');
 });
 
-$('[data-action="show-repository-modal"]').on('click', () => {
+$('[data-action="show-changelog-modal"]').on('click', () => {
   window.open(config.repositoryUrl, '_blank');
+});
+
+$('[data-action="play-version-sample"]').on('click', () => {
+  sampleContainer.playRandomWithId({ id: config.versionSampleId })
 });
 
 // Play random sample on space

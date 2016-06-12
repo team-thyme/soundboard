@@ -3,4 +3,5 @@ client:
   apiBaseUrl: api
   versionNumber: 2.1.0
   versionName: erik doe rustig
+  versionSampleId: 80b4aba5
   repositoryUrl: https://github.com/villermen/soundboard
