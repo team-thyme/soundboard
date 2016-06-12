@@ -18,6 +18,10 @@
 	&:hover {
 		text-decoration: underline;
 	}
+
+	&:active {
+		color: darken($color-text-secondary, 10%);
+	}
 }
 
 .version__number {
