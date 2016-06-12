@@ -6,26 +6,18 @@
   flex-wrap: wrap;
 	align-items: center;
   justify-content: center;
-
-	cursor: pointer;
-
-	padding: $spacing-base $spacing-base * 2;
-
-  transition: background $transition-fast ease, color $transition-fast ease;
-
-	&:hover {
-    background: rgba(0,0,0,0.03);
-  }
-
-  &:active {
-    background: rgba(0,0,0,0.06);
-  }
 }
 
 .version__title,
 .version__name {
 	margin: 0 $spacing-base;
 	display: initial;
+
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
 }
 
 .version__number {
