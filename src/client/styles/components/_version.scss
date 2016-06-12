@@ -14,11 +14,11 @@
   transition: background $transition-fast ease, color $transition-fast ease;
 
 	&:hover {
-    background: rgba(0,0,0,0.08);
+    background: rgba(0,0,0,0.03);
   }
 
   &:active {
-    background: rgba(0,0,0,0.11);
+    background: rgba(0,0,0,0.06);
   }
 }
 
