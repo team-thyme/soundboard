@@ -79,6 +79,10 @@ $('[data-action="show-contribution-modal"]').on('click', () => {
   window.open(config.contributeUrl, '_blank');
 });
 
+$('[data-action="show-repository-modal"]').on('click', () => {
+  window.open(config.repositoryUrl, '_blank');
+});
+
 // Play random sample on space
 $(window).on('keydown', (e) => {
   if (e.which === 32) {
@@ -110,3 +114,7 @@ $title.text(
   `More like ${boardNames[Math.floor(Math.random() * boardNames.length)]}board, \
   ${postNames[Math.floor(Math.random() * postNames.length)]}?`
 );
+
+// Version in settings modal
+$('.version__number').text(`v${config.versionNumber}`);
+$('.version__name').text(config.versionName);
