@@ -26,15 +26,15 @@ $themes: (
   ),
 
   thyme: (
-    primary: #0f0,
-    primary-text: #000,
+    primary: #000,
+    primary-text: #0f0,
 
-    search: darken(#0f0, 5%),
-    search-text: #000,
+    search: #001000,
+    search-text: #0f0,
 
-    sample-container: #000,
-    sample: #111,
-    sample-text: #ddd
+    sample-container: #001000,
+    sample: #000,
+    sample-text: #0f0
   ),
 
 );
