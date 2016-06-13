@@ -36,4 +36,7 @@ Samples not included!
 ### LiveReload
 To live reload scripts and styles you need to have [one of these extensions](http://livereload.com/extensions/) installed and use the `--livereload` option on the `gulp watch` tasks.
 
+## So you want your own client? _With blackjack and hookers?_
+There's [an API documentation](https://github.com/villermen/soundboard/wiki/API-documentation) for that on [the wiki](https://github.com/villermen/soundboard/wiki)!
+
 Design by [Mesoptier](https://github.com/mesoptier)!
