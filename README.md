@@ -7,7 +7,7 @@
  - Direct, obfuscated, linking to soundbytes
  - Hold shift to play soundbytes simultaneously
  - Hold control to play soundbytes on a loop
- - Press <kbd>Enter</kbd> in the search bar to play a random soundbyte. (This also works when a (partial) search term is entered.)
+ - Press <kbd>Enter</kbd> in the search bar to play a random sample. (This also works when a (partial) search term is entered.)
  - Maximum overkill
 
 Samples not included!
