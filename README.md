@@ -5,7 +5,6 @@
  - Every wav/mp3/ogg file you add to `samples/` will be glorified instantaneously
  - Responsive search
  - Direct, obfuscated, linking to soundbytes
- - Random button
  - Hold shift to play soundbytes simultaneously
  - Hold control to play soundbytes on a loop
  - Maximum overkill
