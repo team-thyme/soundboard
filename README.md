@@ -1,5 +1,5 @@
 # Soundboard
-> More like knäckebröd, har jag rätt?
+> Meer zoals Knäckebröt, ik heb het recht?
 
 ## Features
  - Every wav/mp3/ogg file you add to `samples/` will be glorified instantaneously
