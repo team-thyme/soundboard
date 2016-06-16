@@ -65,7 +65,8 @@ class RequestModal extends Modal {
         {
           name: 'Request',
           renderCell($td, row) {
-            $td.text(row.request);
+            $td.text(row.request)
+              .addClass('text--selectable');
           },
           sortable: true,
           sort(row1, row2) {

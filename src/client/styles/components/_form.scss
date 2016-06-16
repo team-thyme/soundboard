@@ -19,12 +19,22 @@
   }
 
   .form--horizontal & {
+    margin-right: $spacing-base;
+    margin-bottom: 0;
     flex-direction: row;
+
+    &:last-child {
+      margin-right: -$spacing-base;
+    }
   }
 }
 
 .form__item--grow {
   flex-grow: 1;
+}
+
+.form__item--align-right {
+  align-self: flex-end;
 }
 
 .form__label {
@@ -38,6 +48,8 @@
   justify-content: center;
 
   .form--horizontal & {
+    margin-right: $spacing-base;
+    margin-bottom: 0;
     flex-direction: row;
   }
 }

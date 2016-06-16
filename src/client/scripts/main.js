@@ -8,6 +8,7 @@ import ThemeManager from './helpers/ThemeManager';
 import Player from './helpers/Player';
 import SampleContainer from './components/SampleContainer';
 import Search from './components/Search';
+import Modal from './components/Modal';
 import SettingsModal from './components/SettingsModal';
 import RequestModal from './components/RequestModal';
 
@@ -95,7 +96,7 @@ $('[data-action="show-contribution-modal"]').on('click', () => {
 
 // Play random sample on space
 $(window).on('keydown', (e) => {
-  if (e.which === 32) {
+  if (e.which === 32 && !Modal.isModalActive()) {
     e.preventDefault();
     sampleContainer.playRandom(e);
   }

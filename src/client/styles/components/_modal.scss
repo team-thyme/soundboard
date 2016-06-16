@@ -67,10 +67,6 @@
   transition:
     background $transition-base ease,
     color $transition-base ease;
-
-  .modal__actions {
-    margin: -10px;
-  }
 }
 
 .modal__content {
@@ -88,6 +84,10 @@
 
   background: darken(#fff, 2%);
   border-top: 1px solid darken(#fff, 5%);
+}
+
+.modal__footer--align-end {
+  justify-content: flex-end;
 }
 
 @each $theme, $colors in $themes {

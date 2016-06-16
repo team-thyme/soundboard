@@ -10,13 +10,13 @@
 
 .switcher__item {
   position: absolute;
-  top: -150%;
+  top: 50%;
   opacity: 0;
 
   transition: top $transition-base ease, opacity $transition-base ease;
 
   .switcher__item--active + & {
-    top: 150%;
+    top: -50%;
   }
 }
 
