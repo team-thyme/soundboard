@@ -1,6 +1,23 @@
 import $ from 'jquery';
 
 /**
+ *
+ * @function
+ * @name jQuery#ternaryClass
+ *
+ * @param {boolean} condition
+ * @param {string} class1
+ * @param {string} class2
+ * @returns {jQuery}
+ */
+$.fn.ternaryClass = function (condition, class1, class2) {
+  $(this)
+    .toggleClass(class1, condition)
+    .toggleClass(class2, !condition);
+  return this;
+};
+
+/**
  * @param {string} type
  * @returns {jQuery}
  */

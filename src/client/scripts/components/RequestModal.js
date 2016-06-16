@@ -1,6 +1,6 @@
 import Modal from './Modal';
 import Table from './Table';
-import VoteBox from './VoteBox';
+import VoteButton from './VoteButton';
 
 const requests = [
   {
@@ -18,13 +18,13 @@ const requests = [
   {
     request: 'Mag ik dat zeggen?',
     date: new Date('2016-06-07 10:31'),
-    votes: 4,
+    votes: 10,
     voted: true,
   },
   {
     request: 'Mag ik dat zeggen?',
     date: new Date('2016-06-07 10:31'),
-    votes: 4,
+    votes: 11,
     voted: true,
   },
   {
@@ -60,7 +60,7 @@ class RequestModal extends Modal {
 
     this.$add = this.$modal.find('[data-action=add-request]');
 
-    const table = this.table = new Table({
+    this.table = new Table({
       columns: [
         {
           name: 'Request',
@@ -87,20 +87,21 @@ class RequestModal extends Modal {
         {
           name: 'Votes',
           renderCell($td, row) {
-            const voteBox = new VoteBox({
+            const voteButton = new VoteButton({
               votes: row.votes,
               voted: row.voted,
               onChange(votes, voted) {
+                /* eslint-disable no-param-reassign */
                 row.votes = votes;
                 row.voted = voted;
-                table.updateSort();
+                /* eslint-enable no-param-reassign */
               },
             });
-            $td.append(voteBox.$root);
+            $td.append(voteButton.$root);
           },
           sortable: true,
           sort(row1, row2) {
-            return (row2.votes + (row2.voted ? 0.5 : 0)) - (row1.votes + (row1.voted ? 0.5 : 0));
+            return (row2.votes - (row2.voted ? 0.5 : 0)) - (row1.votes + (row1.voted ? 0.5 : 0));
           },
           align: 'right',
           autoWidth: true,

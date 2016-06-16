@@ -1,7 +1,12 @@
 @import '../variables';
 
 .form {
+  flex: 1 1 auto;
+}
 
+.form--horizontal {
+  flex-direction: row;
+  align-items: flex-start;
 }
 
 .form__item {
@@ -12,6 +17,14 @@
   &:last-child {
     margin-bottom: -$spacing-base;
   }
+
+  .form--horizontal & {
+    flex-direction: row;
+  }
+}
+
+.form__item--grow {
+  flex-grow: 1;
 }
 
 .form__label {
@@ -23,4 +36,8 @@
   margin-bottom: $spacing-base;
   flex: 1 1 auto;
   justify-content: center;
+
+  .form--horizontal & {
+    flex-direction: row;
+  }
 }

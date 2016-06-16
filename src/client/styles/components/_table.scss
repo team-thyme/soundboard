@@ -20,6 +20,8 @@
 }
 
 .table__head--align-left {
+  padding-right: $spacing-base * 1.25;
+
   .table__head-content {
     flex-direction: row;
   }
@@ -30,6 +32,8 @@
 }
 
 .table__head--align-right {
+  padding-left: $spacing-base * 1.25;
+
   .table__head-content {
     flex-direction: row-reverse;
   }

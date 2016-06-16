@@ -1,0 +1,9 @@
+@import '../variables';
+@import 'input-range';
+
+textarea {
+  flex: 1 1 auto;
+
+  border: 1px solid darken(#fff, 10%);
+  border-radius: $border-radius-base;
+}
