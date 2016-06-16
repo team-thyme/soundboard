@@ -2,10 +2,14 @@
 @import '../variables';
 
 .button {
+  flex: 0 0 auto;
+  display: inline-flex;
   margin-right: $spacing-base;
   padding: $spacing-base $spacing-base * 1.5;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  overflow: hidden;
 
   border-radius: $border-radius-base;
   cursor: pointer;
@@ -18,9 +22,25 @@
 }
 
 .button__icon {
-  margin-right: $spacing-base * 0.5;
   font-size: 18px;
+
+  &:first-child {
+    margin-right: $spacing-base * 0.5;
+  }
+  &:last-child {
+    margin-left: $spacing-base * 0.5;
+  }
 }
+
+.button--size-small {
+  padding: $spacing-base * 0.5 $spacing-base;
+
+  .button__icon {
+    font-size: 16px;
+  }
+}
+
+.button--size-default { /* well, it's the default */ }
 
 .button--default {
   background: rgba(0,0,0,0.05);
