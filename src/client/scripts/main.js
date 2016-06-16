@@ -8,7 +8,9 @@ import ThemeManager from './helpers/ThemeManager';
 import Player from './helpers/Player';
 import SampleContainer from './components/SampleContainer';
 import Search from './components/Search';
+import Modal from './components/Modal';
 import SettingsModal from './components/SettingsModal';
+import RequestModal from './components/RequestModal';
 
 const apiClient = new ApiClient(config.apiBaseUrl);
 
@@ -17,9 +19,11 @@ ThemeManager.init();
 Player.init();
 
 const settingsModal = new SettingsModal();
+const requestModal = new RequestModal();
 
 // TODO: Remove debug code
 // settingsModal.show();
+requestModal.show();
 
 const sampleContainer = new SampleContainer();
 
@@ -86,12 +90,13 @@ $('[data-action="show-settings-modal"]').on('click', () => {
 });
 
 $('[data-action="show-contribution-modal"]').on('click', () => {
-  window.open(config.contributeUrl, '_blank');
+  requestModal.show();
+  // window.open(config.contributeUrl, '_blank');
 });
 
 // Play random sample on space
 $(window).on('keydown', (e) => {
-  if (e.which === 32) {
+  if (e.which === 32 && !Modal.isModalActive()) {
     e.preventDefault();
     Player.instance.stopAll();
   }

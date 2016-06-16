@@ -10,9 +10,10 @@
   right: 0;
   bottom: 0;
 
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: $spacing-base * 2;
 
   background: rgba(0,0,0,0.6);
   opacity: 0;
@@ -29,8 +30,9 @@
 }
 
 .modal__dialog {
-  flex: 0 1 540px;
-  margin: $spacing-base * 2;
+  flex: 0 1 auto;
+  width: 100%;
+  max-width: 540px;
 
   background: #fff;
   border-radius: $border-radius-base * 2;
@@ -59,21 +61,33 @@
 }
 
 .modal__header {
+  flex-direction: row;
+  justify-content: space-between;
+
   transition:
     background $transition-base ease,
     color $transition-base ease;
 }
 
 .modal__content {
+  flex: 1 1 auto;
+  overflow: auto;
   background: #fff;
+}
+
+.modal__content--table {
+  padding: 0;
 }
 
 .modal__footer {
   flex-direction: row;
-  justify-content: flex-end;
 
   background: darken(#fff, 2%);
   border-top: 1px solid darken(#fff, 5%);
+}
+
+.modal__footer--align-end {
+  justify-content: flex-end;
 }
 
 @each $theme, $colors in $themes {
