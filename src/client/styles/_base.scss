@@ -11,7 +11,7 @@ html {
 }
 
 body {
-  min-height: 100%;
+  height: 100%;
   margin: 0;
 
   overflow-y: scroll;
@@ -20,6 +20,10 @@ body {
   color: $color-text-default;
 
   cursor: default;
+}
+
+.page-container {
+  min-height: 100%;
 }
 
 div, span, .block {
