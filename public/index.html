@@ -1,17 +1,17 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="initial-scale=1" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
     <meta name="mobile-web-app-capable" content="yes">
 
-		<title>Soundboard</title>
+    <title>Soundboard</title>
 
-		<link rel="stylesheet" href="build/style.css" />
-		<link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" href="build/style.css" />
+    <link rel="shortcut icon" href="favicon.ico" />
 
-		<script src="build/script.js" defer></script>
-	</head>
+    <script src="build/script.js" defer></script>
+  </head>
 
 	<body>
     <div class="page-container">
@@ -36,7 +36,7 @@
         <div class="sample-container__empty">
           <div class="sample-container__empty-icon material-icons">search</div>
           <div class="sample-container__empty-label">
-            Of je zoekt naar dingen die&nbsp;wel&nbsp;iets&nbsp;zijn...
+            Whether&nbsp;you're&nbsp;looking&nbsp;for things&nbsp;that&nbsp;do&nbsp;what ...
           </div>
         </div>
       </div>
@@ -54,6 +54,14 @@
         <div class="modal__footer modal__footer--align-end">
           <div class="button button--default" data-action="cancel">Cancel</div>
           <div class="button button--primary" data-action="save">Save</div>
+        </div>
+        <div class="modal__subfooter">
+          <div class="version">
+            <div class="version__title" data-action="show-changelog-modal">
+              Soundboard <span class="version__number"></span>
+            </div>
+            <div class="version__name" data-action="play-version-sample"></div>
+          </div>
         </div>
       </div>
     </div>

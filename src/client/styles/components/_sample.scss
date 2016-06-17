@@ -55,7 +55,6 @@
 
 .sample__progress {
   flex: 1 1 auto;
-  background: rgba(255,255,255,0.3);
   transform-origin: 0 0;
 }
 
@@ -115,6 +114,10 @@
       &:active {
         background: lighten($color-primary, 4%);
       }
+    }
+
+    .sample__progress {
+      background: transparentize($color-primary-text, 0.85);
     }
   }
 }

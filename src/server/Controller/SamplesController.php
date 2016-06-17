@@ -50,7 +50,6 @@ class SamplesController extends Controller
 	{
 		$query = $request->getQueryParam('query');
 		$samples = $this->getSamples();
-		$query = preg_quote($query);
 		$queryTerms = preg_split('/\s/', $query);
 		$regexQuery = '/^(?=.*' . implode(')(?=.*', $queryTerms) . ').*$/i';
 

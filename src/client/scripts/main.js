@@ -34,17 +34,7 @@ if ('scrollRestoration' in history) {
 
 function updateFromHistoryState(state) {
   if (state !== null && state.id) {
-    const $sample = sampleContainer.playRandomWithId(state.id);
-
-    if ($sample === null) {
-      return;
-    }
-
-    const sampleTop = $sample.offset().top;
-
-    $('body').animate({
-      scrollTop: sampleTop - 100,
-    });
+    sampleContainer.playRandomWithId({ id: state.id, scroll: true, addToHistory: false });
   } else {
     Player.instance.stopAll();
   }
@@ -80,7 +70,7 @@ const search = new Search({
   },
 
   onSubmit: (e) => {
-    sampleContainer.playRandom(e);
+    sampleContainer.playRandom({ scroll: true, addToHistory: true, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
   },
 });
 
@@ -94,11 +84,19 @@ $('[data-action="show-contribution-modal"]').on('click', () => {
   // window.open(config.contributeUrl, '_blank');
 });
 
+$('[data-action="show-changelog-modal"]').on('click', () => {
+  window.open(config.repositoryUrl, '_blank');
+});
+
+$('[data-action="play-version-sample"]').on('click', () => {
+  sampleContainer.playRandomWithId({ id: config.versionSampleId })
+});
+
 // Play random sample on space
 $(window).on('keydown', (e) => {
   if (e.which === 32 && !Modal.isModalActive()) {
     e.preventDefault();
-    sampleContainer.playRandom(e);
+    Player.instance.stopAll();
   }
 });
 
@@ -125,3 +123,7 @@ $title.text(
   `More like ${boardNames[Math.floor(Math.random() * boardNames.length)]}board, \
   ${postNames[Math.floor(Math.random() * postNames.length)]}?`
 );
+
+// Version in settings modal
+$('.version__number').text(`v${config.versionNumber}`);
+$('.version__name').text(config.versionName);

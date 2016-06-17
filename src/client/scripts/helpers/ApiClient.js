@@ -17,7 +17,7 @@ class ApiClient {
         /* eslint-disable no-param-reassign */
 
         // Make the file point back to the used API url
-        data.file = `${this.baseUrl}/samples/${data.file}`;
+        data.file = `${this.baseUrl}/samples${data.file}`;
 
         // Javascript's timestamp uses milliseconds
         data.mtime = 1000 * data.mtime;
