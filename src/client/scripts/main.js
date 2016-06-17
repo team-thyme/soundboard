@@ -66,7 +66,7 @@ const search = new Search({
   },
 
   onSubmit: (e) => {
-    sampleContainer.playRandom({ e, scroll: true, addToHistory: true });
+    sampleContainer.playRandom({ scroll: true, addToHistory: true, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
   },
 });
 
