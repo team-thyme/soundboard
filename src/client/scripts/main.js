@@ -19,7 +19,7 @@ Player.init();
 const settingsModal = new SettingsModal();
 
 // TODO: Remove debug code
-// settingsModal.show();
+settingsModal.show();
 
 const sampleContainer = new SampleContainer();
 
@@ -120,5 +120,5 @@ $title.text(
 );
 
 // Version in settings modal
-$('.version__number').text(`v${config.versionNumber}`);
-$('.version__name').text(config.versionName);
+$('[data-content=version-number]').text(`v${config.versionNumber}`);
+$('[data-content=version-name]').text(config.versionName);

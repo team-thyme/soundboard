@@ -75,6 +75,15 @@
 
   background: darken(#fff, 2%);
   border-top: 1px solid darken(#fff, 5%);
+
+  .modal__footer + & {
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+.modal__footer--align-center {
+  justify-content: center;
 }
 
 .modal__subfooter {

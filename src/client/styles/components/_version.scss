@@ -1,18 +1,14 @@
 @import '../variables';
 
 .version {
-	flex: 1 1 auto;
-	flex-direction: row;
-  flex-wrap: wrap;
-	align-items: center;
-  justify-content: center;
+  margin: 0 (-$spacing-base / 2);
+
+  font-size: 0.8em;
+  color: $color-text-secondary;
 }
 
-.version__title,
-.version__name {
-	margin: 0 $spacing-base;
-	display: initial;
-
+.version__link {
+  margin: 0 ($spacing-base / 2);
 	cursor: pointer;
 
 	&:hover {
@@ -22,8 +18,4 @@
 	&:active {
 		color: darken($color-text-secondary, 10%);
 	}
-}
-
-.version__number {
-	display: initial;
 }
