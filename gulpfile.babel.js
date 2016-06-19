@@ -1,6 +1,7 @@
 import gulp from 'gulp';
 import { argv } from 'yargs';
 import { spawn } from 'child_process';
+import path from 'path';
 
 import sass from 'gulp-sass';
 import postcss from 'gulp-postcss';
@@ -63,6 +64,16 @@ gulp.task('watch', ['watch:scripts', 'watch:styles']);
 gulp.task('clean:styles', () => del([`${buildDir}/*.{css,css.map}`]));
 
 gulp.task('build:styles', ['clean:styles'], () => {
+  const sassOptions = {
+    importer(url, prev, done) {
+      if (url[0] === '~') {
+        url = path.resolve('node_modules', url.substr(1));
+      }
+
+      return { file: url };
+    },
+  };
+
   const processors = [
     autoprefixer({ browsers: ['last 1 version'] }),
   ];
@@ -73,7 +84,7 @@ gulp.task('build:styles', ['clean:styles'], () => {
 
   return gulp.src('src/client/styles/**/*.scss')
     .pipe(gulpif(sourcemaps, gulpSourcemaps.init()))
-      .pipe(sass().on('error', sass.logError))
+      .pipe(sass(sassOptions).on('error', sass.logError))
       .pipe(postcss(processors))
       .pipe(rename('style.css'))
     .pipe(gulpif(sourcemaps, gulpSourcemaps.write('./')))
