@@ -37,11 +37,11 @@
       color: $color-primary-text;
 
       &:hover {
-        background: darken($color-primary, 4%);
+        background: mix($color-primary-text, $color-primary, 10%);
       }
 
       &:active {
-        background: darken($color-primary, 8%);
+        background: mix($color-primary-text, $color-primary, 20%);
       }
     }
   }
