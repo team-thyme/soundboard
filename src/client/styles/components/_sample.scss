@@ -55,7 +55,6 @@
 
 .sample__progress {
   flex: 1 1 auto;
-  background: rgba(255,255,255,0.3);
   transform-origin: 0 0;
 }
 
@@ -72,22 +71,12 @@
       background: $color-sample;
       color: $color-sample-text;
 
-      @if (lightness($color-sample) > 50%) {
-        &:hover {
-          background: darken($color-sample, 3%);
-        }
+      &:hover {
+        background: mix($color-sample-text, $color-sample, 5%);
+      }
 
-        &:active {
-          background: darken($color-sample, 6%);
-        }
-      } @else {
-        &:hover {
-          background: lighten($color-sample, 5%);
-        }
-
-        &:active {
-          background: lighten($color-sample, 10%);
-        }
+      &:active {
+        background: mix($color-sample-text, $color-sample, 10%);
       }
 
       @if ($color-sample-shadow) {
@@ -115,6 +104,10 @@
       &:active {
         background: lighten($color-primary, 4%);
       }
+    }
+
+    .sample__progress {
+      background: transparentize($color-primary-text, 0.85);
     }
   }
 }

@@ -1,28 +1,6 @@
-$themes: (
+@import 'themes/__themes';
 
-  default: (
-    primary: #25b192,
-    primary-text: #fff,
-
-    search: #fff,
-    search-text: #2d3e4c,
-
-    sample-container: #232323,
-    sample: #2d2d2d,
-    sample-text: #fff,
-  ),
-
-  classic: (
-    primary: #4caf50,
-    primary-text: #fff,
-
-    search: #fff,
-    search-text: #222,
-
-    sample-container: #eee,
-    sample: #fff,
-    sample-text: #222,
-    sample-shadow: rgba(0,0,0,0.15)
-  ),
-
-);
+@import 'themes/default';
+@import 'themes/classic';
+@import 'themes/thyme';
+@import 'themes/cirkeltrek';

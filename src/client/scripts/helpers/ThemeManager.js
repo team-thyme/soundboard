@@ -4,6 +4,8 @@ import SettingsManager from './SettingsManager';
 export const themes = {
   default: { name: 'Default', primaryColor: '#25b192' },
   classic: { name: 'Classic', primaryColor: '#4caf50' },
+  thyme: { name: 'Thyme', primaryColor: '#000' },
+  cirkeltrek: { name: 'Cirkeltrek', primaryColor: '#e27000' },
 };
 
 class ThemeManager {

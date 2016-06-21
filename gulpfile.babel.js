@@ -1,6 +1,7 @@
 import gulp from 'gulp';
 import { argv } from 'yargs';
 import { spawn } from 'child_process';
+import path from 'path';
 
 import sass from 'gulp-sass';
 import postcss from 'gulp-postcss';
@@ -30,7 +31,7 @@ const {
 } = argv;
 
 const browserifyOptions = {
-  entries: ['./src/client/scripts/main.js'],
+  entries: ['src/client/scripts/main.js'],
   debug: sourcemaps,
 };
 
@@ -63,6 +64,16 @@ gulp.task('watch', ['watch:scripts', 'watch:styles']);
 gulp.task('clean:styles', () => del([`${buildDir}/*.{css,css.map}`]));
 
 gulp.task('build:styles', ['clean:styles'], () => {
+  const sassOptions = {
+    importer(url, prev, done) {
+      if (url[0] === '~') {
+        url = path.resolve('node_modules', url.substr(1));
+      }
+
+      return { file: url };
+    },
+  };
+
   const processors = [
     autoprefixer({ browsers: ['last 1 version'] }),
   ];
@@ -71,9 +82,9 @@ gulp.task('build:styles', ['clean:styles'], () => {
     processors.push(cssnano());
   }
 
-  return gulp.src('./src/client/styles/**/*.scss')
+  return gulp.src('src/client/styles/**/*.scss')
     .pipe(gulpif(sourcemaps, gulpSourcemaps.init()))
-      .pipe(sass().on('error', sass.logError))
+      .pipe(sass(sassOptions).on('error', sass.logError))
       .pipe(postcss(processors))
       .pipe(rename('style.css'))
     .pipe(gulpif(sourcemaps, gulpSourcemaps.write('./')))
@@ -86,7 +97,7 @@ gulp.task('watch:styles', (callback) => {
     gulpLivereload.listen();
   }
 
-  gulp.watch('./src/client/styles/**/*.scss', ['build:styles']);
+  gulp.watch('src/client/styles/**/*.scss', ['build:styles']);
 });
 
 gulp.task('clean:scripts', () => del([`${buildDir}/*.{js,js.map}`]));
@@ -138,6 +149,6 @@ gulp.task('watch:scripts', (callback) => {
 gulp.task('clean:iconfont', () => del([`${buildDir}/iconfont/`]));
 
 gulp.task('build:iconfont', ['clean:iconfont'], () => {
-  return gulp.src('./src/client/iconfont/**/*.{css,eot,svg,ttf,woff,woff2}')
+  return gulp.src('src/client/iconfont/**/*.{css,eot,svg,ttf,woff,woff2}')
     .pipe(gulp.dest(`${buildDir}/iconfont`));
 });

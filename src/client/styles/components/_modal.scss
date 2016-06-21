@@ -46,7 +46,8 @@
 
 .modal__header,
 .modal__content,
-.modal__footer {
+.modal__footer,
+.modal__subfooter {
   padding: $spacing-base * 2;
 
   &:first-child {
@@ -74,6 +75,27 @@
 
   background: darken(#fff, 2%);
   border-top: 1px solid darken(#fff, 5%);
+
+  .modal__footer + & {
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+.modal__footer--align-center {
+  justify-content: center;
+}
+
+.modal__subfooter {
+  padding: 0 $spacing-base * 2 $spacing-base $spacing-base * 2;
+
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  background: darken(#fff, 2%);
+  color: $color-text-secondary;
 }
 
 @each $theme, $colors in $themes {

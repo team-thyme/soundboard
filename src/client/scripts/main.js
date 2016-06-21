@@ -18,9 +18,6 @@ Player.init();
 
 const settingsModal = new SettingsModal();
 
-// TODO: Remove debug code
-// settingsModal.show();
-
 const sampleContainer = new SampleContainer();
 
 // History
@@ -30,17 +27,7 @@ if ('scrollRestoration' in history) {
 
 function updateFromHistoryState(state) {
   if (state !== null && state.id) {
-    const $sample = sampleContainer.playRandomWithId(state.id);
-
-    if ($sample === null) {
-      return;
-    }
-
-    const sampleTop = $sample.offset().top;
-
-    $('body').animate({
-      scrollTop: sampleTop - 100,
-    });
+    sampleContainer.playRandomWithId({ id: state.id, scroll: true, addToHistory: false });
   } else {
     Player.instance.stopAll();
   }
@@ -76,7 +63,7 @@ const search = new Search({
   },
 
   onSubmit: (e) => {
-    sampleContainer.playRandom(e);
+    sampleContainer.playRandom({ scroll: true, addToHistory: true, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
   },
 });
 
@@ -87,6 +74,14 @@ $('[data-action="show-settings-modal"]').on('click', () => {
 
 $('[data-action="show-contribution-modal"]').on('click', () => {
   window.open(config.contributeUrl, '_blank');
+});
+
+$('[data-action="show-changelog-modal"]').on('click', () => {
+  window.open(config.repositoryUrl, '_blank');
+});
+
+$('[data-action="play-version-sample"]').on('click', () => {
+  sampleContainer.playRandomWithId({ id: config.versionSampleId })
 });
 
 // Play random sample on space
@@ -120,3 +115,7 @@ $title.text(
   `More like ${boardNames[Math.floor(Math.random() * boardNames.length)]}board, \
   ${postNames[Math.floor(Math.random() * postNames.length)]}?`
 );
+
+// Version in settings modal
+$('[data-content=version-number]').text(`v${config.versionNumber}`);
+$('[data-content=version-name]').text(config.versionName);
