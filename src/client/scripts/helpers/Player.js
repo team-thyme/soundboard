@@ -34,7 +34,7 @@ class Player {
     // Prepare sound
     const howl = new Howl({
       src: [encodeURI(file)],
-      // html5: true, // Use HTML5 Audio, so large files can be streamed
+      html5: true,
       preload: false,
     });
 
