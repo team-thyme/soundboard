@@ -11,9 +11,9 @@
   bottom: 0;
 
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   padding: $spacing-base * 2;
+  overflow-y: auto;
 
   background: rgba(0,0,0,0.6);
   opacity: 0;
@@ -30,9 +30,9 @@
 }
 
 .modal__dialog {
-  flex: 0 1 auto;
   width: 100%;
   max-width: 540px;
+  margin: auto;
 
   background: #fff;
   border-radius: $border-radius-base * 2;
@@ -71,8 +71,6 @@
 }
 
 .modal__content {
-  flex: 1 1 auto;
-  overflow: auto;
   background: #fff;
 }
 
