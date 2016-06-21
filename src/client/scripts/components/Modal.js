@@ -11,11 +11,12 @@ class Modal {
   constructor(selector) {
     this.$modal = $(selector);
 
-    this.$modal.on('touchmove wheel', (e) => {
-      if (!e.isPropagationStopped()) {
-        e.preventDefault();
-      }
-    });
+    // TODO: Disable scrolling through samples when modal is active
+    // this.$modal.on('touchmove wheel', (e) => {
+    //   if (!e.isPropagationStopped()) {
+    //     e.preventDefault();
+    //   }
+    // });
 
     this.$modal.on('click', (e) => {
       if (this.$modal.is(e.target)) {
