@@ -3,11 +3,13 @@
 
 .theme-selector {
   flex-direction: row;
-  margin: 0 -2px;
+  flex-wrap: wrap;
+  margin: 0 (-2px) (-$spacing-base);
+  max-width: 400px;
 }
 
 .theme-selector__item {
-  margin-right: $spacing-base;
+  margin: 0 $spacing-base $spacing-base 0;
 
   cursor: pointer;
 }
