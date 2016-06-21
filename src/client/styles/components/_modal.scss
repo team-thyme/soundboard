@@ -24,7 +24,7 @@
 
 .modal--visible {
   opacity: 1;
-  overflow-y: auto;
+  overflow-y: scroll;
   visibility: visible;
 
   transition: opacity 300ms ease, visibility 300ms ease;
