@@ -2,16 +2,20 @@
 @import '../variables';
 
 .theme-selector {
+  margin: 0 (-$spacing-base / 2 - 4px) (-$spacing-base);
   flex-direction: row;
   flex-wrap: wrap;
-  margin: 0 (-2px) (-$spacing-base);
-  max-width: 400px;
 }
 
 .theme-selector__item {
-  margin: 0 $spacing-base $spacing-base 0;
+  flex: 0 0 (100% / 3);
+  padding: 0 ($spacing-base / 2) $spacing-base;
 
   cursor: pointer;
+
+  @media (max-width: 500px) {
+    flex-basis: (100% / 2);
+  }
 }
 
 .theme-selector__thumb {

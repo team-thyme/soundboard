@@ -44,7 +44,8 @@
 
 .form__control {
   margin-bottom: $spacing-base;
-  flex: 1 1 auto;
+  flex: 1 100 0;
+  min-width: 70%;
   justify-content: center;
 
   .form--horizontal & {
