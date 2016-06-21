@@ -18,9 +18,6 @@ Player.init();
 
 const settingsModal = new SettingsModal();
 
-// TODO: Remove debug code
-settingsModal.show();
-
 const sampleContainer = new SampleContainer();
 
 // History
