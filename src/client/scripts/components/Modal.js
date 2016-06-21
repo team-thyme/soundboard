@@ -1,4 +1,17 @@
 import $ from 'jquery';
+import getScrollbarWidth from '../helpers/getScrollbarWidth';
+
+function toggleContainerScroll(disableScroll) {
+  $(document.body)
+    .css({
+      overflow: disableScroll ? 'hidden' : '',
+      marginRight: disableScroll ? getScrollbarWidth() : '',
+    });
+  $('.header')
+    .css({
+      right: disableScroll ? getScrollbarWidth() : '',
+    });
+}
 
 class Modal {
 
@@ -10,13 +23,6 @@ class Modal {
 
   constructor(selector) {
     this.$modal = $(selector);
-
-    // TODO: Disable scrolling through samples when modal is active
-    // this.$modal.on('touchmove wheel', (e) => {
-    //   if (!e.isPropagationStopped()) {
-    //     e.preventDefault();
-    //   }
-    // });
 
     this.$modal.on('click', (e) => {
       if (this.$modal.is(e.target)) {
@@ -36,6 +42,12 @@ class Modal {
   toggle(visible) {
     Modal.activeModals += (visible ? 1 : -1);
     this.$modal.toggleClass('modal--visible', visible);
+
+    if (visible) {
+      this.$modal.scrollTop(0);
+    }
+
+    toggleContainerScroll(Modal.isModalActive());
   }
 
   static isModalActive() {
