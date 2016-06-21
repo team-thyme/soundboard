@@ -32,18 +32,9 @@
   align-items: center;
 
   border-radius: 50%;
-
   cursor: pointer;
 
   transition: background $transition-fast ease;
-
-  &:hover {
-    background: rgba(0,0,0,0.1);
-  }
-
-  &:active {
-    background: rgba(0,0,0,0.2);
-  }
 
   &:last-child {
     margin-right: 0;
@@ -58,6 +49,18 @@
     .header {
       background: $color-primary;
       color: $color-primary-text;
+    }
+
+    .header__button {
+      background-color: transparentize($color-primary-text, 1);
+
+      &:hover {
+        background-color: transparentize($color-primary-text, 0.9);
+      }
+
+      &:active {
+        background-color: transparentize($color-primary-text, 0.85);
+      }
     }
   }
 }

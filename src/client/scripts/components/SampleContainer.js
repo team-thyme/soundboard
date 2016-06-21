@@ -96,6 +96,30 @@ class SampleContainer {
     this.$sampleContainer.toggleClass('sample-container--empty', empty);
 
     this.$sampleContainer.insertAfter($prev);
+
+    if (!empty) {
+      this.updateLines();
+    }
+  }
+
+  updateLines() {
+    let row = -1;
+    let lastTop = 0;
+
+    this.$sampleContainer.find('.sample:not(.sample--filtered)').each(function () {
+      const { top } = $(this).offset();
+      if (lastTop < top) row++;
+      lastTop = top;
+
+      $(this)
+        .toggleClass('sample--line-0', row % 3 === 0)
+        .toggleClass('sample--line-1', row % 3 === 1)
+        .toggleClass('sample--line-2', row % 3 === 2);
+    });
+
+    const $prev = this.$sampleContainer.prev();
+    this.$sampleContainer.detach();
+    this.$sampleContainer.insertAfter($prev);
   }
 
   setQuery(query) {

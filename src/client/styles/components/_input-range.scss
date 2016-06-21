@@ -69,6 +69,7 @@ input[type=range] {
 
 @each $theme, $colors in $themes {
   $color-primary: map-get($colors, primary);
+  $color-primary-text: map-get($colors, primary-text);
 
   .theme--#{$theme} {
     input[type=range] {
@@ -78,13 +79,13 @@ input[type=range] {
 
       &:hover {
         @include thumb {
-          background: darken($color-primary, 4%);
+          background: mix($color-primary-text, $color-primary, 10%);
         }
       }
 
       &:active {
         @include thumb {
-          background: darken($color-primary, 8%);
+          background: mix($color-primary-text, $color-primary, 20%);
         }
       }
     }
