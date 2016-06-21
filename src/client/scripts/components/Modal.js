@@ -2,6 +2,9 @@ import $ from 'jquery';
 
 class Modal {
 
+  /** @type number */
+  static activeModals = 0;
+
   /** @type jQuery */
   $modal;
 
@@ -9,7 +12,7 @@ class Modal {
     this.$modal = $(selector);
 
     this.$modal.on('touchmove wheel', (e) => {
-      if (e.isPropagationStopped) {
+      if (!e.isPropagationStopped()) {
         e.preventDefault();
       }
     });
@@ -30,7 +33,12 @@ class Modal {
   }
 
   toggle(visible) {
+    Modal.activeModals += (visible ? 1 : -1);
     this.$modal.toggleClass('modal--visible', visible);
+  }
+
+  static isModalActive() {
+    return this.activeModals > 0;
   }
 
 }

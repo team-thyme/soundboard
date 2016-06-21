@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'themes';
 
 * {
   box-sizing: border-box;
@@ -11,17 +12,19 @@ html {
 }
 
 body {
-  min-height: 100%;
+  height: 100%;
   margin: 0;
 
-  display: flex;
-  flex-direction: column;
   overflow-y: scroll;
 
   font: $font-stack;
   color: $color-text-default;
 
   cursor: default;
+}
+
+.page-container {
+  min-height: 100%;
 }
 
 div, .block {
@@ -37,4 +40,26 @@ div, .block {
   border: 0 solid black;
   margin: 0;
   padding: 0;
+}
+
+.text--selectable {
+  user-select: all;
+  cursor: text;
+}
+
+@each $theme, $colors in $themes {
+  $color-primary: map-get($colors, primary);
+  $color-primary-text: map-get($colors, primary-text);
+
+  .theme--#{$theme} {
+    ::selection {
+      background: $color-primary;
+      color: $color-primary-text;
+    }
+
+    ::-moz-selection {
+      background: $color-primary;
+      color: $color-primary-text;
+    }
+  }
 }
