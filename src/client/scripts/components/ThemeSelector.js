@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { themes } from '../helpers/ThemeManager';
+import svg from '../../theme-thumb.svg';
 
 class ThemeSelector {
 
@@ -37,28 +38,7 @@ class ThemeSelector {
   }
 
   createThumb(theme) {
-    const $thumb = $('<div />')
-      .addClass(`theme-thumb theme-thumb--${theme}`);
-
-    // Header
-    $('<div />')
-      .appendTo($thumb)
-      .addClass('theme-thumb__header')
-      .append(
-        $('<div />')
-          .addClass('theme-thumb__search')
-      );
-
-    // Samples
-    const $samples = ['never', 'gonna', 'give', 'you', 'up', 'let', 'down']
-      .map((name) => $('<div />').addClass('theme-thumb__sample').text(name));
-
-    $('<div />')
-      .appendTo($thumb)
-      .addClass('theme-thumb__sample-container')
-      .append($samples);
-
-    return $thumb;
+    return $(svg).addClass(`theme-thumb--${theme} theme-thumb--fluid`);
   }
 
   get value() {

@@ -2,6 +2,9 @@ import gulp from 'gulp';
 import { argv } from 'yargs';
 import { spawn } from 'child_process';
 import path from 'path';
+import del from 'del';
+import sourceStream from 'vinyl-source-stream';
+import buffer from 'vinyl-buffer';
 
 import sass from 'gulp-sass';
 import postcss from 'gulp-postcss';
@@ -10,17 +13,16 @@ import gulpif from 'gulp-if';
 import { log } from 'gulp-util';
 import gulpLivereload from 'gulp-livereload';
 import gulpSourcemaps from 'gulp-sourcemaps';
+import uglify from 'gulp-uglify';
 
 import browserify from 'browserify';
+import svgify from 'svg-browserify';
 import babelify from 'babelify';
 import watchify from 'watchify';
+import yamlify from 'yamlify';
+
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
-import del from 'del';
-import sourceStream from 'vinyl-source-stream';
-import buffer from 'vinyl-buffer';
-import uglify from 'gulp-uglify';
-import yamlify from 'yamlify';
 
 const buildDir = `${__dirname}/public/build`;
 
@@ -104,8 +106,9 @@ gulp.task('clean:scripts', () => del([`${buildDir}/*.{js,js.map}`]));
 
 function createBundler(options = {}) {
   return browserify(Object.assign({}, browserifyOptions, options))
-    .transform(yamlify)
-    .transform(babelify);
+    .transform(babelify)
+    .transform(svgify)
+    .transform(yamlify);
 }
 
 function bundle(bundler) {

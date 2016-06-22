@@ -5,9 +5,11 @@
 
   font-size: 0.8em;
   color: $color-text-secondary;
+  text-align: center;
 }
 
 .version__link {
+  display: inline-block;
   margin: 0 ($spacing-base / 2);
 	cursor: pointer;
 
