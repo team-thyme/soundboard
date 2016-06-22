@@ -1,7 +1,7 @@
 client:
   contributeUrl: https://docs.google.com/document/d/1tDlWfX2TtczI5IHLmffY4LPya1J1Z9ZWHW4pYlD8toM/edit?usp=sharing
   apiBaseUrl: api
-  versionNumber: 2.2.0
-  versionName: how about no, you crazy dutch bastard
-  versionSampleId: 8ff805da
+  versionNumber: 2.3.0
+  versionName: start the game already
+  versionSampleId: d5a55355
   repositoryUrl: https://github.com/villermen/soundboard
