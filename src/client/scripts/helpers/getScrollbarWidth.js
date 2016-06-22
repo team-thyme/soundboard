@@ -22,8 +22,6 @@ function getScrollbarWidth() {
     $outer.remove();
   }
 
-  console.log(scrollbarWidth);
-
   return scrollbarWidth;
 }
 
