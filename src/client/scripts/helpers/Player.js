@@ -128,7 +128,7 @@ class Player {
         while (i-- > 0) {
           const howlerId = playing[i];
 
-          this.samples[sampleIndex].howl.stop(howlerId);
+          this.stop(sampleIndex, howlerId);
 
           // Remove it from playing, so that the events can deal with the new state
           this.playing[sampleIndex].splice(this.playing[sampleIndex].indexOf(howlerId), 1);
