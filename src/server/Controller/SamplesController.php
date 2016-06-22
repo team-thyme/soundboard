@@ -44,8 +44,8 @@ class SamplesController extends Controller
 		readfile($path);
 
 		return $response
-      ->withHeader('Content-Type', $mimeType)
-      ->withHeader('Accept-Ranges', 'bytes');
+			->withHeader('Content-Type', $mimeType)
+			->withHeader('Accept-Ranges', 'bytes');
 	}
 
 	public function queryAction(Request $request, Response $response, $arguments)
