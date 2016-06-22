@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { detach } from './jquery-utils';
 import SettingsManager from './SettingsManager';
 
 export const themes = {
@@ -29,22 +28,15 @@ class ThemeManager {
       this.updateTheme();
     });
 
-    this.updateTheme(true);
+    this.updateTheme();
   }
 
-  updateTheme(shouldDetach = false) {
+  updateTheme() {
     const theme = SettingsManager.instance.get('theme');
 
-    const $body = $('body');
-    const reAttachBody = shouldDetach ? detach($body) : null;
-
     Object.keys(themes).forEach((key) => {
-      $body.toggleClass(`theme--${key}`, key === theme);
+      $('body').toggleClass(`theme--${key}`, key === theme);
     });
-
-    if (shouldDetach) {
-      reAttachBody();
-    }
 
     this.$meta.attr('content', themes[theme].primaryColor);
   }
