@@ -9,7 +9,7 @@ class Sample {
   id;
 
   /** @type string */
-  file;
+  url;
 
   /** @type string */
   name;
@@ -31,13 +31,13 @@ class Sample {
 
   constructor(data) {
     this.id = data.id;
-    this.file = data.file;
+    this.url = data.url;
     this.name = data.name;
     this.categories = data.categories;
     this.mtime = data.mtime;
 
     this.playerId = Player.instance.registerSample({
-      file: this.file,
+      url: this.url,
       onPlay: fastBind.call(this.handlePlay, this),
       onStop: fastBind.call(this.handleStop, this),
       onProgress: fastBind.call(this.handleProgress, this),

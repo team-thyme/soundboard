@@ -7,10 +7,10 @@ use Slim\Http\Response;
 use Slim\Exception\NotFoundException;
 use Villermen\Soundboard\Model\Sample;
 use Villermen\Soundboard\Controller;
-use \RecursiveIteratorIterator;
-use \RegexIterator;
-use \RecursiveDirectoryIterator;
-use \finfo;
+use RecursiveIteratorIterator;
+use RegexIterator;
+use RecursiveDirectoryIterator;
+use finfo;
 
 class SamplesController extends Controller
 {
@@ -20,38 +20,15 @@ class SamplesController extends Controller
 			return $this->queryAction($request, $response, $arguments);
 		}
 
-		$samples = $this->getSamples();
+		$samples = $this->getSamples($request);
 
 		return $response->withJson($samples);
-	}
-
-	public function getAction(Request $request, Response $response, $arguments)
-	{
-		$file = '/' . $arguments['file'];
-
-		// Directory traveral protection.
-		$file = str_replace('/../', '/', $file);
-
-		$path = $this->getContainer()->get('config')['sampleLocation'] . $file;
-
-		if (!file_exists($path)) {
-			throw new NotFoundException($request, $response);
-		}
-
-		$finfo = new finfo();
-		$mimeType = $finfo->file($path, FILEINFO_MIME_TYPE);
-
-		readfile($path);
-
-		return $response
-			->withHeader('Content-Type', $mimeType)
-			->withHeader('Accept-Ranges', 'bytes');
 	}
 
 	public function queryAction(Request $request, Response $response, $arguments)
 	{
 		$query = $request->getQueryParam('query');
-		$samples = $this->getSamples();
+		$samples = $this->getSamples($request);
 		$queryTerms = preg_split('/\s/', $query);
 		$regexQuery = '/^(?=.*' . implode(')(?=.*', $queryTerms) . ').*$/i';
 
@@ -64,12 +41,12 @@ class SamplesController extends Controller
 		return $response->withJson($filteredSamples);
 	}
 
-	public function getSamples()
+	public function getSamples(Request $request)
 	{
 		// Get files.
 		$iterator = new RecursiveIteratorIterator(
 			new RecursiveDirectoryIterator(
-				$this->getContainer()->get('config')['sampleLocation'],
+				'samples',
 				RecursiveDirectoryIterator::FOLLOW_SYMLINKS
 			)
 		);
@@ -81,15 +58,35 @@ class SamplesController extends Controller
 		);
 
 		// Map to sample objects.
-		$samples = array_map(function ($file) {
+		$sampleBaseUrl = $this->getSampleBaseUrl($request);
+		$samples = array_map(function ($file) use ($sampleBaseUrl) {
 			// Windows compatibility.
-			$pathname = str_replace('\\', '/', $file->getPathname());
+			$path = str_replace('\\', '/', $file->getPathname());
 
-			// Make path relative.
-			$path = str_replace($this->getContainer()->get('config')['sampleLocation'], '', $pathname);
-			return new Sample($path, $file->getMTime());
+			// Remove the included samples/ directory.
+			$path = substr($path, 8);
+
+			// Create an url out of path.
+			// Urlencode.
+			$urlPath = implode('/', array_map(function($part) {
+				return rawurlencode($part);
+			}, explode('/', $path)));
+			$url = $sampleBaseUrl . '/' . $urlPath;
+			return new Sample($path, $url, $file->getMTime());
 		}, iterator_to_array($iterator, false));
 
 		return $samples;
+	}
+
+	/**
+	 * Obtains the base url for the samples from the given request.
+	 */
+	private function getSampleBaseUrl(Request $request)
+	{
+		$requestUri = $request->getUri();
+
+		// Replace the always present /api with /samples for the sample base url
+		$basePath = substr($requestUri->getBasePath(), 0, -4) . '/samples';
+		return $requestUri->getScheme() . '://' . $requestUri->getHost() . $basePath;
 	}
 }

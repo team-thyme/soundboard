@@ -6,7 +6,7 @@ use Interop\Container\ContainerInterface;
 
 class Controller
 {
-	protected $container;
+	private $container;
 
 	public function __construct(ContainerInterface $container)
 	{

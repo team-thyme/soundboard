@@ -1,6 +1,4 @@
 server:
-  sampleLocation: samples
-
   slim:
     settings:
       displayErrorDetails: true

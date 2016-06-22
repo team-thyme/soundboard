@@ -2,7 +2,7 @@
 
 namespace Villermen\Soundboard\Model;
 
-use \JsonSerializable;
+use JsonSerializable;
 
 class Sample implements JsonSerializable
 {
@@ -12,31 +12,41 @@ class Sample implements JsonSerializable
 	protected $categories;
 	protected $id;
 
-	public function __construct($file, $mtime)
+	public function __construct($file, $url, $mtime)
 	{
 		$this->file = $file;
+		$this->url = $url;
 		$this->mtime = $mtime;
 
 		// Conjure a name out of the filename.
-		$name = substr($this->file, strrpos($this->file, '/') + 1);
+		$name = $this->file;
+		$slashPosition = strrpos($name, '/');
+		if ($slashPosition) {
+			$name = substr($name, $slashPosition  + 1);
+		}
 
 		$dotPosition = strrpos($name, '.');
 		if ($dotPosition) {
 			$name = substr($name, 0, $dotPosition);
 		}
 
-		// Replace trailing numbers, to allow files to obtain the same name.
+		// Replace trailing numbers, to allow different files to obtain the same name.
 		$this->name = preg_replace('/([^\d])\d{0,2}$/', '\1', $name);
 
 		$this->id = hash('crc32', $this->name);
 
 		// Create categories for each of the relative directories.
-		$this->categories = array_slice(explode('/', $this->file), 1, -1);
+		$this->categories = array_slice(explode('/', $this->file), 0, -1);
 	}
 
 	public function getFile()
 	{
 		return $this->file;
+	}
+
+	public function getUrl()
+	{
+		return $this->url;
 	}
 
 	public function getName()
@@ -62,7 +72,7 @@ class Sample implements JsonSerializable
 	public function jsonSerialize()
 	{
 		return [
-			'file' => $this->getFile(),
+			'url' => $this->getUrl(),
 			'name' => $this->getName(),
 			'id' => $this->getId(),
 			'mtime' => $this->getMtime(),

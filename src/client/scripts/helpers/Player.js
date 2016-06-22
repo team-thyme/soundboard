@@ -21,11 +21,11 @@ class Player {
     this.progressStep = this.progressStep.bind(this);
   }
 
-  registerSample({ file, onPlay, onStop, onProgress }) {
+  registerSample({ url, onPlay, onStop, onProgress }) {
     const sampleIndex = this.samples.length;
 
     const sample = {
-      file,
+      url,
       onPlay,
       onStop,
       onProgress,
@@ -33,7 +33,7 @@ class Player {
 
     // Prepare sound
     const howl = new Howl({
-      src: [encodeURI(file)],
+      src: [url],
       html5: true,
       preload: false,
     });
