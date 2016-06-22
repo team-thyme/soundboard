@@ -1,3 +1,4 @@
 RewriteEngine on
 
-RewriteRule ^(.*)$ ../../samples/$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]
