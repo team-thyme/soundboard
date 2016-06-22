@@ -59,21 +59,13 @@ class Player {
       // NOTE: This event can trigger even when a sound was already stopped
 
       // Remove the audio if it was registered as playing
-      if (this.playing[sampleIndex].includes(howlerId)) {
+      if (!howl.loop(howlerId) && this.playing[sampleIndex].includes(howlerId)) {
         this.playing[sampleIndex].splice(this.playing[sampleIndex].indexOf(howlerId), 1);
 
         // Only trigger onStop when the last sound has just been stopped
         if (this.playing[sampleIndex].length === 0) {
           onStop();
         }
-      }
-    });
-
-    howl.on('end', (howlerId) => {
-      // Don't stop when the sound is looping
-      if (!howl.loop()) {
-        // Stop only the corresponding instance of sound
-        howl.stop(howlerId);
       }
     });
 
@@ -103,20 +95,25 @@ class Player {
       this.stopAll();
     }
 
-    // TODO: Set this individually for each play instead of for each sample (seems bugged in howler)
-    sample.howl.loop(loop);
-
     // Last-resort load
     this.load(sampleIndex);
 
     const howlerId = sample.howl.play();
+
+    sample.howl.loop(loop, howlerId);
 
     this.playing[sampleIndex].push(howlerId);
   }
 
   stop(sampleIndex, howlerId = undefined) {
     if (this.samples[sampleIndex].howl.state() !== 'unloaded') {
-      this.samples[sampleIndex].howl.stop(howlerId);
+      if (howlerId) {
+        this.samples[sampleIndex].howl.loop(false, howlerId);
+        this.samples[sampleIndex].howl.stop(howlerId);
+      } else {
+        this.samples[sampleIndex].howl.loop(false);
+        this.samples[sampleIndex].howl.stop();
+      }
     }
   }
 
