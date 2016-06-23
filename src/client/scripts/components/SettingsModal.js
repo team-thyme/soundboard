@@ -125,6 +125,8 @@ class SettingsModal extends Modal {
   }
 
   buildSettingSlider(initialValue, { min, max, step, multiplier }) {
+    const actualInitialValue = Math.round(initialValue * multiplier);
+
     const $group = $('<div />')
       .addClass('input-group input-group--range');
 
@@ -132,12 +134,12 @@ class SettingsModal extends Modal {
       .appendTo($group)
       .addClass('input-group__input')
       .attr({ type: 'range', min, max, step })
-      .val(initialValue * multiplier);
+      .val(actualInitialValue);
 
     const $value = $('<div />')
       .appendTo($group)
       .addClass('input-group__value')
-      .text(initialValue * multiplier);
+      .text(actualInitialValue);
 
     $input.on('input', () => $value.text($input.val()));
 
@@ -147,8 +149,9 @@ class SettingsModal extends Modal {
         return $input.val() / multiplier;
       },
       set value(newValue) {
-        $input.val(newValue * multiplier);
-        $value.text(newValue * multiplier);
+        const actualNewValue = Math.round(newValue * multiplier);
+        $input.val(actualNewValue);
+        $value.text(actualNewValue);
       },
     };
   }
