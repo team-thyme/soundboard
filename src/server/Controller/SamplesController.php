@@ -22,7 +22,9 @@ class SamplesController extends Controller
 
 		$samples = $this->getSamples($request);
 
-		return $response->withJson($samples);
+		return $response->withJson((object) [
+			'samples' => $samples
+		]);
 	}
 
 	public function queryAction(Request $request, Response $response, $arguments)
@@ -38,7 +40,9 @@ class SamplesController extends Controller
 			return preg_match($regexQuery, $searchString);
 		}));
 
-		return $response->withJson($filteredSamples);
+		return $response->withJson((object) [
+			'samples' => $filteredSamples
+		]);
 	}
 
 	public function getSamples(Request $request)
@@ -85,7 +89,7 @@ class SamplesController extends Controller
 	{
 		$requestUri = $request->getUri();
 
-		// Replace the always present /api with /samples for the sample base url
+		// Replace the always present /api with /samples for the sample base url.
 		$basePath = substr($requestUri->getBasePath(), 0, -4) . '/samples';
 		return $requestUri->getScheme() . '://' . $requestUri->getHost() . $basePath;
 	}

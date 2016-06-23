@@ -13,7 +13,7 @@ class ApiClient {
 
         throw new Error(`Server replied with ${response.status}`);
       })
-      .then((json) => json.map((data) => {
+      .then((json) => json.samples.map((data) => {
         /* eslint-disable no-param-reassign */
 
         // Javascript's timestamp uses milliseconds
