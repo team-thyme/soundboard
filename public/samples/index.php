@@ -18,9 +18,11 @@ if (file_exists($requestPath)) {
 	// Pass through the obtained file with some additional headers required for functioning
 	$finfo = new finfo();
 	$mimeType = $finfo->file($requestPath, FILEINFO_MIME_TYPE);
+	$size = filesize($requestPath);
 
 	header('Content-Type: ' . $mimeType);
 	header('Accept-Ranges: bytes');
+	header('Content-Length: ' . $size);
 
 	readfile($requestPath);
 } else {
