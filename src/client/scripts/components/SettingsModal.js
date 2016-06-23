@@ -133,7 +133,6 @@ class SettingsModal extends Modal {
       .addClass('input-group__input')
       .attr({ type: 'range', min, max, step })
       .val(initialValue * multiplier);
-      // .on('touchmove', (e) => e.stopPropagation());
 
     const $value = $('<div />')
       .appendTo($group)
