@@ -20,6 +20,7 @@
   visibility: hidden;
 
    transition: opacity 200ms ease, visibility 200ms ease;
+   transform: rotate3d(0,0,0,0deg);
 }
 
 .modal--visible {
