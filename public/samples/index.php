@@ -5,7 +5,9 @@
  * The webserver can't be trusted to handle this, as public might be symlinked.
  */
 
-chdir(__DIR__ . '/../../samples');
+$sampleDir = __DIR__ . '/../../samples';
+
+chdir($sampleDir);
 
 $scriptDirectory = dirname($_SERVER['SCRIPT_NAME']);
 $requestPath = substr($_SERVER['REQUEST_URI'], strlen($scriptDirectory) + 1);
@@ -24,7 +26,12 @@ if (file_exists($requestPath)) {
 	header('Accept-Ranges: bytes');
 	header('Content-Length: ' . $size);
 
-	readfile($requestPath);
+	// Send file with X-Sendfile header if enabled (It's worth it)
+	if (in_array('mod_xsendfile', apache_get_modules())) {
+		header('X-Sendfile: ' . $sampleDir . '/' . $requestPath);
+	} else {
+		readfile($requestPath);
+	}
 } else {
 	header('HTTP/1.0 404 Not Found');
 	echo '<h1>Sample not found</h1><p>The requested sample could not be found.</p>';
