@@ -16,8 +16,12 @@ Samples not included!
  1. Add some sound samples to `samples/`.
  2. Build the project by executing `build.sh` or `build.bat` depending on platform.
  3. __Optional:__ Start a development server by executing `server.sh` or `server.bat`.
+ 4. __Recommended:__ Add X-Sendfile support (see below).
 
 > Building the soundboard requires having [Node.js](https://nodejs.org/), [PHP](https://secure.php.net/) and [Composer](https://getcomposer.org/) installed on your system.
+
+### X-Sendfile
+Samples are served through PHP by default. This is due to them residing outside of the public directory. This disables certain Apache cleverness like buffering, and will cause other weird side-effects. This can be prevented by serving them with X-Sendfile. To set up X-Sendfile for Apache on Linux, you'll have to install the Apache mod using something similar to `sudo apt-get install libapache2-mod-xsendfile`. The soundboard will automatically start using X-Sendfile, but it will deny access to the samples directory (giving a 404). Allow X-Sendfile to serve the files by adding like `XSendFilePath /path/to/soundboard/samples` to your Apache configuration/virtualhost setup.
 
 ### Gulp Tasks
 ```shell
