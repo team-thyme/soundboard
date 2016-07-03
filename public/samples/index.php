@@ -27,7 +27,7 @@ if (file_exists($requestPath)) {
 	header('Content-Length: ' . $size);
 
 	// Send file with X-Sendfile header if enabled (It's worth it)
-	if (in_array('mod_xsendfile', apache_get_modules())) {
+	if (function_exists('apache_get_modules') && in_array('mod_xsendfile', apache_get_modules())) {
 		header('X-Sendfile: ' . $sampleDir . '/' . $requestPath);
 	} else {
 		readfile($requestPath);
