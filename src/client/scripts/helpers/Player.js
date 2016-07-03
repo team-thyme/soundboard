@@ -59,7 +59,7 @@ class Player {
       // NOTE: This event can trigger even when a sound was already stopped
 
       // Remove the audio if it was registered as playing
-      if (!howl.loop(howlerId) && this.playing[sampleIndex].includes(howlerId)) {
+      if (this.playing[sampleIndex].includes(howlerId)) {
         this.playing[sampleIndex].splice(this.playing[sampleIndex].indexOf(howlerId), 1);
 
         // Only trigger onStop when the last sound has just been stopped
@@ -105,13 +105,11 @@ class Player {
     this.playing[sampleIndex].push(howlerId);
   }
 
-  stop(sampleIndex, howlerId = undefined) {
+  stop(sampleIndex, howlerId = null) {
     if (this.samples[sampleIndex].howl.state() !== 'unloaded') {
       if (howlerId) {
-        this.samples[sampleIndex].howl.loop(false, howlerId);
         this.samples[sampleIndex].howl.stop(howlerId);
       } else {
-        this.samples[sampleIndex].howl.loop(false);
         this.samples[sampleIndex].howl.stop();
       }
     }
