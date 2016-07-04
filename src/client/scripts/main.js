@@ -107,6 +107,7 @@ const boardNames = [
   'crack',
   'shit',
   'originality',
+  'meme'
 ];
 
 const postNames = [
