@@ -12,6 +12,13 @@
 
 Samples not included!
 
+## Browser support
+
+The soundboard works only in _true_ browsers.
+This means that Chrome, Firefox and Opera are fully supported.
+Edge gives mixed results depending on the filetype used for samples.
+Other browsers probably won't work, but who uses those anyway?
+
 ## How to _deal with it?_
  1. Add some sound samples to `samples/`.
  2. Build the project by executing `build.sh` or `build.bat` depending on platform.
