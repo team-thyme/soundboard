@@ -61,7 +61,7 @@ class TelegramController extends Controller
 		$responseData = [
 			'method' => 'sendMessage',
 			'chat_id' => $this->requestData['message']['chat']['id'],
-			'text' => 'I\'m too shy.'
+			'text' => 'I\'m too shy to talk with you.'
 		];
 
 		return $response->withJson($responseData);
