@@ -1,12 +1,13 @@
 <?php
 
-namespace Villermen\Soundboard\Model;
+namespace Villermen\Soundboard\Models;
 
 use JsonSerializable;
 
 class Sample implements JsonSerializable
 {
 	protected $file;
+	protected $url;
 	protected $name;
 	protected $mtime;
 	protected $categories;
