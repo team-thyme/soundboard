@@ -10,3 +10,8 @@ server:
         controller: Villermen\Soundboard\Controllers\SamplesController
         action: listAction
         methods: [ get ]
+      telegram:
+        path: /telegram
+        controller: Villermen\Soundboard\Controllers\TelegramController
+        action: webhookAction
+        methods: [ post ]
