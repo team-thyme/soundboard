@@ -10,9 +10,3 @@ server:
         controller: Villermen\Soundboard\Controllers\SamplesController
         action: listAction
         methods: [ get ]
-
-      samples_get:
-        path: /samples/{file:.+}
-        controller: Villermen\Soundboard\Controllers\SamplesController
-        action: getAction
-        methods: [ get ]
