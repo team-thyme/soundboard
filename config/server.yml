@@ -7,12 +7,11 @@ server:
     routes:
       samples_list:
         path: /samples
-        controller: Villermen\Soundboard\Controller\SamplesController
+        controller: Villermen\Soundboard\Controllers\SamplesController
         action: listAction
         methods: [ get ]
-
-      samples_get:
-        path: /samples/{file:.+}
-        controller: Villermen\Soundboard\Controller\SamplesController
-        action: getAction
-        methods: [ get ]
+      telegram:
+        path: /telegram
+        controller: Villermen\Soundboard\Controllers\TelegramController
+        action: webhookAction
+        methods: [ post ]
