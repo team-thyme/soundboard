@@ -4,7 +4,6 @@
  * This script will pass through the requested file from the samples.
  * The webserver can't be trusted to handle this, as public might be symlinked.
  */
-
 $sampleDir = __DIR__ . '/../../samples';
 
 chdir($sampleDir);
@@ -18,13 +17,30 @@ $requestPath = str_replace('/..', '/', $requestPath);
 
 if (file_exists($requestPath)) {
 	// Pass through the obtained file with some additional headers required for functioning
-	$finfo = new finfo();
-	$mimeType = $finfo->file($requestPath, FILEINFO_MIME_TYPE);
 	$size = filesize($requestPath);
 
-	header('Content-Type: ' . $mimeType);
+	// Fileinfo is unreliable here, use a good ol` switch to determine content type
+	$extension = pathinfo($requestPath, PATHINFO_EXTENSION);
+	switch($extension) {
+		case 'ogg';
+			$contentType = 'audio/ogg';
+			break;
+
+		case 'mp3':
+			$contentType = 'audio/mpeg';
+			break;
+
+		case 'wav':
+			$contentType = 'audio/wav';
+			break;
+
+		default:
+			exit('Unknown file type requested.');
+	}
+
 	header('Accept-Ranges: bytes');
-	header('Content-Length: ' . $size);
+	header("Content-Type: {$contentType}");
+	header("Content-Length: {$size}");
 
 	// Send file with X-Sendfile header if enabled (It's worth it)
 	if (function_exists('apache_get_modules') && in_array('mod_xsendfile', apache_get_modules())) {
