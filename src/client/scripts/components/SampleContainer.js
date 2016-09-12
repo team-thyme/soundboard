@@ -144,7 +144,7 @@ class SampleContainer {
       return $(this).data('sample').id === id;
     });
 
-    if ($filteredSamples.size() === 0) {
+    if ($filteredSamples.length === 0) {
       return null;
     }
 
