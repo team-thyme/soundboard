@@ -45,6 +45,7 @@ class TelegramController extends Controller
 				'id' => substr($sample->getUrl(), -64),
 				'voice_url' => $sample->getUrl(),
 				'title' => $sample->getName(),
+				'caption' => implode(' / ', $sample->getCategories())
 			];
 
 			// Limit to 50 as per specification
