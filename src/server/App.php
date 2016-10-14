@@ -14,6 +14,7 @@ class App extends SlimApp
 
 	public function __construct()
 	{
+		header('Access-Control-Allow-Origin: *');
 		chdir(__DIR__ . '/../..');
 
 		// Load configuration.
