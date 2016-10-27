@@ -9,6 +9,8 @@ public/build/
 
 # NodeJS
 node_modules/
+.npmrc
+npm-debug.log
 
 # Composer
 vendor/
