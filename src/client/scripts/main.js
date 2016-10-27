@@ -19,7 +19,7 @@ ThemeManager.init();
 Player.init();
 
 const settingsModal = new SettingsModal();
-const requestModal = new RequestModal();
+// const requestModal = new RequestModal();
 
 // TODO: Remove debug code
 // settingsModal.show();
