@@ -15,6 +15,8 @@ $requestPath = rawurldecode($requestPath);
 // Directory traveral protection.
 $requestPath = str_replace('/..', '/', $requestPath);
 
+header("Access-Control-Allow-Origin: *");
+
 if (file_exists($requestPath)) {
 	// Pass through the obtained file with some additional headers required for functioning
 	$size = filesize($requestPath);
