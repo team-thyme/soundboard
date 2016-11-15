@@ -26,9 +26,6 @@ class Sample {
   /** @type jQuery */
   $progress;
 
-  /** @type number */
-  hoverTimer;
-
   constructor(data) {
     this.id = data.id;
     this.url = data.url;
@@ -97,22 +94,6 @@ class Sample {
   handleContextMenu(e) {
     e.preventDefault();
     Player.instance.stop(this.playerId);
-  }
-
-  handleMouseEnter() {
-    if (Player.instance.isUnloaded(this.playerId)) {
-      this.hoverTimer = setTimeout(() => {
-        Player.instance.load(this.playerId);
-      }, 150);
-    }
-  }
-
-  handleMouseLeave() {
-    clearTimeout(this.hoverTimer);
-  }
-
-  handleMouseDown() {
-    Player.instance.load(this.playerId);
   }
 }
 
