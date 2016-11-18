@@ -12,12 +12,14 @@ class Player {
   // Used to create audio sources and as destination for the playing samples
   audioContext = new AudioContext();
 
+  // Whether an animation frame is requested, indicating that no new loop has to be spawned
   frameRequested = false;
 
   static init() {
     this.instance = new Player();
     this.instance.context = new AudioContext();
 
+    // TODO: Gain node
     // SettingsManager.instance.on('volume', (volume) => Howler.volume(volume));
     // Howler.volume(SettingsManager.instance.get('volume'));
   }
@@ -52,12 +54,15 @@ class Player {
       // Add to playing
       player.playing[sampleIndex].push(audio);
 
-      // Register audio stop event
+      // Register audio stop and pause events
       audio.onended = audio.onpause = function() {
         // Remove from playing
-        player.playing[sampleIndex].splice(player.playing[sampleIndex].indexOf(audio), 1);
+        const spliced = player.playing[sampleIndex].splice(player.playing[sampleIndex].indexOf(audio), 1);
 
-        sample.onStop();
+        // Might be called multiple times, so only trigger onStop when actually removed from playing
+        if (spliced.length > 0) {
+          sample.onStop();
+        }
       };
 
       sample.onPlay();
@@ -99,7 +104,6 @@ class Player {
     this.playing.forEach((playing, sampleIndex) => {
       if (playing.length > 0) {
         const progress = playing[playing.length - 1].currentTime / playing[playing.length - 1].duration * 100;
-        console.log(playing[playing.length - 1].duration);
         this.samples[sampleIndex].onProgress(progress);
 
         samplesArePlaying = true;
@@ -108,31 +112,10 @@ class Player {
 
     this.frameRequested = samplesArePlaying;
 
+    // Keep requesting an animation frame until all no samples are playing
     if (this.frameRequested) {
       window.requestAnimationFrame(this.progressStep);
     }
-
-
-    // if (playingIndexes.length > 0) {
-    //   playingIndexes.forEach((sampleIndex) => {
-    //     // Update using the latest howler id
-    //     const howlerId = this.playing[sampleIndex][this.playing[sampleIndex].length - 1];
-    //
-    //     const sample = this.samples[sampleIndex];
-    //     const seek = sample.howl.seek(undefined, howlerId) || 0;
-    //     const progress = (seek / sample.howl.duration()) * 100;
-    //
-    //     sample.onProgress(progress);
-    //
-    //     frameRequested = true;
-    //   });
-    //
-    //   if (frameRe)
-    //
-    //   requestAnimationFrame(this.progressStep);
-    // } else {
-    //   this.frameRequested = false;
-    // }
   }
 }
 
