@@ -59,18 +59,22 @@ class Player {
         // Remove from playing
         const spliced = player.playing[sampleIndex].splice(player.playing[sampleIndex].indexOf(audio), 1);
 
-        // Might be called multiple times, so only trigger onStop when actually removed from playing
-        if (spliced.length > 0) {
+        // Trigger onStop only when we just removed the last playing intance of this sample
+        if (spliced.length > 0 && player.playing[sampleIndex].length == 0) {
           sample.onStop();
         }
       };
 
-      sample.onPlay();
+      // Trigger onPlay only when this is the first instance of this sample to start playing
+      if (player.playing[sampleIndex].length == 1) {
+        sample.onPlay();
 
-      // Request animation frame (only once)
-      if (!this.frameRequested) {
-        this.frameRequested = true;
-        requestAnimationFrame(player.progressStep);
+        // Request animation frame (only once)
+        if (!player.frameRequested) {
+          player.frameRequested = true;
+
+          requestAnimationFrame(player.progressStep);
+        }
       }
     };
 
@@ -103,6 +107,7 @@ class Player {
     let samplesArePlaying = false;
     this.playing.forEach((playing, sampleIndex) => {
       if (playing.length > 0) {
+        // Use the last playing sample to reflect the most recently started sample
         const progress = playing[playing.length - 1].currentTime / playing[playing.length - 1].duration * 100;
         this.samples[sampleIndex].onProgress(progress);
 
