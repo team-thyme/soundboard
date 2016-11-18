@@ -95,20 +95,21 @@ class Player {
   }
 
   progressStep() {
-    // TODO: Make this work
-    let frameRequested = false;
+    let samplesArePlaying = false;
     this.playing.forEach((playing, sampleIndex) => {
       if (playing.length > 0) {
         const progress = playing[playing.length - 1].currentTime / playing[playing.length - 1].duration * 100;
         console.log(playing[playing.length - 1].duration);
         this.samples[sampleIndex].onProgress(progress);
 
-        frameRequested = true;
+        samplesArePlaying = true;
       }
     });
 
-    if (frameRequested) {
-      this.frameRequested = true;
+    this.frameRequested = samplesArePlaying;
+
+    if (this.frameRequested) {
+      window.requestAnimationFrame(this.progressStep);
     }
 
 
