@@ -12,20 +12,33 @@ class Player {
   // Used to create audio sources and as destination for the playing samples
   audioContext = new AudioContext();
 
+  // The audio node to connect the created audio to
+  audioDestinationNode;
+
   // Whether an animation frame is requested, indicating that no new loop has to be spawned
   frameRequested = false;
 
   static init() {
     this.instance = new Player();
-    this.instance.context = new AudioContext();
-
-    // TODO: Gain node
-    // SettingsManager.instance.on('volume', (volume) => Howler.volume(volume));
-    // Howler.volume(SettingsManager.instance.get('volume'));
   }
 
   constructor() {
     this.progressStep = this.progressStep.bind(this);
+
+    // Set up volume control using a gain node
+    const gainNode = this.audioContext.createGain();
+    gainNode.connect(this.audioContext.destination)
+
+    // Initial volume
+    gainNode.gain.value = SettingsManager.instance.get('volume');
+
+    // Bind to volume changes
+    SettingsManager.instance.on('volume', (volume) => {
+      gainNode.gain.value = volume;
+    });
+
+    // Set the gain node as the destination node
+    this.audioDestinationNode = gainNode;
   }
 
   registerSample({ url, onPlay, onStop, onProgress }) {
@@ -45,7 +58,7 @@ class Player {
       const audio = new Audio(url);
       audio.crossOrigin = "anonymous";
       const source = player.audioContext.createMediaElementSource(audio);
-      source.connect(player.audioContext.destination);
+      source.connect(player.audioDestinationNode);
 
       audio.loop = loop;
 
