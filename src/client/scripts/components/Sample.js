@@ -48,7 +48,6 @@ class Sample {
   }
 
   handleStop() {
-    // BUG: Will be triggered when playing multiple samples at the same time and the first one stops
     this.$sample.removeClass('sample--playing');
   }
 
