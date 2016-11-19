@@ -69,14 +69,16 @@ class Player {
 
       // Register audio stop and pause events
       audio.onended = audio.onpause = function() {
-        // BUG: Removes two every stop, so messes with simultaneous plays. This is because of Array.prototype.indexOf matching by value instead of reference
+        const audioIndex = player.playing[sampleIndex].indexOf(audio);
 
-        // Remove from playing
-        const spliced = player.playing[sampleIndex].splice(player.playing[sampleIndex].indexOf(audio), 1);
+        if (audioIndex >= 0) {
+          // Remove from playing
+          const spliced = player.playing[sampleIndex].splice(audioIndex, 1);
 
-        // Trigger onStop only when we just removed the last playing intance of this sample
-        if (spliced.length > 0 && player.playing[sampleIndex].length == 0) {
-          sample.onStop();
+          // Trigger onStop only when we just removed the last playing intance of this sample
+          if (player.playing[sampleIndex].length == 0) {
+            sample.onStop();
+          }
         }
       };
 
