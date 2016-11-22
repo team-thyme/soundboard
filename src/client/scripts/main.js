@@ -125,6 +125,8 @@ $title.text(
   ${postNames[Math.floor(Math.random() * postNames.length)]}?`
 );
 
+if(Math.random() <= 0.01) $title.text("Villermen & The Memester Bois");
+
 // Version in settings modal
 $('[data-content=version-number]').text(`v${config.versionNumber}`);
 $('[data-content=version-name]').text(config.versionName);
