@@ -1,8 +1,0 @@
-<IfModule mod_xsendfile.c>
-	XSendFile on
-</IfModule>
-
-RewriteEngine on
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.php [QSA,L]

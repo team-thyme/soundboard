@@ -2,15 +2,8 @@
 samples/*
 !samples/.gitkeep
 
-public/build/
-
 # IntellIJ
 .idea/
-
-# NodeJS
-node_modules/
-.npmrc
-npm-debug.log
 
 # Composer
 vendor/
