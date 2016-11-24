@@ -1,4 +1,4 @@
-server:
+config:
     soundboard:
         sampleBaseDirectory: samples
 

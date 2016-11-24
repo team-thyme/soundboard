@@ -21,7 +21,7 @@ class App extends SlimApp
 
         // Load configuration.
         $config = Yaml::parse(file_get_contents(self::CONFIG_FILE));
-        $this->config = $config['server'];
+        $this->config = $config['config'];
 
         // Actually create the app.
         parent::__construct($this->config['slim']);
