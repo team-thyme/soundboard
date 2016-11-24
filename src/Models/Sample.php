@@ -26,23 +26,23 @@ class Sample implements JsonSerializable
 
         // Conjure a name out of the filename.
         $name = $this->file;
-        $slashPosition = strrpos($name, '/');
+        $slashPosition = strrpos($name, "/");
         if ($slashPosition) {
             $name = substr($name, $slashPosition  + 1);
         }
 
-        $dotPosition = strrpos($name, '.');
+        $dotPosition = strrpos($name, ".");
         if ($dotPosition) {
             $name = substr($name, 0, $dotPosition);
         }
 
         // Replace trailing numbers, to allow different files to obtain the same name.
-        $this->name = preg_replace('/([^\d])\d{0,2}$/', '\1', $name);
+        $this->name = preg_replace("/([^\d])\d{0,2}$/", "\1", $name);
 
-        $this->id = hash('crc32', $this->name);
+        $this->id = hash("crc32", $this->name);
 
         // Create categories for each of the relative directories.
-        $this->categories = array_slice(explode('/', $this->file), 0, -1);
+        $this->categories = array_slice(explode("/", $this->file), 0, -1);
     }
 
     public function getFile()
@@ -78,11 +78,11 @@ class Sample implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'path' => $this->getPath(),
-            'name' => $this->getName(),
-            'id' => $this->getId(),
-            'mtime' => $this->getMtime(),
-            'categories' => $this->getCategories()
+            "path" => $this->getPath(),
+            "name" => $this->getName(),
+            "id" => $this->getId(),
+            "mtime" => $this->getMtime(),
+            "categories" => $this->getCategories()
         ];
     }
 }

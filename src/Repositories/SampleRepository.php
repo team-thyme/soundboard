@@ -30,22 +30,22 @@ class SampleRepository
         // Filter sound files.
         $iterator = new RegexIterator(
             $iterator,
-            '/\.(wav|mp3|ogg)$/'
+            "/\.(wav|mp3|ogg)$/"
         );
 
         // Map to sample objects.
         $samples = array_map(function($file) {
             // Windows compatibility.
-            $path = str_replace('\\', '/', $file->getPathname());
+            $path = str_replace("\\", "/", $file->getPathname());
 
-            // Remove the included 'samples/'.
+            // Remove the included "samples/".
             $path = substr($path, 8);
 
             // Create an url out of path.
             // Urlencode.
-            $url = implode('/', array_map(function($part) {
+            $url = implode("/", array_map(function($part) {
                 return rawurlencode($part);
-            }, explode('/', $path)));
+            }, explode("/", $path)));
 
             return new Sample($path, $url, $file->getMTime());
         }, iterator_to_array($iterator, false));
@@ -57,11 +57,11 @@ class SampleRepository
     {
         $samples = $this->findAll();
 
-        $queryTerms = preg_split('/\s/', $query);
-        $regexQuery = '/^(?=.*' . implode(')(?=.*', $queryTerms) . ').*$/i';
+        $queryTerms = preg_split("/\s/", $query);
+        $regexQuery = "/^(?=.*" . implode(")(?=.*", $queryTerms) . ").*$/i";
 
         $filteredSamples = array_values(array_filter($samples, function($sample) use ($regexQuery) {
-            $searchString = $sample->getName() . ' ' . implode(' ', $sample->getCategories());
+            $searchString = $sample->getName() . " " . implode(" ", $sample->getCategories());
 
             return preg_match($regexQuery, $searchString);
         }));

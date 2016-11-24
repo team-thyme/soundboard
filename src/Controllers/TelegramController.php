@@ -18,36 +18,36 @@ class TelegramController extends Controller
     {
         $this->requestData = $request->getParsedBody();
 
-        if (isset($this->requestData['inline_query'])) {
+        if (isset($this->requestData["inline_query"])) {
             return $this->handleInlineQuery($request, $response);
-        } elseif (isset($this->requestData['message'])) {
+        } elseif (isset($this->requestData["message"])) {
             return $this->handleMessage($request, $response);
         }
     }
 
     public function handleInlineQuery(Request $request, Response $response) : Response
     {
-        $query = $this->requestData['inline_query']['query'];
+        $query = $this->requestData["inline_query"]["query"];
 
         $responseData = [
-            'method' => 'answerInlineQuery',
-            'inline_query_id' => $this->requestData['inline_query']['id'],
-            'results' => []
+            "method" => "answerInlineQuery",
+            "inline_query_id" => $this->requestData["inline_query"]["id"],
+            "results" => []
         ];
 
         $sampleRepository = new SampleRepository(
-            $this->getContainer()->get('config')['soundboard']['sampleBaseDirectory']
+            $this->getContainer()->get("config")["soundboard"]["sampleBaseDirectory"]
         );
         $samples = $sampleRepository->findByQuery($query);
 
         $count = 0;
         foreach($samples as $sample) {
-            $responseData['results'][] = [
-                'type' => 'voice',
-                'id' => substr($sample->getUrl(), -64),
-                'voice_url' => $sample->getUrl(),
-                'title' => $sample->getName(),
-                // 'caption' => implode(' / ', $sample->getCategories())
+            $responseData["results"][] = [
+                "type" => "voice",
+                "id" => substr($sample->getUrl(), -64),
+                "voice_url" => $sample->getUrl(),
+                "title" => $sample->getName(),
+                // "caption" => implode(" / ", $sample->getCategories())
             ];
 
             // Limit to 50 as per specification
@@ -62,9 +62,9 @@ class TelegramController extends Controller
     public function handleMessage(Request $request, Response $response) : Response
     {
         $responseData = [
-            'method' => 'sendMessage',
-            'chat_id' => $this->requestData['message']['chat']['id'],
-            'text' => 'I\'m too shy to talk with you.'
+            "method" => "sendMessage",
+            "chat_id" => $this->requestData["message"]["chat"]["id"],
+            "text" => "I\"m too shy to talk with you.'
         ];
 
         return $response->withJson($responseData);

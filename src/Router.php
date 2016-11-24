@@ -18,17 +18,17 @@ class Router extends SlimRouter
         parent::__construct();
 
         $this->container = $container;
-        $this->config = $this->container->get('config')['router'];
+        $this->config = $this->container->get("config")["router"];
 
         $this->configureRoutes();
     }
 
     public function configureRoutes()
     {
-        foreach ($this->config['routes'] as $name => $route) {
-            $controller = new $route['controller']($this->container);
+        foreach ($this->config["routes"] as $name => $route) {
+            $controller = new $route["controller"]($this->container);
 
-            $this->map($route['methods'], $route['path'], [ $controller, $route['action'] ]);
+            $this->map($route["methods"], $route["path"], [ $controller, $route["action"] ]);
         }
     }
 }
