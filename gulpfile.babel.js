@@ -33,32 +33,9 @@ const {
 } = argv;
 
 const browserifyOptions = {
-  entries: ['src/client/scripts/main.js'],
+  entries: ['src/scripts/main.js'],
   debug: sourcemaps,
 };
-
-gulp.task('php-server', (callback) => {
-  const {
-    host = '0.0.0.0',
-    port = 80,
-  } = argv;
-
-  // Start PHP built-in web server
-  spawn('php', [
-    '-S',
-    `${host}:${port}`,
-    '-t',
-    `${__dirname}/public`,
-    `${__dirname}/router.php`,
-  ], {
-    shell: true,
-    stdio: [
-      process.stdin,
-      process.stdout,
-      process.stderr,
-    ],
-  });
-});
 
 gulp.task('build', ['build:scripts', 'build:styles', 'build:iconfont']);
 gulp.task('watch', ['watch:scripts', 'watch:styles']);
@@ -84,7 +61,7 @@ gulp.task('build:styles', ['clean:styles'], () => {
     processors.push(cssnano());
   }
 
-  return gulp.src('src/client/styles/**/*.scss')
+  return gulp.src('src/styles/**/*.scss')
     .pipe(gulpif(sourcemaps, gulpSourcemaps.init()))
       .pipe(sass(sassOptions).on('error', sass.logError))
       .pipe(postcss(processors))
@@ -99,7 +76,7 @@ gulp.task('watch:styles', (callback) => {
     gulpLivereload.listen();
   }
 
-  gulp.watch('src/client/styles/**/*.scss', ['build:styles']);
+  gulp.watch('src/styles/**/*.scss', ['build:styles']);
 });
 
 gulp.task('clean:scripts', () => del([`${buildDir}/*.{js,js.map}`]));
@@ -152,6 +129,6 @@ gulp.task('watch:scripts', (callback) => {
 gulp.task('clean:iconfont', () => del([`${buildDir}/iconfont/`]));
 
 gulp.task('build:iconfont', ['clean:iconfont'], () => {
-  return gulp.src('src/client/iconfont/**/*.{css,eot,svg,ttf,woff,woff2}')
+  return gulp.src('src/iconfont/**/*.{css,eot,svg,ttf,woff,woff2}')
     .pipe(gulp.dest(`${buildDir}/iconfont`));
 });

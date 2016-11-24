@@ -1,4 +1,4 @@
-import config from '../../../config/client.yml';
+import config from '../../config.yml';
 
 /**
  * @property {string} contributeUrl
@@ -7,4 +7,4 @@ import config from '../../../config/client.yml';
  * @property {string} versionName
  * @property {string} repositoryUrl
  */
-export default config.client;
+export default config.config;
