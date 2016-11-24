@@ -1,10 +1,10 @@
 <?php
 
-namespace Villermen\Soundboard;
+namespace TeamThyme\Soundboard;
 
 use Symfony\Component\Yaml\Yaml;
 use Slim\App as SlimApp;
-use Villermen\Soundboard\Router;
+use TeamThyme\Soundboard\Router;
 use Slim\Http\Request;
 use Slim\Http\Response;
 

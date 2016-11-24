@@ -1,13 +1,13 @@
 <?php
 
-namespace Villermen\Soundboard\Controllers;
+namespace TeamThyme\Soundboard\Controllers;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Exception\NotFoundException;
-use Villermen\Soundboard\Models\Sample;
-use Villermen\Soundboard\Repositories\SampleRepository;
-use Villermen\Soundboard\Controller;
+use TeamThyme\Soundboard\Models\Sample;
+use TeamThyme\Soundboard\Repositories\SampleRepository;
+use TeamThyme\Soundboard\Controller;
 
 class SamplesController extends Controller
 {
@@ -45,7 +45,7 @@ class SamplesController extends Controller
     {
         // Construct relative path to sample
         $file = "/" . $arguments["file"];
-        
+
         // Directory traveral protection.
         $file = str_replace("/../", "/", $file);
 
@@ -76,12 +76,12 @@ class SamplesController extends Controller
 
         $response = $response
             ->withHeader("Content-Type", $contentType)
-            ->withHeader("Accept-Ranges", "bytes');
+            ->withHeader("Accept-Ranges", "bytes");
             // ->withHeader("Content-Length", filesize($path));
 
         // Send file with X-Sendfile header if enabled (It"s worth it)
         if (function_exists("apache_get_modules") && in_array("mod_xsendfile", apache_get_modules())) {
-            $response = $response->withHeader("X-Sendfile', $path);
+            $response = $response->withHeader("X-Sendfile", $path);
         } else {
             readfile($path);
         }

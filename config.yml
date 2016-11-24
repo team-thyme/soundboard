@@ -10,16 +10,16 @@ config:
         routes:
             samples_list:
                 path: /samples
-                controller: Villermen\Soundboard\Controllers\SamplesController
+                controller: TeamThyme\Soundboard\Controllers\SamplesController
                 action: listAction
                 methods: [ GET ]
             samples_get:
                 path: /samples/{file:.+}
-                controller: Villermen\Soundboard\Controllers\SamplesController
+                controller: TeamThyme\Soundboard\Controllers\SamplesController
                 action: getAction
                 methods: [ GET ]
             telegram:
                 path: /telegram
-                controller: Villermen\Soundboard\Controllers\TelegramController
+                controller: TeamThyme\Soundboard\Controllers\TelegramController
                 action: webhookAction
                 methods: [ POST ]

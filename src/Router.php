@@ -1,8 +1,8 @@
 <?php
 
-namespace Villermen\Soundboard;
+namespace TeamThyme\Soundboard;
 
-use Villermen\Soundboard\App;
+use TeamThyme\Soundboard\App;
 use Slim\Router as SlimRouter;
 use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;

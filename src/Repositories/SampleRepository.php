@@ -1,8 +1,8 @@
 <?php
 
-namespace Villermen\Soundboard\Repositories;
+namespace TeamThyme\Soundboard\Repositories;
 
-use Villermen\Soundboard\Models\Sample;
+use TeamThyme\Soundboard\Models\Sample;
 use RecursiveIteratorIterator;
 use RegexIterator;
 use RecursiveDirectoryIterator;

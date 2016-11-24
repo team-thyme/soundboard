@@ -1,6 +1,6 @@
 <?php
 
-namespace Villermen\Soundboard;
+namespace TeamThyme\Soundboard;
 
 use Interop\Container\ContainerInterface;
 

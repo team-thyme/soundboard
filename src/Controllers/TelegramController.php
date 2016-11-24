@@ -1,9 +1,9 @@
 <?php
 
-namespace Villermen\Soundboard\Controllers;
+namespace TeamThyme\Soundboard\Controllers;
 
-use Villermen\Soundboard\Controller;
-use Villermen\Soundboard\Repositories\SampleRepository;
+use TeamThyme\Soundboard\Controller;
+use TeamThyme\Soundboard\Repositories\SampleRepository;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -64,7 +64,7 @@ class TelegramController extends Controller
         $responseData = [
             "method" => "sendMessage",
             "chat_id" => $this->requestData["message"]["chat"]["id"],
-            "text" => "I\"m too shy to talk with you.'
+            "text" => "I'm too shy to talk with you."
         ];
 
         return $response->withJson($responseData);

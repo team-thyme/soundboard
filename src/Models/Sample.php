@@ -1,6 +1,6 @@
 <?php
 
-namespace Villermen\Soundboard\Models;
+namespace TeamThyme\Soundboard\Models;
 
 use JsonSerializable;
 
