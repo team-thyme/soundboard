@@ -1,7 +1,0 @@
-config:
-    contributeUrl: https://docs.google.com/document/d/1tDlWfX2TtczI5IHLmffY4LPya1J1Z9ZWHW4pYlD8toM/edit?usp=sharing
-    apiBaseUrl: https://viller.men/soundboard/api
-    versionNumber: 2.3.0
-    versionName: start the game already
-    versionSampleId: d5a55355
-    repositoryUrl: https://github.com/team-thyme/soundboard-front-end

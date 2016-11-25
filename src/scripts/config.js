@@ -1,10 +1,15 @@
-import config from '../../config.yml';
+import system from '../../system.json';
 
-/**
- * @property {string} contributeUrl
- * @property {string} apiBaseUrl
- * @property {string} versionNumber
- * @property {string} versionName
- * @property {string} repositoryUrl
- */
-export default config.config;
+export default fetch('config.json').then(response => {
+    if (!response.ok) {
+        console.log("Could not fetch public config.");
+        return;
+    }
+
+    return response.json().then(config => {
+        // Merge system and public config
+        return Object.assign(system, config);
+    });
+}).catch((error) => {
+    console.log("Could not fetch public config.");
+});

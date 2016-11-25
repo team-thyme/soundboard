@@ -1,6 +1,5 @@
 class ApiClient {
-
-  constructor(baseUrl = 'api') {
+  constructor(baseUrl) {
     this.baseUrl = baseUrl;
   }
 
