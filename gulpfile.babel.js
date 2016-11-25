@@ -1,4 +1,4 @@
-import gulp from 'gulp';
+import fs from 'fs-extra';
 import { argv } from 'yargs';
 import { spawn } from 'child_process';
 import path from 'path';
@@ -6,6 +6,7 @@ import del from 'del';
 import sourceStream from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 
+import gulp from 'gulp';
 import sass from 'gulp-sass';
 import postcss from 'gulp-postcss';
 import rename from 'gulp-rename';
@@ -24,7 +25,8 @@ import yamlify from 'yamlify';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 
-const buildDir = `${__dirname}/public/build`;
+const publicDir = `${__dirname}/public`
+const buildDir = `${publicDir}/build`;
 
 const {
   compress = true,
@@ -106,9 +108,23 @@ function bundle(bundler) {
 }
 
 gulp.task('build:scripts', ['clean:scripts'], () => {
-  const bundler = createBundler();
 
-  return bundle(bundler);
+  // Only copy config if it doesn't exist
+
+  // This plain just doesn't work while documentation states it should.
+  // let configCopied = gulp.src('config.dist.json')
+  //   .pipe(rename('config.json'))
+  //   .pipe(gulp.dest(publicDir, { overwrite: false }));
+
+  try {
+    fs.copySync('config.dist.json', `${publicDir}/config.json`, { clobber: false });
+  } catch (error) {
+    if (error.code !== 'EEXIST') {
+      throw error;
+    }
+  }
+
+  return bundle(createBundler());
 });
 
 gulp.task('watch:scripts', (callback) => {
