@@ -4,7 +4,9 @@ class ApiClient {
   }
 
   getSamples() {
-    return fetch(`${this.baseUrl}/samples`)
+    let apiClient = this;
+
+    return fetch(`${apiClient.baseUrl}/samples`)
       .then((response) => {
         if (response.status === 200) {
           return response.json();
@@ -17,6 +19,9 @@ class ApiClient {
 
         // Javascript's timestamp uses milliseconds
         data.mtime = 1000 * data.mtime;
+
+        // Convert path to an absolute url
+        data.url = apiClient.baseUrl + '/samples/' + data.path;
 
         return data;
 
