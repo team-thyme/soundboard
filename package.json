@@ -1,6 +1,6 @@
 {
-  "name": "soundboard",
-  "version": "1.0.0",
+  "name": "soundboard-front-end",
+  "version": "3.0.0",
   "description": "Front-end for Team Thyme's web-based soundboard",
   "homepage": "https://github.com/team-thyme/soundboard-front-end",
   "private": true,
