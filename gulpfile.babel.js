@@ -20,7 +20,6 @@ import browserify from 'browserify';
 import svgify from 'svg-browserify';
 import babelify from 'babelify';
 import watchify from 'watchify';
-import yamlify from 'yamlify';
 
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
@@ -86,8 +85,7 @@ gulp.task('clean:scripts', () => del([`${buildDir}/*.{js,js.map}`]));
 function createBundler(options = {}) {
   return browserify(Object.assign({}, browserifyOptions, options))
     .transform(babelify)
-    .transform(svgify)
-    .transform(yamlify);
+    .transform(svgify);
 }
 
 function bundle(bundler) {
