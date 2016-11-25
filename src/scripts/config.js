@@ -2,7 +2,7 @@ import system from '../../system.json';
 
 export default fetch('config.json').then(response => {
     if (!response.ok) {
-        console.log("Could not fetch public config.");
+        throw new Error("Could not fetch public config.");
         return;
     }
 
@@ -11,5 +11,5 @@ export default fetch('config.json').then(response => {
         return Object.assign(system, config);
     });
 }).catch((error) => {
-    console.log("Could not fetch public config.");
+    throw new Error("Could not fetch public config.");
 });
