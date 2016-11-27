@@ -1,1 +1,1 @@
-composer install
+composer install --no-dev --optimize-autoloader
