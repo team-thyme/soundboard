@@ -43,19 +43,22 @@ class SamplesController extends Controller
 
     public function getAction(Request $request, Response $response, $arguments)
     {
-        // Construct relative path to sample
-        $file = "/" . $arguments["file"];
+        // Convert given path to an absolute path to the sample file
+        $basePath = realpath($this->getContainer()->get("config")["soundboard"]["sampleBaseDirectory"]);
 
-        // Directory traveral protection.
-        $file = str_replace("/../", "/", $file);
+        if ($basePath === false) {
+            throw new Exception("sampleBaseDirectory config option does not point to an existing path.");
+        }
 
-        $path = $this->getContainer()->get("config")["soundboard"]["sampleBaseDirectory"] . $file;
-        if (!file_exists($path)) {
+        $samplePath = realpath($basePath . "/" . $arguments["file"]);
+
+        // Check if file exist and prevent directory traversal.
+        if (!$samplePath || substr($samplePath, 0, strlen($basePath)) != $basePath) {
             throw new NotFoundException($request, $response);
         }
 
-        // Determine content type (Fileinfo is unreliable here, use a good ol" switch to determine content type)
-        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        // Determine content type (Fileinfo is unreliable here, use a good ol' switch to determine content type)
+        $extension = pathinfo($samplePath, PATHINFO_EXTENSION);
 
         switch($extension) {
             case "ogg";
@@ -71,19 +74,19 @@ class SamplesController extends Controller
                 break;
 
             default:
-                throw new Exception("Unknown file type requested.");
+                throw new NotFoundException($request, $response);
         }
 
         $response = $response
             ->withHeader("Content-Type", $contentType)
             ->withHeader("Accept-Ranges", "bytes");
-            // ->withHeader("Content-Length", filesize($path));
 
-        // Send file with X-Sendfile header if enabled (It"s worth it)
+        // Send file with X-Sendfile header if enabled (It's worth it)
         if (function_exists("apache_get_modules") && in_array("mod_xsendfile", apache_get_modules())) {
-            $response = $response->withHeader("X-Sendfile", $path);
+            $response = $response->withHeader("X-Sendfile", $samplePath);
         } else {
-            readfile($path);
+            // The best practice would be to read the file to string and use $response->withBody(), but that would be horribly memory inefficient
+            readfile($samplePath);
         }
 
         return $response;
