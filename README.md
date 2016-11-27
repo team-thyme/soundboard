@@ -5,6 +5,7 @@
 - Add wav/mp3/ogg files to `samples/` to instantly add them to the API
 - Searching for specific samples
 - Telegram API
+- Have multiple samples with the same name by suffixing them with digits
 - Contains maximum overkill
 
 Samples not included!
