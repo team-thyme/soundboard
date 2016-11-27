@@ -1,42 +1,105 @@
 # Soundboard
-> More like knäckebröd, har jag rätt?
+> More like bitterballen, niet?
 
 ## Features
- - Every wav/mp3/ogg file you add to `samples/` will be glorified instantaneously
- - Responsive search
- - Direct, obfuscated, linking to soundbytes
- - Press <kbd>Enter</kbd> in the search bar to play a random sample. (This also works when a (partial) search term is entered.)
- - Hold shift to play soundbytes simultaneously
- - Hold control to play soundbytes on a loop
- - Maximum overkill
+- Add wav/mp3/ogg files to `samples/` to instantly add them to the API
+- Searching for specific samples
+- Telegram API
+- Contains maximum overkill
 
 Samples not included!
 
 ## How to _deal with it?_
- 1. Add some sound samples to `samples/`.
- 2. Build the project by executing `build.sh` or `build.bat` depending on platform.
- 3. __Optional:__ Start a development server by executing `server.sh` or `server.bat`.
+1. Download the latest release, or build from source by running `build.sh`
+2. Add some wav/mp3/ogg files to `samples/`
+3. __Optional:__ Convert the samples to a compatible format with FFmpeg byr running `convert-to-ogg.sh`
+3. __Optional:__ Start a development server by executing `devserver.sh`
 
-> Building the soundboard requires having [Node.js](https://nodejs.org/), [PHP](https://secure.php.net/) and [Composer](https://getcomposer.org/) installed on your system.
+## API
+To obtain an array with the info of all the available samples:
 
-### Gulp Tasks
-```shell
-> gulp build [--no-compress] [--sourcemaps] # Simple calls the other build tasks
-> gulp build:scripts # Same options as gulp build
-> gulp build:styles # Same options as gulp build
-> gulp build:fontello
-
-> gulp watch [--no-compress] [--sourcemaps] [--livereload] # Simply calls the other watch tasks
-> gulp watch:scripts # Same options as gulp watch
-> gulp watch:styles # Same options as gulp watch
-
-> gulp php-server
+```
+GET /samples
 ```
 
-### LiveReload
-To live reload scripts and styles you need to have [one of these extensions](http://livereload.com/extensions/) installed and use the `--livereload` option on the `gulp watch` tasks.
+Example output:
 
-## So you want your own client? _With blackjack and hookers?_
-There's [an API documentation](https://github.com/villermen/soundboard/wiki/API-documentation) for that on [the wiki](https://github.com/villermen/soundboard/wiki)!
+```
+{
+  "samples": [
+    {
+      "url": "loop/yoshi's%20island.ogg",
+      "name": "yoshi's island",
+      "id": "3153b81e",
+      "mtime": 1465334423,
+      "categories": [
+        "loop"
+      ]
+    },
+    {
+      "url": "loop/de%20huilende%20rappers/boutjes%20moertjes%20stekkertjes snoertjes.ogg",
+      "name": "boutjes moertjes stekkertjes snoertjes",
+      "id": "e6d4f390",
+      "mtime": 1465333910,
+      "categories": [
+        "loop",
+        "de huilende rappers"
+      ]
+    }.
+    {
+      "url": "voice/wow%20effect3.ogg",
+      "name": "wow effect",
+      "id": "68851e0f",
+      "mtime": 1465670673,
+      "categories": [
+        "voice"
+      ]
+    }
+  ]
+}
+```
 
-Design by [Mesoptier](https://github.com/mesoptier)!
+You can refine this list by adding a query to the request:
+
+```
+GET /samples?query=rappers|wow
+```
+
+Example output:
+
+```
+{
+  "samples": [
+    {
+      "url": "loop/de%20huilende%20rappers/boutjes%20moertjes%20stekkertjes%20snoertjes.ogg",
+      "name": "boutjes moertjes stekkertjes snoertjes",
+      "id": "e6d4f390",
+      "mtime": 1465333910,
+      "categories": [
+        "loop",
+        "de huilende rappers"
+      ]
+    }.
+    {
+      "url": "voice/wow%20effect.ogg",
+      "name": "wow effect",
+      "id": "68851e0f",
+      "mtime": 1465670673,
+      "categories": [
+        "voice"
+      ]
+    }
+  ]
+}
+```
+
+Separating query arguments with a space will perform an AND match, and separating them by a pipe will perform an OR match. This behavior mimics the [front-end](https://github.com/team-thyme/soundboard-front-end) as closely as possible (it does not use the API for this, as API calls are expensive).
+
+Actually obtaining the sample data can be done by appending a sample's path to the `samples/` url:
+
+```
+GET /samples/voice/wow%20effect.ogg
+```
+
+## Telegram API
+Setting up a telegram bot with the API is as simple as setting the API's inline url to `[your-back-ends-url]/telegram`.
