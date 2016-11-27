@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "gulp build",
-    "devbuild": "gulp build --sourcemaps && gulp watch --sourcemaps",
+    "devbuild": "gulp build --sourcemaps --livereload && gulp watch --sourcemaps --livereload",
     "devserver": "ws --port 80 --directory public --spa index.html"
   },
   "devDependencies": {
