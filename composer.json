@@ -1,23 +1,24 @@
 {
-    "name": "villermen/soundboard",
-    "description": "RESTful soundboard backend using slim framework.",
+    "name": "team-thyme/soundboard",
+    "description": "RESTful soundboard back-end using Slim framework.",
     "keywords": [
-			"soundboard",
-			"rest",
-			"slim",
-			"backend",
-			"api"
-		],
-    "homepage": "https://viller.men/soundboard",
+            "soundboard",
+            "rest",
+            "slim",
+            "backend",
+            "api",
+            "team-thyme"
+        ],
+    "homepage": "https://github.com/team-thyme/soundboard-back-end",
     "license": "MIT",
     "authors": [
-		],
+        ],
     "require": {
         "php": ">=5.5.0",
         "slim/slim": "^3.1",
         "symfony/yaml": "^3.1"
     },
-		"autoload": {
-			"psr-4": { "Villermen\\Soundboard\\": "src/server/" }
-		}
+    "autoload": {
+        "psr-4": { "TeamThyme\\Soundboard\\": "src/" }
+    }
 }
