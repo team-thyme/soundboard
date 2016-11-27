@@ -13,7 +13,11 @@ Samples not included!
 1. Download the latest release, or build from source by running `build.sh`
 2. Add some wav/mp3/ogg files to `samples/`
 3. __Optional:__ Convert the samples to a compatible format with FFmpeg byr running `convert-to-ogg.sh`
-3. __Optional:__ Start a development server by executing `devserver.sh`
+4. __Optional:__ Start a development server by executing `devserver.sh`
+5. Make sure only to expose the `public/` directory to the public. E.g. by symlinking to it.
+
+## X-Sendfile
+Samples are served through PHP by default. This is due to them residing outside of the public directory. This disables certain Apache cleverness like buffering, and will cause other weird side-effects. This can be fixed by serving them with X-Sendfile. To set up X-Sendfile for Apache on Linux, you'll have to install the Apache mod using something similar to `sudo apt-get install libapache2-mod-xsendfile`. The soundboard will automatically start using X-Sendfile, but it will deny access to the samples directory (giving a 404). Allow X-Sendfile to serve the files by adding the samples directory to sendfile's allowed paths. Add something similar to `XSendFilePath /path/to/soundboard/samples` to your Apache's website configuration.
 
 ## API
 To obtain an array with the info of all the available samples:
