@@ -9,7 +9,7 @@ class Sample {
   id;
 
   /** @type string */
-  file;
+  url;
 
   /** @type string */
   name;
@@ -26,18 +26,15 @@ class Sample {
   /** @type jQuery */
   $progress;
 
-  /** @type number */
-  hoverTimer;
-
   constructor(data) {
     this.id = data.id;
-    this.file = data.file;
+    this.url = data.url;
     this.name = data.name;
     this.categories = data.categories;
     this.mtime = data.mtime;
 
     this.playerId = Player.instance.registerSample({
-      file: this.file,
+      url: this.url,
       onPlay: fastBind.call(this.handlePlay, this),
       onStop: fastBind.call(this.handleStop, this),
       onProgress: fastBind.call(this.handleProgress, this),
@@ -97,22 +94,6 @@ class Sample {
   handleContextMenu(e) {
     e.preventDefault();
     Player.instance.stop(this.playerId);
-  }
-
-  handleMouseEnter() {
-    if (Player.instance.isUnloaded(this.playerId)) {
-      this.hoverTimer = setTimeout(() => {
-        Player.instance.load(this.playerId);
-      }, 150);
-    }
-  }
-
-  handleMouseLeave() {
-    clearTimeout(this.hoverTimer);
-  }
-
-  handleMouseDown() {
-    Player.instance.load(this.playerId);
   }
 }
 

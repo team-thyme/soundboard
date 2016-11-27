@@ -1,14 +1,10 @@
-# Sample files (we got that sweet copyright on our own voices)
-samples/*
-!samples/.gitkeep
-
 public/build/
+public/config.json
 
 # IntellIJ
 .idea/
 
 # NodeJS
 node_modules/
-
-# Composer
-vendor/
+.npmrc
+npm-debug.log

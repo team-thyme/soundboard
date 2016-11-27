@@ -26,16 +26,7 @@ class SampleContainer {
       })
       .on('contextmenu', '.sample', function (e) {
         $(this).data('sample').handleContextMenu(e);
-      })
-      .on('mouseenter touchstart', '.sample', function (e) {
-        $(this).data('sample').handleMouseEnter(e);
-      })
-      .on('mouseleave touchend', '.sample', function (e) {
-        $(this).data('sample').handleMouseLeave(e);
-      })
-      .on('mousedown', '.sample', function (e) {
-        $(this).data('sample').handleMouseDown(e);
-      });
+    });
   }
 
   setSamples(samples) {
@@ -144,7 +135,7 @@ class SampleContainer {
       return $(this).data('sample').id === id;
     });
 
-    if ($filteredSamples.size() === 0) {
+    if ($filteredSamples.length === 0) {
       return null;
     }
 
