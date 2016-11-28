@@ -149,7 +149,7 @@ class SampleContainer {
   scrollToSample($sample) {
     const sampleTop = $sample.offset().top;
 
-    $('body').animate({
+    $('html, body').animate({
       scrollTop: sampleTop - 100,
     });
   }
