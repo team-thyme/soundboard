@@ -6,7 +6,6 @@ use TeamThyme\Soundboard\Controller;
 use TeamThyme\Soundboard\Repositories\SampleRepository;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Exception;
 
 class TelegramController extends Controller
 {
@@ -23,9 +22,9 @@ class TelegramController extends Controller
             return $this->handleInlineQuery($request, $response);
         } elseif (isset($this->requestData["message"])) {
             return $this->handleMessage($request, $response);
-        } else {
-            throw new Exception("No supported operation supplied.");
         }
+
+        return $response;
     }
 
     public function handleInlineQuery(Request $request, Response $response) : Response
