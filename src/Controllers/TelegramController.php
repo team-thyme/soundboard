@@ -47,7 +47,7 @@ class TelegramController extends Controller
 
         $count = 0;
         foreach($samples as $sample) {
-            $sampleUrl =  $apiBaseUrl . "/" . $sample->getPath();
+            $sampleUrl =  $apiBaseUrl . "/samples/" . $sample->getPath();
 
             $responseData["results"][] = [
                 "type" => "voice",
