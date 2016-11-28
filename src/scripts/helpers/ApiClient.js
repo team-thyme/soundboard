@@ -1,3 +1,5 @@
+import Sample from '../components/Sample';
+
 class ApiClient {
   constructor(baseUrl) {
     this.baseUrl = baseUrl;
@@ -15,17 +17,15 @@ class ApiClient {
         throw new Error(`Server replied with ${response.status}`);
       })
       .then((json) => json.samples.map((data) => {
-        /* eslint-disable no-param-reassign */
+        let sampleData = data;
 
         // Javascript's timestamp uses milliseconds
-        data.mtime = 1000 * data.mtime;
+        sampleData.mtime = 1000 * sampleData.mtime;
 
         // Convert path to an absolute url
-        data.url = apiClient.baseUrl + '/samples/' + data.path;
+        sampleData.url = apiClient.baseUrl + '/samples/' + sampleData.path;
 
-        return data;
-
-        /* eslint-enable no-param-reassign */
+        return new Sample(sampleData);
       }));
   }
 

@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import Sample from './Sample';
 
 class SampleContainer {
 
@@ -33,16 +32,13 @@ class SampleContainer {
     // Sort samples
     const sortLimit = new Date().getTime() - 14 * 24 * 60 * 60 * 1000;
 
-    samples.sort((sample1, sample2) => {
+    this.samples = samples.sort((sample1, sample2) => {
       if (sample1.mtime > sortLimit || sample2.mtime > sortLimit) {
         return sample2.mtime - sample1.mtime;
       }
 
       return 2 * Math.floor(2 * Math.random()) - 1;
     });
-
-    // Create Sample objects
-    this.samples = samples.map((data) => new Sample(data));
 
     // Add the samples to the DOM
     const $prev = this.$sampleContainer.prev();
