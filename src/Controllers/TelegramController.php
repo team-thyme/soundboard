@@ -6,6 +6,7 @@ use TeamThyme\Soundboard\Controller;
 use TeamThyme\Soundboard\Repositories\SampleRepository;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Exception;
 
 class TelegramController extends Controller
 {
@@ -14,7 +15,7 @@ class TelegramController extends Controller
     /**
      * Routes the request.
      */
-    public function webhookAction(Request $request, Response $response)
+    public function webhookAction(Request $request, Response $response) : Response
     {
         $this->requestData = $request->getParsedBody();
 
@@ -22,6 +23,8 @@ class TelegramController extends Controller
             return $this->handleInlineQuery($request, $response);
         } elseif (isset($this->requestData["message"])) {
             return $this->handleMessage($request, $response);
+        } else {
+            throw new Exception("No supported operation supplied.");
         }
     }
 
@@ -40,12 +43,16 @@ class TelegramController extends Controller
         );
         $samples = $sampleRepository->findByQuery($query);
 
+        $apiBaseUrl = $request->getUri()->getBaseUrl();
+
         $count = 0;
         foreach($samples as $sample) {
+            $sampleUrl =  $apiBaseUrl . "/" . $sample->getPath();
+
             $responseData["results"][] = [
                 "type" => "voice",
-                "id" => substr($sample->getUrl(), -64),
-                "voice_url" => $sample->getUrl(),
+                "id" => substr($sampleUrl, -64),
+                "voice_url" => $sampleUrl,
                 "title" => $sample->getName(),
                 // "caption" => implode(" / ", $sample->getCategories())
             ];
