@@ -90,11 +90,6 @@ class Sample {
       history.pushState({ id: this.id }, '', this.id);
     }
   }
-
-  handleContextMenu(e) {
-    e.preventDefault();
-    Player.instance.stop(this.playerId);
-  }
 }
 
 export default Sample;

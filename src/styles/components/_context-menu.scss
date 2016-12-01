@@ -1,0 +1,18 @@
+@import '../variables';
+@import '../themes';
+
+.context-menu-list {
+  position: absolute;
+}
+
+@each $theme, $colors in $themes {
+  $color-search: map-get($colors, search);
+  $color-search-text: map-get($colors, search-text);
+
+  .theme--#{$theme} {
+    .context-menu-list {
+      background: $color-search;
+      color: $color-search-text;
+    }
+  }
+}

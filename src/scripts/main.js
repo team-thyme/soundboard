@@ -1,5 +1,6 @@
 import 'whatwg-fetch';
 import $ from 'jquery';
+import 'jquery-contextmenu';
 
 import configPromise from './config';
 import ApiClient from './helpers/ApiClient';
@@ -129,4 +130,13 @@ configPromise.then((config) => {
   // Version in settings modal
   $('[data-content=version-number]').text(`v${config.versionNumber}`);
   $('[data-content=version-name]').text(config.versionName);
+
+  $.contextMenu({
+      "selector": ".sample",
+      "items": {
+          "foo": {
+              "name": "Asdf", "callback": (key, opt) => { alert(key + " " + opt); }
+          }
+      }
+  })
 });
