@@ -68,6 +68,49 @@ function setContainerSamples(samples) {
   });
 }
 
+// Randomized page title
+const boardNames = [
+  'music',
+  'spam',
+  'crack',
+  'shit',
+  'originality',
+  'meme'
+];
+
+const postNames = [
+  'amirite',
+  'correct',
+  'no',
+  'you see',
+  'eh',
+  'hmm',
+];
+
+const $title = $('title');
+$title.text(
+  `More like ${boardNames[Math.floor(Math.random() * boardNames.length)]}board, \
+  ${postNames[Math.floor(Math.random() * postNames.length)]}?`
+);
+
+// Action buttons
+$('[data-action="show-settings-modal"]').on('click', () => {
+  settingsModal.show();
+});
+
+// Init search
+const search = new Search({
+  onChange: (query) => {
+    sampleContainer.setQuery(query);
+    sampleContainer.update();
+  },
+
+  onSubmit: (e) => {
+    sampleContainer.playRandom({ scroll: true, addToHistory: true, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
+  },
+});
+
+// Wait for config to register samples and set some other values
 configPromise.then((config) => {
   const apiClient = new ApiClient(config.apiBaseUrl);
 
@@ -76,23 +119,7 @@ configPromise.then((config) => {
     .then(setContainerSamples)
     .then(playFromArguments);
 
-  // Init search
-  const search = new Search({
-    onChange: (query) => {
-      sampleContainer.setQuery(query);
-      sampleContainer.update();
-    },
-
-    onSubmit: (e) => {
-      sampleContainer.playRandom({ scroll: true, addToHistory: true, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
-    },
-  });
-
-  // Action buttons
-  $('[data-action="show-settings-modal"]').on('click', () => {
-    settingsModal.show();
-  });
-
+  // Modals
   $('[data-action="show-contribution-modal"]').on('click', () => {
     window.open(config.contributeUrl, '_blank');
   });
@@ -112,31 +139,6 @@ configPromise.then((config) => {
       Player.instance.stopAll();
     }
   });
-
-  // Random page title
-  const boardNames = [
-    'music',
-    'spam',
-    'crack',
-    'shit',
-    'originality',
-    'meme'
-  ];
-
-  const postNames = [
-    'amirite',
-    'correct',
-    'no',
-    'you see',
-    'eh',
-    'hmm',
-  ];
-
-  const $title = $('title');
-  $title.text(
-    `More like ${boardNames[Math.floor(Math.random() * boardNames.length)]}board, \
-    ${postNames[Math.floor(Math.random() * postNames.length)]}?`
-  );
 
   // Version in settings modal
   $('[data-content=version-number]').text(`v${config.versionNumber}`);
