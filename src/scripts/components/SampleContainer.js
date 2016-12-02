@@ -61,7 +61,7 @@ class SampleContainer {
       'selector': '.sample',
       'items': {
         'loop': {
-          'name': 'Play looping (Ctrl + Click)',
+          'name': 'Loop (Ctrl + Click)',
           'callback': (key, opt) => {
             opt.$trigger.data('sample').play(false, true);
           }
@@ -72,22 +72,27 @@ class SampleContainer {
             opt.$trigger.data('sample').play(true, false);
           }
         },
-        'stop': {
-          'name': 'Stop (Middle-click)',
-          'callback': (key, opt) => {
-            opt.$trigger.data('sample').stop();
-          }
-        },
         'copy': {
           'name': 'Copy url',
-          'callback': (key, opt) => { alert(key + ' ' + opt); },
-          'disabled': true
+          'callback': (key, opt) => {
+            // TODO: Actually copy the url to clipboard
+            // Get url to sample by letting the browser resolve it relatively
+            let anchor = document.createElement('a');
+            anchor.href = opt.$trigger.data('sample').id;
+            prompt('To be improved...', anchor.href);
+          }
         },
         'bind': {
           'name': 'Bind to key',
           'callback': (key, opt) => { alert(key + ' ' + opt); },
           'disabled': true
         },
+        'stop': {
+          'name': 'Stop (Middle-click)',
+          'callback': (key, opt) => {
+            opt.$trigger.data('sample').stop();
+          }
+        }
       }
   })
 

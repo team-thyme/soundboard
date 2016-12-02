@@ -12,56 +12,69 @@ import Modal from './components/Modal';
 import SettingsModal from './components/SettingsModal';
 import RequestModal from './components/RequestModal';
 
+SettingsManager.init();
+ThemeManager.init();
+Player.init();
+
+const settingsModal = new SettingsModal();
+const sampleContainer = new SampleContainer();
+
+// Returns an array of strings representing the given path arguments relative to the base url of the index
+function getArguments() {
+  // Ensure baseuri is pointing to a directory
+  let baseUri = document.baseURI;
+  if (!baseUri.endsWith('/')) {
+    baseUri = baseUri.substr(0, baseUri.lastIndexOf('/') + 1);
+  }
+
+  // Get path relative to base URI
+  let argumentPath;
+  if ((location.origin + location.pathname).startsWith(baseUri)) {
+    argumentPath = (location.origin + location.pathname).substr(baseUri.length);
+  } else {
+    console.log('Base URI does not seems to be on same origin.\nFalling back to full path for argument parsing.');
+    argumentPath = location.pathname.substr(1); // Remove leading slash
+  }
+
+  // Make sure a trailing slash does not translate into an empty argument
+  if (argumentPath.endsWith('/')) {
+    argumentPath = argumentPath.slice(0, -1);
+  }
+
+  return argumentPath ? argumentPath.split('/') : [];
+}
+
+// Will play samples based on the arguments obtained with getArguments
+function playFromArguments(resolve)
+{
+  return new Promise((resolve) => {
+    let played = 0;
+    getArguments().forEach((argument) => {
+      if (sampleContainer.playRandomWithId({ id: argument, scroll: true })) {
+        played++;
+      }
+    });
+
+    resolve(played);
+  });
+}
+
+// Sets given samples for the container
+function setContainerSamples(samples) {
+  return new Promise((resolve) => {
+    sampleContainer.setSamples(samples);
+
+    resolve(samples.length);
+  });
+}
+
 configPromise.then((config) => {
   const apiClient = new ApiClient(config.apiBaseUrl);
 
-  SettingsManager.init();
-  ThemeManager.init();
-  Player.init();
-
-  const settingsModal = new SettingsModal();
-  // const requestModal = new RequestModal();
-
-  // TODO: Remove debug code
-  // settingsModal.show();
-  // requestModal.show();
-
-  const sampleContainer = new SampleContainer();
-
-  // History
-  if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual';
-  }
-
-  function updateFromHistoryState(state) {
-    if (state !== null && state.id) {
-      sampleContainer.playRandomWithId({ id: state.id, scroll: true, addToHistory: false });
-    } else {
-      Player.instance.stopAll();
-    }
-  }
-
-  function getIdFromUrl() {
-    return window.location.pathname.split('/').pop();
-  }
-
-  $(window).on('popstate', (e) => {
-    updateFromHistoryState(e.originalEvent.state);
-  });
-
-  // Add samples to the container
-  apiClient.getSamples().then((samples) => {
-    sampleContainer.setSamples(samples);
-
-    if (history.state === null) {
-      const id = getIdFromUrl();
-      if (id) {
-        history.replaceState({ id }, '');
-      }
-    }
-
-    updateFromHistoryState(history.state);
-  });
+  // Get samples and add them to the container
+  apiClient.getSamples()
+    .then(setContainerSamples)
+    .then(playFromArguments);
 
   // Init search
   const search = new Search({
@@ -81,7 +94,6 @@ configPromise.then((config) => {
   });
 
   $('[data-action="show-contribution-modal"]').on('click', () => {
-    // requestModal.show();
     window.open(config.contributeUrl, '_blank');
   });
 
@@ -93,7 +105,7 @@ configPromise.then((config) => {
     sampleContainer.playRandomWithId({ id: config.versionSampleId })
   });
 
-  // Play random sample on space
+  // Stop playing everything on space
   $(window).on('keydown', (e) => {
     if (e.which === 32 && !Modal.isModalActive()) {
       e.preventDefault();
