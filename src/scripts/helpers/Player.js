@@ -52,7 +52,7 @@ class Player {
   }
 
   // TODO: Sample object
-  registerSample({ url, onPlay, onStop, onProgress }) {
+  registerSample(url, onPlay, onStop, onProgress) {
     const sample = {
       url,
       onPlay,

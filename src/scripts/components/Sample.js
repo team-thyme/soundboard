@@ -33,12 +33,12 @@ class Sample {
     this.categories = data.categories;
     this.mtime = data.mtime;
 
-    this.playerId = Player.instance.registerSample({
-      url: this.url,
-      onPlay: fastBind.call(this.handlePlay, this),
-      onStop: fastBind.call(this.handleStop, this),
-      onProgress: fastBind.call(this.handleProgress, this),
-    });
+    this.playerId = Player.instance.registerSample(
+      this.url,
+      fastBind.call(this.handlePlay, this),
+      fastBind.call(this.handleStop, this),
+      fastBind.call(this.handleProgress, this)
+    );
 
     this.createElements();
   }
