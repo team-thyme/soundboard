@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'jquery-contextmenu';
 import Player from '../helpers/Player';
+import copy from 'copy-to-clipboard';
 
 class SampleContainer {
 
@@ -75,11 +76,10 @@ class SampleContainer {
         'copy': {
           'name': 'Copy url',
           'callback': (key, opt) => {
-            // TODO: Actually copy the url to clipboard
-            // Get url to sample by letting the browser resolve it relatively
+            // Get url to sample by letting the browser resolve it relatively (takes into account the base url set)
             let anchor = document.createElement('a');
             anchor.href = opt.$trigger.data('sample').id;
-            prompt('To be improved...', anchor.href);
+            copy(anchor.href);
           }
         },
         'bind': {
