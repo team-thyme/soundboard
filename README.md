@@ -6,26 +6,27 @@
 - Direct linking to soundbytes without giving a clue on what's about to play
 - Uses a configurable [back-end](https://github.com/team-thyme/soundboard-back-end)
 - Contains maximum overkill
- 
+
 ## Contrails
 - <kbd>Enter</kbd> while focused on the search bar to play a random visible sample
 - Hold <kbd>Shift</kbd> to play samples simultaneously
 - Hold <kbd>Ctrl</kbd> to play samples on a loop
 - Press <kbd>Space</kbd> While not focused on the search bar to stop all playing samples
-- <kbd>RMB</kbd> on a sample to stop playing only that one
+- <kbd>Middle-click</kbd> on a sample to stop playing it
+- <kbd>Right-click</kbd> on a sample for all sample-options
 
 ## Browser support
 The soundboard works only in _true_ browsers.
 This means that recent versions of Chrome and Firefox are fully supported.
-Edge gives mixed results depending on the filetype used for samples.
-Other browsers probably won't work, but who uses those anyway?
+Other browsers give mixed results, but who uses those anyway?
 
 ## How to _deal with it?_
-1. Download the latest release, or build the application from source
-2. Alter the client config options in `config.json`, to make it point to your backend
-3. Put the files (or when building, the files in `public/`) in a web-accessible directory
+1. Download the latest release, or build the application from source.
+2. Alter the client config options in `config.json`, to make it point to your backend.
+3. Put the files (or when building, the files in `public/`) in a web-accessible directory.
+4. If hosting from a subdirectory, change the href of the `<base>` tag in index.html to point to your subdirectory. This allows the page to load its resources and arguments no matter where it is called from
 
-> Building the front-end requires [Node.js](https://nodejs.org/).
+> Building the front-end requires [Node.js](https://nodejs.org/). [Apache HTTP Server](https://www.apache.org/) is recommended for hosting the front-end, as it will work without having to set up redirecting to index.html manually.
 
 ### Development
 For development, there are a few npm scripts created to ease development:
