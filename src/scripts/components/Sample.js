@@ -87,6 +87,10 @@ class Sample {
   stop() {
     Player.instance.stop(this.playerId);
   }
+
+  isPlaying() {
+    return Player.instance.isPlaying(this.playerId);
+  }
 }
 
 export default Sample;

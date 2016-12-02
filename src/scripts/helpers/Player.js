@@ -110,9 +110,9 @@ class Player {
     return sampleIndex;
   }
 
-  play(sampleIndex, multiple = false, loop = false) {
+  play(sampleIndex, spam = false, loop = false) {
     // Stop all sounds before playing if multiple are not allowed
-    if (!multiple) {
+    if (!spam) {
       this.stopAll();
     }
 
@@ -149,6 +149,10 @@ class Player {
     if (this.frameRequested) {
       window.requestAnimationFrame(this.progressStep);
     }
+  }
+
+  isPlaying(sampleIndex) {
+    return this.playing[sampleIndex].length > 0;
   }
 }
 

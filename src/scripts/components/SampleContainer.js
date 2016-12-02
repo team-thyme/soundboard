@@ -21,18 +21,18 @@ class SampleContainer {
     this.$sampleContainer = $('.sample-container');
     this.$empty = $('.sample-container__empty');
 
-    // Play on click
+    // Play/stop on click
     this.$sampleContainer.on('click', '.sample', (e, params) => {
-      $(e.currentTarget).data('sample').play(e.shiftKey, e.ctrlKey);
-    });
+      let sample = $(e.currentTarget).data('sample');
 
-    // Stop on middle-click
-    this.$sampleContainer.on('mousedown', '.sample', (e, params) => {
-      if (e.which == 2) {
-        $(e.currentTarget).data('sample').stop();
-        e.preventDefault();
+      let spam = e.shiftKey;
+
+      if (!sample.isPlaying() || spam) {
+        sample.play(spam, e.ctrlKey);
+      } else {
+        sample.stop();
       }
-    })
+    });
   }
 
   setSamples(samples) {
@@ -86,12 +86,6 @@ class SampleContainer {
           'name': 'Bind to key',
           'callback': (key, opt) => { alert(key + ' ' + opt); },
           'disabled': true
-        },
-        'stop': {
-          'name': 'Stop (Middle-click)',
-          'callback': (key, opt) => {
-            opt.$trigger.data('sample').stop();
-          }
         }
       }
   })

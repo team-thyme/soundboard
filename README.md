@@ -11,8 +11,7 @@
 - <kbd>Enter</kbd> while focused on the search bar to play a random visible sample
 - Hold <kbd>Shift</kbd> to play samples simultaneously
 - Hold <kbd>Ctrl</kbd> to play samples on a loop
-- Press <kbd>Space</kbd> While not focused on the search bar to stop all playing samples
-- <kbd>Middle-click</kbd> on a sample to stop playing it
+- Press <kbd>Space</kbd> while not focused on the search bar to stop all playing samples
 - <kbd>Right-click</kbd> on a sample for all sample-options
 
 ## Browser support
