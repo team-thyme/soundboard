@@ -1,4 +1,6 @@
 import SettingsManager from './SettingsManager';
+import Modal from '../components/Modal';
+import $ from 'jquery';
 
 class Player {
   static instance;
@@ -39,8 +41,17 @@ class Player {
 
     // Set the gain node as the destination node
     this.audioDestinationNode = gainNode;
+
+    // Stop playing everything on space (except when a modal is active)
+    $(window).on('keydown', (e) => {
+      if (e.which === 32 && !Modal.isModalActive()) {
+        e.preventDefault();
+        Player.instance.stopAll();
+      }
+    });
   }
 
+  // TODO: Sample object
   registerSample({ url, onPlay, onStop, onProgress }) {
     const sample = {
       url,

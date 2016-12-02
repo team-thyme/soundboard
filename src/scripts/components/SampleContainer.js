@@ -159,11 +159,12 @@ class SampleContainer {
     this.query = query;
   }
 
-  playRandom({ shiftKey = false, ctrlKey = false, scroll = false, addToHistory = false }) {
+  playRandomVisible(spam = false, loop = false, scroll = false) {
     const $visibleSamples = $('.sample:not(.sample--filtered)');
     const index = Math.floor(Math.random() * $visibleSamples.length);
     const $sample = $visibleSamples.eq(index);
-    $sample.trigger('click', { shiftKey, ctrlKey, addToHistory });
+
+    $sample.data('sample').play(spam, loop);
 
     if (scroll) {
       this.scrollToSample($sample);
@@ -172,7 +173,9 @@ class SampleContainer {
     return $sample;
   }
 
-  playRandomWithId({ id, scroll = false, addToHistory = false }) {
+  // Returns the sample object that has been played, or null
+  playRandomWithId(id, spam = false, loop = false, scroll = false) {
+    // Obtain a sample
     const $filteredSamples = $('.sample').filter(function () {
       return $(this).data('sample').id === id;
     });
@@ -183,8 +186,11 @@ class SampleContainer {
 
     const index = Math.floor(Math.random() * $filteredSamples.length);
     const $sample = $filteredSamples.eq(index);
-    $sample.trigger('click', { addToHistory });
 
+    // Play the sample
+    $sample.data('sample').play(spam, loop);
+
+    // Scroll
     if (scroll) {
       this.scrollToSample($sample);
     }

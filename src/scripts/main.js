@@ -50,7 +50,7 @@ function playFromArguments(resolve)
   return new Promise((resolve) => {
     let played = 0;
     getArguments().forEach((argument) => {
-      if (sampleContainer.playRandomWithId({ id: argument, scroll: true })) {
+      if (sampleContainer.playRandomWithId(argument, true, false, true)) {
         played++;
       }
     });
@@ -106,7 +106,7 @@ const search = new Search({
   },
 
   onSubmit: (e) => {
-    sampleContainer.playRandom({ scroll: true, addToHistory: true, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
+    sampleContainer.playRandomVisible(e.shiftKey, e.ctrlKey, true);
   },
 });
 
@@ -129,15 +129,7 @@ configPromise.then((config) => {
   });
 
   $('[data-action="play-version-sample"]').on('click', () => {
-    sampleContainer.playRandomWithId({ id: config.versionSampleId })
-  });
-
-  // Stop playing everything on space
-  $(window).on('keydown', (e) => {
-    if (e.which === 32 && !Modal.isModalActive()) {
-      e.preventDefault();
-      Player.instance.stopAll();
-    }
+    sampleContainer.playRandomWithId(config.versionSampleId);
   });
 
   // Version in settings modal
