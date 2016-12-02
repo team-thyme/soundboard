@@ -80,15 +80,12 @@ class Sample {
     );
   }
 
-  handleClick(e, params = { shiftKey: false, ctrlKey: false, addToHistory: true }) {
-    const multiple = e.shiftKey || params.shiftKey;
-    const loop = e.ctrlKey || params.ctrlKey;
+  play(spam = false, loop = false) {
+    Player.instance.play(this.playerId, spam, loop);
+  }
 
-    Player.instance.play(this.playerId, multiple, loop);
-
-    if (params.addToHistory && (history.state === null || history.state.id !== this.id)) {
-      history.pushState({ id: this.id }, '', this.id);
-    }
+  stop() {
+    Player.instance.stop(this.playerId);
   }
 }
 

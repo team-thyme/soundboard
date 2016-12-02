@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import 'jquery-contextmenu';
+import Player from '../helpers/Player';
 
 class SampleContainer {
 
@@ -18,11 +20,18 @@ class SampleContainer {
     this.$sampleContainer = $('.sample-container');
     this.$empty = $('.sample-container__empty');
 
-    // Add events
-    this.$sampleContainer
-      .on('click', '.sample', function (e, params) {
-        $(this).data('sample').handleClick(e, params);
+    // Play on click
+    this.$sampleContainer.on('click', '.sample', (e, params) => {
+      $(e.currentTarget).data('sample').play(e.shiftKey, e.ctrlKey);
     });
+
+    // Stop on middle-click
+    this.$sampleContainer.on('mousedown', '.sample', (e, params) => {
+      if (e.which == 2) {
+        $(e.currentTarget).data('sample').stop();
+        e.preventDefault();
+      }
+    })
   }
 
   setSamples(samples) {
@@ -46,6 +55,41 @@ class SampleContainer {
     });
 
     this.$sampleContainer.insertAfter($prev);
+
+    // Add a context menu for the samples
+    $.contextMenu({
+      'selector': '.sample',
+      'items': {
+        'loop': {
+          'name': 'Play looping (Ctrl + Click)',
+          'callback': (key, opt) => {
+            opt.$trigger.data('sample').play(false, true);
+          }
+        },
+        'spam': {
+          'name': 'Spam (Shift + Click)',
+          'callback': (key, opt) => {
+            opt.$trigger.data('sample').play(true, false);
+          }
+        },
+        'stop': {
+          'name': 'Stop (Middle-click)',
+          'callback': (key, opt) => {
+            opt.$trigger.data('sample').stop();
+          }
+        },
+        'copy': {
+          'name': 'Copy url',
+          'callback': (key, opt) => { alert(key + ' ' + opt); },
+          'disabled': true
+        },
+        'bind': {
+          'name': 'Bind to key',
+          'callback': (key, opt) => { alert(key + ' ' + opt); },
+          'disabled': true
+        },
+      }
+  })
 
     this.update();
   }
