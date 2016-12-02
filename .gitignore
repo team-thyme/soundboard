@@ -1,5 +1,6 @@
 public/build/
 public/config.json
+public/index.html
 
 # IntellIJ
 .idea/

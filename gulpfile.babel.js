@@ -24,7 +24,8 @@ import watchify from 'watchify';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 
-const publicDir = `${__dirname}/public`
+const publicDir = `${__dirname}/public`;
+const distDir = `${__dirname}/dist`;
 const buildDir = `${publicDir}/build`;
 
 const {
@@ -107,20 +108,17 @@ function bundle(bundler) {
 
 gulp.task('build:scripts', ['clean:scripts'], () => {
 
-  // Only copy config if it doesn't exist
+  // Copy dist files to public once
+  fs.copy(distDir, publicDir, { clobber: false }, (error) => {
+    if (error && error.code !== 'EEXIST') {
+      throw error;
+    }
+  });
 
-  // This plain just doesn't work while documentation states it should.
+  // Below code plain just doesn't work while documentation states it should.
   // let configCopied = gulp.src('config.dist.json')
   //   .pipe(rename('config.json'))
   //   .pipe(gulp.dest(publicDir, { overwrite: false }));
-
-  try {
-    fs.copySync('config.dist.json', `${publicDir}/config.json`, { clobber: false });
-  } catch (error) {
-    if (error.code !== 'EEXIST') {
-      throw error;
-    }
-  }
 
   return bundle(createBundler());
 });
