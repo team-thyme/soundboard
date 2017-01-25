@@ -150,6 +150,7 @@ class SampleContainer {
   }
 
   setQuery(query) {
+    query = query.replace(/[^a-zA-Z0-9\s]/g, '');
     this.query = query;
   }
 
