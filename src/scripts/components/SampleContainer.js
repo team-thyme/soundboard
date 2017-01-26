@@ -114,7 +114,9 @@ class SampleContainer {
 
       // Filter samples
       this.samples.forEach((sample) => {
-        const visible = regex.test(`${sample.name} ${sample.categories.join(' ')}`);
+        const visible = regex.test(`${sample.name.replace(/[^a-zA-Z0-9\s\|]/g, '')} ${sample.categories.forEach((category) => {
+          category.replace(/[^a-zA-Z0-9\s\|]/g, '');
+        }).join(' ')}`);
         sample.$sample.toggleClass('sample--filtered', !visible);
         if (visible) empty = false;
       });
