@@ -107,17 +107,22 @@ class SampleContainer {
       });
     } else {
       // Prepare regex
-      const terms = this.query.split(' ');
-      const regex = new RegExp(`.*${
-        terms.map(term => `(?=.*${term}.*)`).join('')
-      }.*`, 'i');
+      const terms = this.query.replace(/[^\w\s\|]/g, '').split(' ');
+      const regex = new RegExp(`.*${terms.map(term => `(?=.*${term}.*)`).join('')}.*`, 'i');
 
       // Filter samples
       this.samples.forEach((sample) => {
-        const visible = regex.test(`${sample.name} ${sample.categories.join(' ')}`);
-        sample.$sample.toggleClass('sample--filtered', !visible);
-        if (visible) empty = false;
-      });
+            const visible = regex.test(
+                sample.name.replace(/[^\w\s\|]/g, '') +
+                ' ' +
+                sample.categories.map(category => category.replace(/[^\w\s\|]/g, '')).join(' ')
+            );
+
+            sample.$sample.toggleClass('sample--filtered', !visible);
+            if (visible) {
+              empty = false;
+            }
+        });
     }
 
     this.$sampleContainer.toggleClass('sample-container--empty', empty);
