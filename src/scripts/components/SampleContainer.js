@@ -107,22 +107,26 @@ class SampleContainer {
       });
     } else {
       // Prepare regex
-      const terms = this.query.replace(/[^\w\s\|]/g, '').split(' ');
+      const terms = this.query
+        .replace(/[^\w\s\|]/g, '') // Strip non-alphanumeric characters (will be done in target as well)
+        .replace(/\s{2,}/g, ' ') // Collapse consecutive whitespaces into a single space
+        .replace(/ \| /g, '|') // Enable OR-searching when whitespace is around the pipe character "|"
+        .split(' ');
       const regex = new RegExp(`.*${terms.map(term => `(?=.*${term}.*)`).join('')}.*`, 'i');
 
       // Filter samples
       this.samples.forEach((sample) => {
-            const visible = regex.test(
-                sample.name.replace(/[^\w\s\|]/g, '') +
-                ' ' +
-                sample.categories.map(category => category.replace(/[^\w\s\|]/g, '')).join(' ')
-            );
+        const visible = regex.test(
+          sample.name.replace(/[^\w\s\|]/g, '') +
+          ' ' +
+          sample.categories.map(category => category.replace(/[^\w\s\|]/g, '')).join(' ')
+        );
 
-            sample.$sample.toggleClass('sample--filtered', !visible);
-            if (visible) {
-              empty = false;
-            }
-        });
+        sample.$sample.toggleClass('sample--filtered', !visible);
+        if (visible) {
+          empty = false;
+        }
+      });
     }
 
     this.$sampleContainer.toggleClass('sample-container--empty', empty);
