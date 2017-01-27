@@ -107,18 +107,21 @@ class SampleContainer {
       });
     } else {
       // Prepare regex
-      const terms = this.query.split(' ');
-      const regex = new RegExp(`.*${
-        terms.map(term => `(?=.*${term}.*)`).join('')
-      }.*`, 'i');
+      const terms = this.query.replace(/[^\w\s\|]/g, '').split(' ');
+      const regex = new RegExp(`.*${terms.map(term => `(?=.*${term}.*)`).join('')}.*`, 'i');
 
       // Filter samples
       this.samples.forEach((sample) => {
-            const visible = regex.test(`${sample.name.replace(/[^a-zA-Z0-9\s\|]/g, '')} ${sample.categories.map(function(category){
-              return category.replace(/[^a-zA-Z0-9\s\|]/g, '');
-            }).join(' ')}`);
+            const visible = regex.test(
+                sample.name.replace(/[^\w\s\|]/g, '') +
+                ' ' +
+                sample.categories.map(category => category.replace(/[^\w\s\|]/g, '')).join(' ')
+            );
+
             sample.$sample.toggleClass('sample--filtered', !visible);
-            if (visible) empty = false;
+            if (visible) {
+              empty = false;
+            }
         });
     }
 
@@ -152,7 +155,6 @@ class SampleContainer {
   }
 
   setQuery(query) {
-    query = query.replace(/[^a-zA-Z0-9\s\|]/g, '');
     this.query = query;
   }
 
