@@ -17,7 +17,7 @@ class SampleRepository
         $this->sampleBaseDirectory = $sampleBaseDirectory;
     }
 
-    public function findAll()
+    public function findAll() : array
     {
         // Get files.
         $iterator = new RecursiveIteratorIterator(
@@ -53,17 +53,26 @@ class SampleRepository
         return $samples;
     }
 
-    public function findByQuery(string $query)
+    public function findByQuery(string $query) : array
     {
         $samples = $this->findAll();
 
-        $queryTerms = preg_split("/\s/", $query);
-        $regexQuery = "/^(?=.*" . implode(")(?=.*", $queryTerms) . ").*$/i";
+        // Strip non-alphanumeric characters (will be done in target as well)
+        $query = preg_replace("/[^\w\s\|]/", "", $query);
+        // Enable OR-searching when whitespace is around the pipe character "|"
+        $query = preg_replace("/\s+\|\s+/", "|", $query);
+        // Split by any combination of whitespace characters
+        $terms = preg_split("/[\s\+&]+/", $query);
 
-        $filteredSamples = array_values(array_filter($samples, function($sample) use ($regexQuery) {
-            $searchString = $sample->getName() . " " . implode(" ", $sample->getCategories());
+        $regex = "/.*(?=.*" . implode(")(?=.*", $terms) . ").*/i";
 
-            return preg_match($regexQuery, $searchString);
+        $filteredSamples = array_values(array_filter($samples, function($sample) use ($regex) {
+            $searchString =
+                preg_replace("/[^\w\s\|]/", "", $sample->getName()) .
+                " " .
+                preg_replace("/[^\w\s\|]/", "", implode(" ", $sample->getCategories()));
+
+            return preg_match($regex, $searchString);
         }));
 
         return $filteredSamples;

@@ -11,7 +11,7 @@ use TeamThyme\Soundboard\Controller;
 
 class SamplesController extends Controller
 {
-    public function listAction(Request $request, Response $response, $arguments)
+    public function listAction(Request $request, Response $response, $arguments) : Response
     {
         if ($request->getQueryParam("query")) {
             return $this->queryAction($request, $response, $arguments);
@@ -27,7 +27,7 @@ class SamplesController extends Controller
         ]);
     }
 
-    public function queryAction(Request $request, Response $response, $arguments)
+    public function queryAction(Request $request, Response $response, $arguments) : Response
     {
         $query = $request->getQueryParam("query");
 
@@ -41,7 +41,7 @@ class SamplesController extends Controller
         ]);
     }
 
-    public function getAction(Request $request, Response $response, $arguments)
+    public function getAction(Request $request, Response $response, $arguments) : Response
     {
         // Convert given path to an absolute path to the sample file
         $basePath = realpath($this->getContainer()->get("config")["soundboard"]["sampleBaseDirectory"]);
