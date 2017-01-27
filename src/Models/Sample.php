@@ -37,8 +37,9 @@ class Sample implements JsonSerializable
         }
 
         // Replace trailing numbers, to allow different files to obtain the same name.
-        // (.*?) lazily match everything, ((?<![\d ])\d+)? But don't match digits directly placed next to non-whitespace characters at the end of the string
-        $this->name = preg_replace('/^(.*?)((?<![\d ])\d+)?$/', '\1', $name);
+        // ^(.+?) lazily match everything with at least one starting character (prevents number only names from being blank)
+        // ((?<![\d ])\d+)?$ Don't match digits directly placed next to non-whitespace characters at the end of the string
+        $this->name = preg_replace('/^(.+?)((?<![\d ])\d+)?$/', '\1', $name);
 
         $this->id = hash("crc32", $this->name);
 
