@@ -108,8 +108,8 @@ class SampleContainer {
     } else {
       // Prepare regex
       const terms = this.query
+        .replace(/[\s+&]+/g, ' ') // Collapse consecutive whitespaces into a single space
         .replace(/[^\w\s\|]/g, '') // Strip non-alphanumeric characters (will be done in target as well)
-        .replace(/\s{2,}/g, ' ') // Collapse consecutive whitespaces into a single space
         .replace(/ \| /g, '|') // Enable OR-searching when whitespace is around the pipe character "|"
         .split(' ');
       const regex = new RegExp(`.*${terms.map(term => `(?=.*${term}.*)`).join('')}.*`, 'i');
