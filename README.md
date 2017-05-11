@@ -1,5 +1,5 @@
 # Soundboard
-> More like knäckebröd, har jag rätt?
+> Meer zoals Knäckebröt, ik heb het recht?
 
 ## Features
 - Responsive search
