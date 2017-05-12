@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import _ from 'underscore';
 
 class Search {
 
@@ -28,7 +29,7 @@ class Search {
     this.$search.addClass('search--empty');
 
     this.$input
-      .on('input', this.handleChange.bind(this))
+      .on('input', _.debounce(this.handleChange.bind(this), 300))
       .on('keydown', this.handleKeydown.bind(this));
 
     this.$clear
