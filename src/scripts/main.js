@@ -1,6 +1,5 @@
 import 'babel-polyfill';
 
-import 'whatwg-fetch';
 import $ from 'jquery';
 
 import configPromise from './config';
@@ -10,9 +9,7 @@ import ThemeManager from './helpers/ThemeManager';
 import Player from './helpers/Player';
 import SampleContainer from './components/SampleContainer';
 import Search from './components/Search';
-import Modal from './components/Modal';
 import SettingsModal from './components/SettingsModal';
-import RequestModal from './components/RequestModal';
 
 SettingsManager.init();
 ThemeManager.init();
@@ -101,7 +98,7 @@ $('[data-action="show-settings-modal"]').on('click', () => {
 });
 
 // Init search
-const search = new Search({
+new Search({
   onChange: (query) => {
     sampleContainer.setQuery(query);
     sampleContainer.update();
