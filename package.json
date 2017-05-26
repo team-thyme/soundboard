@@ -12,6 +12,7 @@
   "devDependencies": {
     "autoprefixer": "^6.3.6",
     "babel-core": "^6.9.1",
+    "babel-eslint": "^7.2.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-polyfill": "^6.16.0",
@@ -22,6 +23,10 @@
     "copy-to-clipboard": "^3.0.5",
     "cssnano": "^3.6.2",
     "del": "^2.2.0",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.3.0",
     "fast-bind": "^1.0.0",
     "fs-extra": "^1.0.0",
     "gulp": "^3.9.1",
@@ -47,14 +52,6 @@
   },
   "optionalDependencies": {
     "local-web-server": "^1.2.6"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ],
-    "plugins": [
-      "transform-class-properties",
-      "transform-object-rest-spread"
-    ]
   }
 }
+
