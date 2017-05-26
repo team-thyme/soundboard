@@ -10,11 +10,11 @@ import $ from 'jquery';
  * @param {string} class2
  * @returns {jQuery}
  */
-$.fn.ternaryClass = function (condition, class1, class2) {
-  $(this)
-    .toggleClass(class1, condition)
-    .toggleClass(class2, !condition);
-  return this;
+$.fn.ternaryClass = (condition, class1, class2) => {
+    $(this)
+        .toggleClass(class1, condition)
+        .toggleClass(class2, !condition);
+    return this;
 };
 
 /**
@@ -22,14 +22,14 @@ $.fn.ternaryClass = function (condition, class1, class2) {
  * @returns {jQuery}
  */
 export function $make(type) {
-  return $(document.createElement(type));
+    return $(document.createElement(type));
 }
 
 /**
  * @returns {jQuery}
  */
 export function $div() {
-  return $make('div');
+    return $make('div');
 }
 
 /**
@@ -37,13 +37,13 @@ export function $div() {
  * @return {function()}
  */
 export function detach($element) {
-  const $parent = $element.parent();
-  const $prev = $element.prev();
-  return () => {
-    if ($prev.length !== 0) {
-      $element.insertAfter($prev);
-    } else {
-      $element.prependTo($parent);
-    }
-  };
+    const $parent = $element.parent();
+    const $prev = $element.prev();
+    return () => {
+        if ($prev.length !== 0) {
+            $element.insertAfter($prev);
+        } else {
+            $element.prependTo($parent);
+        }
+    };
 }

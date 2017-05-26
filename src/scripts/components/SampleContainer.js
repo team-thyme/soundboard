@@ -1,212 +1,215 @@
 import $ from 'jquery';
 import 'jquery-contextmenu';
-import Player from '../helpers/Player';
 import copy from 'copy-to-clipboard';
 
 class SampleContainer {
 
-  /** @type jQuery */
-  $sampleContainer;
+    /** @type jQuery */
+    $sampleContainer;
 
-  /** @type Sample[] */
-  samples = [];
+    /** @type Sample[] */
+    samples = [];
 
-  /** @type string */
-  sortType = 'recent';
+    /** @type string */
+    sortType = 'recent';
 
-  /** @type string */
-  query = '';
+    /** @type string */
+    query = '';
 
-  constructor() {
-    this.$sampleContainer = $('.sample-container');
-    this.$empty = $('.sample-container__empty');
+    constructor() {
+        this.$sampleContainer = $('.sample-container');
+        this.$empty = $('.sample-container__empty');
 
-    // Play/stop on click
-    this.$sampleContainer.on('click', '.sample', (e, params) => {
-      let sample = $(e.currentTarget).data('sample');
+        // Play/stop on click
+        this.$sampleContainer.on('click', '.sample', (e) => {
+            const sample = $(e.currentTarget).data('sample');
 
-      let spam = e.shiftKey;
+            const spam = e.shiftKey;
 
-      if (!sample.isPlaying() || spam) {
-        sample.play(spam, e.ctrlKey);
-      } else {
-        sample.stop();
-      }
-    });
-  }
+            if (!sample.isPlaying() || spam) {
+                sample.play(spam, e.ctrlKey);
+            } else {
+                sample.stop();
+            }
+        });
+    }
 
-  setSamples(samples) {
-    // Sort samples
-    const sortLimit = new Date().getTime() - 14 * 24 * 60 * 60 * 1000;
+    setSamples(samples) {
+        // Sort samples
+        const sortLimit = new Date().getTime() - (14 * 24 * 60 * 60 * 1000);
 
-    this.samples = samples.sort((sample1, sample2) => {
-      if (sample1.mtime > sortLimit || sample2.mtime > sortLimit) {
-        return sample2.mtime - sample1.mtime;
-      }
+        this.samples = samples.sort((sample1, sample2) => {
+            if (sample1.mtime > sortLimit || sample2.mtime > sortLimit) {
+                return sample2.mtime - sample1.mtime;
+            }
 
-      return 2 * Math.floor(2 * Math.random()) - 1;
-    });
+            return (2 * Math.floor(2 * Math.random())) - 1;
+        });
 
-    // Add the samples to the DOM
-    const $prev = this.$sampleContainer.prev();
-    this.$sampleContainer.detach();
+        // Add the samples to the DOM
+        const $prev = this.$sampleContainer.prev();
+        this.$sampleContainer.detach();
 
-    this.samples.forEach((sample) => {
-      this.$sampleContainer.append(sample.$sample);
-    });
+        this.samples.forEach((sample) => {
+            this.$sampleContainer.append(sample.$sample);
+        });
 
-    this.$sampleContainer.insertAfter($prev);
+        this.$sampleContainer.insertAfter($prev);
 
-    // Add a context menu for the samples
-    $.contextMenu({
-      'selector': '.sample',
-      'items': {
-        'loop': {
-          'name': 'Loop (Ctrl + Click)',
-          'callback': (key, opt) => {
-            opt.$trigger.data('sample').play(false, true);
-          }
-        },
-        'spam': {
-          'name': 'Spam (Shift + Click)',
-          'callback': (key, opt) => {
-            opt.$trigger.data('sample').play(true, false);
-          }
-        },
-        'copy': {
-          'name': 'Copy url',
-          'callback': (key, opt) => {
-            // Get url to sample by letting the browser resolve it relatively (takes into account the base url set)
-            let anchor = document.createElement('a');
-            anchor.href = opt.$trigger.data('sample').id;
-            copy(anchor.href);
-          }
-        },
-        'bind': {
-          'name': 'Bind to key',
-          'callback': (key, opt) => { alert(key + ' ' + opt); },
-          'disabled': true
-        }
-      }
-  })
+        // Add a context menu for the samples
+        $.contextMenu({
+            selector: '.sample',
+            items: {
+                loop: {
+                    name: 'Loop (Ctrl + Click)',
+                    callback: (key, opt) => {
+                        opt.$trigger.data('sample').play(false, true);
+                    },
+                },
+                spam: {
+                    name: 'Spam (Shift + Click)',
+                    callback: (key, opt) => {
+                        opt.$trigger.data('sample').play(true, false);
+                    },
+                },
+                copy: {
+                    name: 'Copy url',
+                    callback: (key, opt) => {
+                        // Get url to sample by letting the browser resolve it relatively
+                        // (takes into account the base url set)
+                        const anchor = document.createElement('a');
+                        anchor.href = opt.$trigger.data('sample').id;
+                        copy(anchor.href);
+                    },
+                },
+                bind: {
+                    name: 'Bind to key',
+                    callback: () => {
+                        throw new Error('Not implemented');
+                    },
+                    disabled: true,
+                },
+            },
+        });
 
-    this.update();
-  }
+        this.update();
+    }
 
-  update() {
-    const $prev = this.$sampleContainer.prev();
-    this.$sampleContainer.detach();
+    update() {
+        const $prev = this.$sampleContainer.prev();
+        this.$sampleContainer.detach();
 
-    let empty = true;
+        let empty = true;
 
-    if (this.query.trim() === '') {
-      empty = false;
+        if (this.query.trim() === '') {
+            empty = false;
 
-      this.samples.forEach((sample) => {
-        sample.$sample.removeClass('sample--filtered');
-      });
-    } else {
-      // Prepare regex
-      const terms = this.query
-        .replace(/[^\w\s\|]/g, '') // Strip non-alphanumeric characters (will be done in target as well)
-        .replace(/\s+\|\s+/g, '|') // Enable OR-searching when whitespace is around the pipe character "|"
-        .split(/[\s\+&]+/g); // Split by any combination of whitespace characters
-      const regex = new RegExp(`.*${terms.map(term => `(?=.*${term}.*)`).join('')}.*`, 'i');
+            this.samples.forEach((sample) => {
+                sample.$sample.removeClass('sample--filtered');
+            });
+        } else {
+            // Prepare regex
+            const terms = this.query
+                .replace(/[^\w\s|]/g, '') // Strip non-alphanumeric characters (will be done in target as well)
+                .replace(/\s+\|\s+/g, '|') // Enable OR-searching when whitespace is around the pipe character "|"
+                .split(/[\s+&]+/g); // Split by any combination of whitespace characters
+            const regex = new RegExp(`.*${terms.map(term => `(?=.*${term}.*)`).join('')}.*`, 'i');
 
-      // Filter samples
-      this.samples.forEach((sample) => {
-        const visible = regex.test(
-          sample.name.replace(/[^\w\s\|]/g, '') +
-          ' ' +
-          sample.categories.map(category => category.replace(/[^\w\s\|]/g, '')).join(' ')
+            // Filter samples
+            this.samples.forEach((sample) => {
+                const visible = regex.test(
+          `${sample.name.replace(/[^\w\s|]/g, '')
+          } ${
+          sample.categories.map(category => category.replace(/[^\w\s|]/g, '')).join(' ')}`,
         );
 
-        sample.$sample.toggleClass('sample--filtered', !visible);
-        if (visible) {
-          empty = false;
+                sample.$sample.toggleClass('sample--filtered', !visible);
+                if (visible) {
+                    empty = false;
+                }
+            });
         }
-      });
+
+        this.$sampleContainer.toggleClass('sample-container--empty', empty);
+
+        this.$sampleContainer.insertAfter($prev);
+
+        if (!empty) {
+            this.updateLines();
+        }
     }
 
-    this.$sampleContainer.toggleClass('sample-container--empty', empty);
+    updateLines() {
+        let row = -1;
+        let lastTop = 0;
 
-    this.$sampleContainer.insertAfter($prev);
+        this.$sampleContainer.find('.sample:not(.sample--filtered)').each(() => {
+            const { top } = $(this).offset();
+            if (lastTop < top) {
+                row += 1;
+            }
+            lastTop = top;
 
-    if (!empty) {
-      this.updateLines();
-    }
-  }
+            $(this)
+                .toggleClass('sample--line-0', row % 3 === 0)
+                .toggleClass('sample--line-1', row % 3 === 1)
+                .toggleClass('sample--line-2', row % 3 === 2);
+        });
 
-  updateLines() {
-    let row = -1;
-    let lastTop = 0;
-
-    this.$sampleContainer.find('.sample:not(.sample--filtered)').each(function () {
-      const { top } = $(this).offset();
-      if (lastTop < top) row++;
-      lastTop = top;
-
-      $(this)
-        .toggleClass('sample--line-0', row % 3 === 0)
-        .toggleClass('sample--line-1', row % 3 === 1)
-        .toggleClass('sample--line-2', row % 3 === 2);
-    });
-
-    const $prev = this.$sampleContainer.prev();
-    this.$sampleContainer.detach();
-    this.$sampleContainer.insertAfter($prev);
-  }
-
-  setQuery(query) {
-    this.query = query;
-  }
-
-  playRandomVisible(spam = false, loop = false, scroll = false) {
-    const $visibleSamples = $('.sample:not(.sample--filtered)');
-    const index = Math.floor(Math.random() * $visibleSamples.length);
-    const $sample = $visibleSamples.eq(index);
-
-    $sample.data('sample').play(spam, loop);
-
-    if (scroll) {
-      this.scrollToSample($sample);
+        const $prev = this.$sampleContainer.prev();
+        this.$sampleContainer.detach();
+        this.$sampleContainer.insertAfter($prev);
     }
 
-    return $sample;
-  }
-
-  // Returns the sample object that has been played, or null
-  playRandomWithId(id, spam = false, loop = false, scroll = false) {
-    // Obtain a sample
-    const $filteredSamples = $('.sample').filter(function () {
-      return $(this).data('sample').id === id;
-    });
-
-    if ($filteredSamples.length === 0) {
-      return null;
+    setQuery(query) {
+        this.query = query;
     }
 
-    const index = Math.floor(Math.random() * $filteredSamples.length);
-    const $sample = $filteredSamples.eq(index);
+    // Returns the sample object that has been played, or null
+    // eslint-disable-next-line class-methods-use-this
+    playRandomWithId(id, spam = false, loop = false, scroll = false) {
+        // Obtain a sample
+        const $filteredSamples = $('.sample').filter(() => $(this).data('sample').id === id);
 
-    // Play the sample
-    $sample.data('sample').play(spam, loop);
+        if ($filteredSamples.length === 0) {
+            return null;
+        }
 
-    // Scroll
-    if (scroll) {
-      this.scrollToSample($sample);
+        const index = Math.floor(Math.random() * $filteredSamples.length);
+        const $sample = $filteredSamples.eq(index);
+
+        // Play the sample
+        $sample.data('sample').play(spam, loop);
+
+        // Scroll
+        if (scroll) {
+            SampleContainer.scrollToSample($sample);
+        }
+
+        return $sample;
     }
 
-    return $sample;
-  }
+    static playRandomVisible(spam = false, loop = false, scroll = false) {
+        const $visibleSamples = $('.sample:not(.sample--filtered)');
+        const index = Math.floor(Math.random() * $visibleSamples.length);
+        const $sample = $visibleSamples.eq(index);
 
-  scrollToSample($sample) {
-    const sampleTop = $sample.offset().top;
+        $sample.data('sample').play(spam, loop);
 
-    $('html, body').animate({
-      scrollTop: sampleTop - 100,
-    });
-  }
+        if (scroll) {
+            SampleContainer.scrollToSample($sample);
+        }
+
+        return $sample;
+    }
+
+    static scrollToSample($sample) {
+        const sampleTop = $sample.offset().top;
+
+        $('html, body').animate({
+            scrollTop: sampleTop - 100,
+        });
+    }
 }
 
 export default SampleContainer;

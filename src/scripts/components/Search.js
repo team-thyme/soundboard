@@ -3,57 +3,57 @@ import _ from 'underscore';
 
 class Search {
 
-  /** @type {function} */
-  onChange;
+    /** @type {function} */
+    onChange;
 
-  /** @type {function} */
-  onSubmit;
+    /** @type {function} */
+    onSubmit;
 
-  /** @type {jQuery} */
-  $search;
+    /** @type {jQuery} */
+    $search;
 
-  /** @type {jQuery} */
-  $input;
+    /** @type {jQuery} */
+    $input;
 
-  /** @type {string} */
-  query = '';
+    /** @type {string} */
+    query = '';
 
-  constructor({ onChange, onSubmit }) {
-    this.onChange = onChange;
-    this.onSubmit = onSubmit;
+    constructor({ onChange, onSubmit }) {
+        this.onChange = onChange;
+        this.onSubmit = onSubmit;
 
-    this.$search = $('.search');
-    this.$input = $('.search__input');
-    this.$clear = $('.search__clear');
+        this.$search = $('.search');
+        this.$input = $('.search__input');
+        this.$clear = $('.search__clear');
 
-    this.$search.addClass('search--empty');
+        this.$search.addClass('search--empty');
 
-    this.$input
-      .on('input', _.debounce(this.handleChange.bind(this), 300))
-      .on('keydown', this.handleKeydown.bind(this));
+        this.$input
+            .on('input', _.debounce(this.handleChange.bind(this), 300))
+            .on('keydown', this.handleKeydown.bind(this));
 
-    this.$clear
-      .on('click', () => this.$input.val('').trigger('input'));
-  }
-
-  handleChange() {
-    const newQuery = this.$input.val().trim();
-
-    if (newQuery !== this.query) {
-      this.onChange(newQuery);
-      this.query = newQuery;
+        this.$clear
+            .on('click', () => this.$input.val('').trigger('input'));
     }
 
-    this.$search.toggleClass('search--empty', this.query === '');
-  }
+    handleChange() {
+        const newQuery = this.$input.val().trim();
 
-  handleKeydown(e) {
-    e.stopPropagation();
+        if (newQuery !== this.query) {
+            this.onChange(newQuery);
+            this.query = newQuery;
+        }
 
-    if (e.which === 13) {
-      this.onSubmit(e);
+        this.$search.toggleClass('search--empty', this.query === '');
     }
-  }
+
+    handleKeydown(e) {
+        e.stopPropagation();
+
+        if (e.which === 13) {
+            this.onSubmit(e);
+        }
+    }
 
 }
 

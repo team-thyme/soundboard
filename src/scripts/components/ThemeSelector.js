@@ -4,54 +4,54 @@ import svg from '../../theme-thumb.svg';
 
 class ThemeSelector {
 
-  /** @type string */
-  _value;
+    /** @type string */
+    _value;
 
-  /** @type jQuery */
-  $selector;
+    /** @type jQuery */
+    $selector;
 
-  constructor(initialValue) {
-    this.$selector = $('<div />')
-      .addClass('theme-selector');
+    constructor(initialValue) {
+        this.$selector = $('<div />')
+            .addClass('theme-selector');
 
-    Object.keys(themes).forEach((value) => {
-      const $item = $('<div />')
-        .appendTo(this.$selector)
-        .addClass('theme-selector__item')
-        .data('value', value)
-        .on('click', () => {
-          this.value = value;
+        Object.keys(themes).forEach((value) => {
+            const $item = $('<div />')
+                .appendTo(this.$selector)
+                .addClass('theme-selector__item')
+                .data('value', value)
+                .on('click', () => {
+                    this.value = value;
+                });
+
+            $('<div />')
+                .appendTo($item)
+                .addClass('theme-selector__thumb')
+                .append(ThemeSelector.createThumb(value));
+
+            $('<div />')
+                .appendTo($item)
+                .addClass('theme-selector__label')
+                .text(themes[value].name);
         });
 
-      $('<div />')
-        .appendTo($item)
-        .addClass('theme-selector__thumb')
-        .append(this.createThumb(value));
+        this.value = initialValue;
+    }
 
-      $('<div />')
-        .appendTo($item)
-        .addClass('theme-selector__label')
-        .text(themes[value].name);
-    });
+    static createThumb(theme) {
+        return $(svg).addClass(`theme-thumb--${theme} theme-thumb--fluid`);
+    }
 
-    this.value = initialValue;
-  }
+    get value() {
+        return this._value;
+    }
 
-  createThumb(theme) {
-    return $(svg).addClass(`theme-thumb--${theme} theme-thumb--fluid`);
-  }
+    set value(value) {
+        this.$selector.find('.theme-selector__item').each(() => {
+            $(this).toggleClass('theme-selector__item--selected', $(this).data('value') === value);
+        });
 
-  get value() {
-    return this._value;
-  }
-
-  set value(value) {
-    this.$selector.find('.theme-selector__item').each(function () {
-      $(this).toggleClass('theme-selector__item--selected', $(this).data('value') === value);
-    });
-
-    this._value = value;
-  }
+        this._value = value;
+    }
 
 }
 
