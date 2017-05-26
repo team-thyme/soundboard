@@ -2,68 +2,68 @@
 @import '../variables';
 
 .sample-container {
-  flex: 1 1 auto;
-  margin-top: $header-inner-height + $spacing-base * 2;
-  padding: $spacing-base / 2;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
+    flex: 1 1 auto;
+    margin-top: $header-inner-height + $spacing-base * 2;
+    padding: $spacing-base / 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
 
-  transition: background $transition-base ease;
+    transition: background $transition-base ease;
 
-  &::after {
-    content: '';
-    flex: 9999 0 auto;
-  }
+    &::after {
+        content: '';
+        flex: 9999 0 auto;
+    }
 
-  @media (max-width: 480px) {
-    flex-direction: column;
-    align-items: stretch;
-  }
+    @media (max-width: 480px) {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
 .sample-container--empty {
-  align-items: center;
+    align-items: center;
 
-  transition: color $transition-base ease;
+    transition: color $transition-base ease;
 
-  &::after {
-    display: none;
-  }
+    &::after {
+        display: none;
+    }
 }
 
 .sample-container__empty {
-  display: none;
-  flex: 1 1 auto;
-  margin: $spacing-base * 2;
-  align-items: center;
-  justify-content: center;
+    display: none;
+    flex: 1 1 auto;
+    margin: $spacing-base * 2;
+    align-items: center;
+    justify-content: center;
 
-  .sample-container--empty & {
-    display: flex;
-  }
+    .sample-container--empty & {
+        display: flex;
+    }
 }
 
 .sample-container__empty-icon {
-  font-size: 72px;
+    font-size: 72px;
 }
 
 .sample-container__empty-label {
-  margin-top: $spacing-base;
-  text-align: center;
+    margin-top: $spacing-base;
+    text-align: center;
 }
 
 @each $theme, $colors in $themes {
-  $color-sample-container: map-get($colors, sample-container);
-  $color-sample-text: map-get($colors, sample-text);
+    $color-sample-container: map-get($colors, sample-container);
+    $color-sample-text: map-get($colors, sample-text);
 
-  .theme--#{$theme} {
-    .sample-container {
-      background: $color-sample-container;
-    }
+    .theme--#{$theme} {
+        .sample-container {
+            background: $color-sample-container;
+        }
 
-    .sample-container__empty {
-      color: mix($color-sample-container, $color-sample-text, 70%);
+        .sample-container__empty {
+            color: mix($color-sample-container, $color-sample-text, 70%);
+        }
     }
-  }
 }

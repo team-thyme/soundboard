@@ -2,64 +2,64 @@
 @import 'themes';
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
-  height: 100%;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+    height: 100%;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  height: 100%;
-  margin: 0;
+    height: 100%;
+    margin: 0;
 
-  overflow-y: scroll;
+    overflow-y: scroll;
 
-  font: $font-stack;
-  color: $color-text-default;
+    font: $font-stack;
+    color: $color-text-default;
 
-  cursor: default;
+    cursor: default;
 }
 
 .page-container {
-  min-height: 100%;
+    min-height: 100%;
 }
 
 div, .block {
-  box-sizing: border-box;
-  position: relative;
+    box-sizing: border-box;
+    position: relative;
 
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  flex-shrink: 0;
-  align-content: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex-shrink: 0;
+    align-content: flex-start;
 
-  border: 0 solid black;
-  margin: 0;
-  padding: 0;
+    border: 0 solid black;
+    margin: 0;
+    padding: 0;
 }
 
 .text--selectable {
-  user-select: all;
-  cursor: text;
+    user-select: all;
+    cursor: text;
 }
 
 @each $theme, $colors in $themes {
-  $color-primary: map-get($colors, primary);
-  $color-primary-text: map-get($colors, primary-text);
+    $color-primary: map-get($colors, primary);
+    $color-primary-text: map-get($colors, primary-text);
 
-  .theme--#{$theme} {
-    ::selection {
-      background: $color-primary;
-      color: $color-primary-text;
-    }
+    .theme--#{$theme} {
+        ::selection {
+            background: $color-primary;
+            color: $color-primary-text;
+        }
 
-    ::-moz-selection {
-      background: $color-primary;
-      color: $color-primary-text;
+        ::-moz-selection {
+            background: $color-primary;
+            color: $color-primary-text;
+        }
     }
-  }
 }

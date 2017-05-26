@@ -2,31 +2,31 @@
 @import '../easings';
 
 .switcher {
-  display: inline-flex;
-  align-items: center;
+    display: inline-flex;
+    align-items: center;
 
-  transition: width $transition-base ease, height $transition-base ease;
+    transition: width $transition-base ease, height $transition-base ease;
 }
 
 .switcher__item {
-  position: absolute;
-  top: 50%;
-  opacity: 0;
+    position: absolute;
+    top: 50%;
+    opacity: 0;
 
-  transition: top $transition-base ease, opacity $transition-base ease;
+    transition: top $transition-base ease, opacity $transition-base ease;
 
-  .switcher__item--active + & {
-    top: -50%;
-  }
+    .switcher__item--active + & {
+        top: -50%;
+    }
 }
 
 .switcher__item--active {
-  top: 0;
-  opacity: 1;
+    top: 0;
+    opacity: 1;
 
-  transition: top $transition-base ease, opacity $transition-base ease;
+    transition: top $transition-base ease, opacity $transition-base ease;
 }
 
 .switcher__item--initial {
-  position: relative;
+    position: relative;
 }
