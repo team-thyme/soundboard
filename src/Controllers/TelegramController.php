@@ -67,6 +67,11 @@ class TelegramController extends Controller
 
     public function handleMessage(Request $request, Response $response) : Response
     {
+        // Only respond to private messages
+        if ($this->requestData["message"]["chat"]["type"] !== "private") {
+            return $response;
+        }
+
         $responseData = [
             "method" => "sendMessage",
             "chat_id" => $this->requestData["message"]["chat"]["id"],
