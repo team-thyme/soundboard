@@ -1,5 +1,5 @@
 {
-    "name": "team-thyme/soundboard",
+    "name": "villermen/soundboard",
     "description": "RESTful soundboard back-end using Slim framework.",
     "keywords": [
             "soundboard",
@@ -9,7 +9,7 @@
             "api",
             "team-thyme"
         ],
-    "homepage": "https://github.com/team-thyme/soundboard-back-end",
+    "homepage": "https://github.com/villermen/soundboard-back-end",
     "license": "MIT",
     "authors": [
         ],

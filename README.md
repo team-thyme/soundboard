@@ -98,7 +98,7 @@ Example output:
 }
 ```
 
-Separating query arguments with a space will perform an AND match, and separating them by a pipe will perform an OR match. This behavior mimics the [front-end](https://github.com/team-thyme/soundboard-front-end) as closely as possible (it does not use the API for this, as API calls are expensive).
+Separating query arguments with a space will perform an AND match, and separating them by a pipe will perform an OR match. This behavior mimics the [front-end](https://github.com/villermen/soundboard-front-end) as closely as possible (it does not use the API for this, as API calls are expensive).
 
 Actually obtaining the sample data can be done by appending a sample's path to the `samples/` url:
 
