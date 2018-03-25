@@ -4,7 +4,7 @@
 ## Features
 - Responsive search
 - Direct linking to soundbytes without giving a clue on what's about to play
-- Uses a configurable [back-end](https://github.com/team-thyme/soundboard-back-end)
+- Uses a configurable [back-end](https://github.com/villermen/soundboard-back-end)
 - Contains maximum overkill
 
 ## Contrails
