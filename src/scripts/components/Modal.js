@@ -42,6 +42,7 @@ class Modal {
     toggle(visible) {
         Modal.activeModals += (visible ? 1 : -1);
         this.$modal.toggleClass('modal--visible', visible);
+        this.$modal.toggleClass('modal--hidden', !visible);
 
         if (visible) {
             this.$modal.scrollTop(0);
