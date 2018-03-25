@@ -46,7 +46,7 @@ class ThemeSelector {
     }
 
     set value(value) {
-        this.$selector.find('.theme-selector__item').each(() => {
+        this.$selector.find('.theme-selector__item').each(function() {
             $(this).toggleClass('theme-selector__item--selected', $(this).data('value') === value);
         });
 

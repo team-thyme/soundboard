@@ -143,7 +143,7 @@ class SampleContainer {
         let row = -1;
         let lastTop = 0;
 
-        this.$sampleContainer.find('.sample:not(.sample--filtered)').each(() => {
+        this.$sampleContainer.find('.sample:not(.sample--filtered)').each(function() {
             const { top } = $(this).offset();
             if (lastTop < top) {
                 row += 1;
@@ -169,7 +169,9 @@ class SampleContainer {
     // eslint-disable-next-line class-methods-use-this
     playRandomWithId(id, spam = false, loop = false, scroll = false) {
         // Obtain a sample
-        const $filteredSamples = $('.sample').filter(() => $(this).data('sample').id === id);
+        const $filteredSamples = $('.sample').filter(function() {
+            return $(this).data('sample').id === id;
+        });
 
         if ($filteredSamples.length === 0) {
             return null;
