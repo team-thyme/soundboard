@@ -3,6 +3,7 @@
 
 .theme-selector {
     margin: 0 (-$spacing-base / 2 - 4px) (-$spacing-base);
+    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }

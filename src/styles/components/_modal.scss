@@ -3,6 +3,7 @@
 @import '../variables';
 
 .modal {
+    display: flex;
     position: fixed;
     z-index: 10;
     top: 0;
@@ -10,8 +11,6 @@
     right: 0;
     bottom: 0;
 
-    flex-direction: column;
-    align-items: center;
     padding: $spacing-base * 2;
 
     background: rgba(0,0,0,0.6);
@@ -95,16 +94,17 @@
 }
 
 .modal__footer--align-center {
-    justify-content: center;
+    text-align: center;
 }
 
 .modal__footer--align-end {
-    justify-content: flex-end;
+    text-align: right;
 }
 
 .modal__subfooter {
     padding: 0 $spacing-base * 2 $spacing-base $spacing-base * 2;
 
+    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;

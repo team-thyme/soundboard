@@ -1,15 +1,12 @@
 @import '../variables';
 
-.form {
-    flex: 1 1 auto;
-}
-
 .form--horizontal {
     flex-direction: row;
     align-items: flex-start;
 }
 
 .form__item {
+    display: flex;
     margin-bottom: $spacing-base;
     flex-direction: row;
     flex-wrap: wrap;
@@ -27,6 +24,17 @@
             margin-right: -$spacing-base;
         }
     }
+
+    .form__label {
+        margin-bottom: $spacing-base;
+        flex: 0 0 100px;
+    }
+
+    .form__control {
+        margin-bottom: $spacing-base;
+        flex: 1 100 0;
+        min-width: 70%;
+    }
 }
 
 .form__item--grow {
@@ -35,22 +43,4 @@
 
 .form__item--align-right {
     align-self: flex-end;
-}
-
-.form__label {
-    margin-bottom: $spacing-base;
-    flex: 0 0 100px;
-}
-
-.form__control {
-    margin-bottom: $spacing-base;
-    flex: 1 100 0;
-    min-width: 70%;
-    justify-content: center;
-
-    .form--horizontal & {
-        margin-right: $spacing-base;
-        margin-bottom: 0;
-        flex-direction: row;
-    }
 }
