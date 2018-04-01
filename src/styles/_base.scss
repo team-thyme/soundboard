@@ -20,26 +20,9 @@ body {
     font: $font-stack;
     color: $color-text-default;
 
+    transition: background $transition-base ease;
+
     cursor: default;
-}
-
-.page-container {
-    min-height: 100%;
-}
-
-div, .block {
-    box-sizing: border-box;
-    position: relative;
-
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    flex-shrink: 0;
-    align-content: flex-start;
-
-    border: 0 solid black;
-    margin: 0;
-    padding: 0;
 }
 
 .text--selectable {
@@ -51,7 +34,10 @@ div, .block {
     $color-primary: map-get($colors, primary);
     $color-primary-text: map-get($colors, primary-text);
 
-    .theme--#{$theme} {
+    body.theme--#{$theme} {
+        $color-sample-container: map-get($colors, sample-container);
+        background: $color-sample-container;
+
         ::selection {
             background: $color-primary;
             color: $color-primary-text;

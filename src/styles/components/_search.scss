@@ -3,15 +3,16 @@
 @import '../variables';
 
 .search {
-    flex: 1 1 auto;
+    position: relative;
 }
 
 .search__input {
-    flex: 1 1 auto;
     padding: $spacing-base * 2;
 
     border: 0;
     border-radius: $border-radius-base;
+
+    width: 100%;
 
     font: inherit;
 
@@ -30,6 +31,7 @@
     right: $spacing-base;
     width: 40px;
     height: 40px;
+    padding: 8px;
 
     justify-content: center;
     align-items: center;

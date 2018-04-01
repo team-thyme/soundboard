@@ -58,7 +58,7 @@ class SampleContainer {
 
         // Add a context menu for the samples
         $.contextMenu({
-            selector: '.sample',
+            selector: 'none',
             items: {
                 loop: {
                     name: 'Loop (Ctrl + Click)',

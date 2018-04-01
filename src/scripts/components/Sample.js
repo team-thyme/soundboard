@@ -51,7 +51,7 @@ class Sample {
     }
 
     handleProgress(progress) {
-        this.$progress.css('transform', `scale(${progress / 100}, 1)`);
+        this.$progress.css('width', `${progress}%`);
     }
 
     createElements() {
@@ -68,12 +68,8 @@ class Sample {
             .toggleClass('sample__categories--empty', this.categories.length === 0)
             .text(this.categories.join(' / ')));
 
-        this.$progress = $div()
-            .addClass('sample__progress');
-
-        this.$sample.append($div()
-            .addClass('sample__progress-container')
-            .append(this.$progress));
+        this.$progress = $div().addClass('sample__progress');
+        this.$sample.append(this.$progress);
     }
 
     play(spam = false, loop = false) {
