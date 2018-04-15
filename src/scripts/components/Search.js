@@ -29,14 +29,14 @@ class Search {
         this.$search.addClass('search--empty');
 
         this.$input
-            .on('input', _.debounce(this.handleChange.bind(this), 300))
-            .on('keydown', this.handleKeydown.bind(this));
+            .on('input', _.debounce(this.handleChange, 300))
+            .on('keydown', this.handleKeydown);
 
         this.$clear
             .on('click', () => this.$input.val('').trigger('input'));
     }
 
-    handleChange() {
+    handleChange = () => {
         const newQuery = this.$input.val().trim();
 
         if (newQuery !== this.query) {
@@ -45,15 +45,18 @@ class Search {
         }
 
         this.$search.toggleClass('search--empty', this.query === '');
-    }
 
-    handleKeydown(e) {
+        return this.query;
+    };
+
+    handleKeydown = (e) => {
         e.stopPropagation();
 
         if (e.which === 13) {
-            this.onSubmit(e);
+            const query = this.handleChange();
+            this.onSubmit(query, e);
         }
-    }
+    };
 
 }
 

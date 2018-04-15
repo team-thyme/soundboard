@@ -95,7 +95,11 @@ class SampleContainer {
         this.update();
     }
 
-    update() {
+    update(query) {
+        if (typeof query === 'string') {
+            this.query = query;
+        }
+
         const $prev = this.$sampleContainer.prev();
         this.$sampleContainer.detach();
 
@@ -161,10 +165,6 @@ class SampleContainer {
         this.$sampleContainer.insertAfter($prev);
     }
 
-    setQuery(query) {
-        this.query = query;
-    }
-
     // Returns the sample object that has been played, or null
     // eslint-disable-next-line class-methods-use-this
     playRandomWithId(id, spam = false, loop = false, scroll = false) {
@@ -193,6 +193,11 @@ class SampleContainer {
 
     static playRandomVisible(spam = false, loop = false, scroll = false) {
         const $visibleSamples = $('.sample:not(.sample--filtered)');
+
+        if ($visibleSamples.length === 0) {
+            return null;
+        }
+
         const index = Math.floor(Math.random() * $visibleSamples.length);
         const $sample = $visibleSamples.eq(index);
 

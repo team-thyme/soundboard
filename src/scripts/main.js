@@ -10,6 +10,7 @@ import Player from './helpers/Player';
 import SampleContainer from './components/SampleContainer';
 import Search from './components/Search';
 import SettingsModal from './components/SettingsModal';
+import Intern from './helpers/Intern';
 
 SettingsManager.init();
 ThemeManager.init();
@@ -96,16 +97,19 @@ $('[data-action="show-settings-modal"]').on('click', () => {
     settingsModal.show();
 });
 
+const intern = new Intern();
+
 // Init search
 // eslint-disable-next-line no-unused-vars
 const search = new Search({
     onChange: (query) => {
-        sampleContainer.setQuery(query);
-        sampleContainer.update();
+        sampleContainer.update(query);
     },
 
-    onSubmit: (e) => {
-        SampleContainer.playRandomVisible(e.shiftKey, e.ctrlKey, true);
+    onSubmit: (query, e) => {
+        if (!SampleContainer.playRandomVisible(e.shiftKey, e.ctrlKey, true)) {
+            intern.say(query);
+        }
     },
 });
 
