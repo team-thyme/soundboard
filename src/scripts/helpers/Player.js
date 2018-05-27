@@ -25,8 +25,6 @@ class Player {
     }
 
     constructor() {
-        this.progressStep = this.progressStep.bind(this);
-
         // Set up volume control using a gain node
         const gainNode = this.audioContext.createGain();
         gainNode.connect(this.audioContext.destination);
@@ -46,7 +44,7 @@ class Player {
         $(window).on('keydown', (e) => {
             if (e.which === 32 && !Modal.isModalActive()) {
                 e.preventDefault();
-                Player.instance.stopAll();
+                this.stopAll();
             }
         });
     }
@@ -63,47 +61,49 @@ class Player {
         const sampleIndex = this.samples.push(sample) - 1;
         this.playing[sampleIndex] = [];
 
-        const player = this;
         sample.play = (loop) => {
+            // Resume context if it is suspended due to a lack of user input
+            this.audioContext.resume();
+
             // Create an audio element source and link it to the context
             const audio = new Audio(url);
             audio.crossOrigin = 'anonymous';
-            const source = player.audioContext.createMediaElementSource(audio);
-            source.connect(player.audioDestinationNode);
+            const source = this.audioContext.createMediaElementSource(audio);
+            source.connect(this.audioDestinationNode);
 
             audio.loop = loop;
 
-            audio.play();
-
             // Add to playing
-            player.playing[sampleIndex].push(audio);
+            this.playing[sampleIndex].push(audio);
 
-            // Register audio stop and pause events
-            audio.onpause = () => {
-                const audioIndex = player.playing[sampleIndex].indexOf(audio);
+            // Stop audio when play failed or it has ended
+            const stop = () => {
+                const audioIndex = this.playing[sampleIndex].indexOf(audio);
 
                 if (audioIndex >= 0) {
                     // Remove from playing
-                    player.playing[sampleIndex].splice(audioIndex, 1);
+                    this.playing[sampleIndex].splice(audioIndex, 1);
 
                     // Trigger onStop only when we just removed the last playing intance of this sample
-                    if (player.playing[sampleIndex].length === 0) {
+                    if (this.playing[sampleIndex].length === 0) {
                         sample.onStop();
                     }
                 }
             };
 
-            audio.onended = audio.onpause;
+            audio.play().catch(stop);
+            audio.onpause = stop;
+            audio.onended = stop;
 
             // Trigger onPlay only when this is the first instance of this sample to start playing
-            if (player.playing[sampleIndex].length === 1) {
+            if (this.playing[sampleIndex].length === 1) {
                 sample.onPlay();
 
                 // Request animation frame (only once)
-                if (!player.frameRequested) {
-                    player.frameRequested = true;
+                if (!this.frameRequested) {
+                    this.frameRequested = true;
 
-                    requestAnimationFrame(player.progressStep);
+                    requestAnimationFrame(this.progressStep);
                 }
             }
         };
@@ -133,7 +133,7 @@ class Player {
         });
     }
 
-    progressStep() {
+    progressStep = () => {
         let samplesArePlaying = false;
         this.playing.forEach((playing, sampleIndex) => {
             if (playing.length > 0) {
@@ -151,7 +151,7 @@ class Player {
         if (this.frameRequested) {
             window.requestAnimationFrame(this.progressStep);
         }
-    }
+    };
 
     isPlaying(sampleIndex) {
         return this.playing[sampleIndex].length > 0;
