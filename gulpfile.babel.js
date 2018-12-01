@@ -1,27 +1,24 @@
-import fs from 'fs-extra';
-import { argv } from 'yargs';
-import path from 'path';
-import del from 'del';
-import sourceStream from 'vinyl-source-stream';
+import autoprefixer from 'autoprefixer';
+import babelify from 'babelify';
+import browserify from 'browserify';
 import buffer from 'vinyl-buffer';
-
+import cssnano from 'cssnano';
+import del from 'del';
+import fs from 'fs-extra';
 import gulp from 'gulp';
-import sass from 'gulp-sass';
-import postcss from 'gulp-postcss';
-import rename from 'gulp-rename';
 import gulpif from 'gulp-if';
-import { log } from 'gulp-util';
 import gulpLivereload from 'gulp-livereload';
 import gulpSourcemaps from 'gulp-sourcemaps';
-import uglify from 'gulp-uglify';
-
-import browserify from 'browserify';
+import path from 'path';
+import postcss from 'gulp-postcss';
+import rename from 'gulp-rename';
+import sass from 'gulp-sass';
+import sourceStream from 'vinyl-source-stream';
 import svgify from 'svg-browserify';
-import babelify from 'babelify';
+import uglify from 'gulp-uglify';
 import watchify from 'watchify';
-
-import autoprefixer from 'autoprefixer';
-import cssnano from 'cssnano';
+import { argv } from 'yargs';
+import { log } from 'gulp-util';
 
 const publicDir = `${__dirname}/public`;
 const distDir = `${__dirname}/dist`;
