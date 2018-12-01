@@ -9,6 +9,7 @@ import gulp from 'gulp';
 import gulpif from 'gulp-if';
 import gulpLivereload from 'gulp-livereload';
 import gulpSourcemaps from 'gulp-sourcemaps';
+import log from 'fancy-log';
 import path from 'path';
 import postcss from 'gulp-postcss';
 import rename from 'gulp-rename';
@@ -18,7 +19,6 @@ import svgify from 'svg-browserify';
 import uglify from 'gulp-uglify';
 import watchify from 'watchify';
 import { argv } from 'yargs';
-import { log } from 'gulp-util';
 
 const publicDir = `${__dirname}/public`;
 const distDir = `${__dirname}/dist`;

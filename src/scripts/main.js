@@ -1,16 +1,14 @@
-import 'babel-polyfill';
-
 import $ from 'jquery';
-
-import configPromise from './config';
+import '@babel/polyfill';
 import ApiClient from './helpers/ApiClient';
-import SettingsManager from './helpers/SettingsManager';
-import ThemeManager from './helpers/ThemeManager';
+import configPromise from './config';
+import Intern from './helpers/Intern';
 import Player from './helpers/Player';
 import SampleContainer from './components/SampleContainer';
 import Search from './components/Search';
+import SettingsManager from './helpers/SettingsManager';
 import SettingsModal from './components/SettingsModal';
-import Intern from './helpers/Intern';
+import ThemeManager from './helpers/ThemeManager';
 
 SettingsManager.init();
 ThemeManager.init();
