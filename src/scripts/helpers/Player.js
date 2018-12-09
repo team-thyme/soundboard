@@ -2,7 +2,7 @@ import $ from 'jquery';
 import SettingsManager from './SettingsManager';
 import Modal from '../components/Modal';
 
-class Player {
+export default class Player {
     static instance;
 
     // The registered samples
@@ -19,6 +19,16 @@ class Player {
 
     // Whether an animation frame is requested, indicating that no new loop has to be spawned
     frameRequested = false;
+
+    // When samples are blocked from playing due to browser policies, they end
+    // up here: [{sample, loop}]
+    blockedSamples = [];
+
+    /**
+     * The function assigned to this property will be called when a sample is
+     * blocked from playing.
+     */
+    onBlocked;
 
     static init() {
         this.instance = new Player();
@@ -61,9 +71,9 @@ class Player {
         const sampleIndex = this.samples.push(sample) - 1;
         this.playing[sampleIndex] = [];
 
-        sample.play = (loop) => {
+        sample.play = async (loop) => {
             // Resume context if it is suspended due to a lack of user input
-            this.audioContext.resume();
+            await this.audioContext.resume();
 
             // Create an audio element source and link it to the context
             const audio = new Audio(url);
@@ -84,16 +94,32 @@ class Player {
                     // Remove from playing
                     this.playing[sampleIndex].splice(audioIndex, 1);
 
-                    // Trigger onStop only when we just removed the last playing intance of this sample
+                    // Trigger onStop only when we just removed the last playing instance of this sample
                     if (this.playing[sampleIndex].length === 0) {
                         sample.onStop();
                     }
                 }
             };
 
-            audio.play().catch(stop);
             audio.onpause = stop;
             audio.onended = stop;
+
+            try {
+                await audio.play();
+            } catch (error) {
+                stop();
+
+                if (
+                    error instanceof DOMException &&
+                    error.name === 'NotAllowedError'
+                ) {
+                    // Audio requires user interaction
+                    this.blockedSamples.push({sample, loop});
+                    this.onBlocked?.();
+                }
+
+                return false;
+            }
 
             // Trigger onPlay only when this is the first instance of this sample to start playing
             if (this.playing[sampleIndex].length === 1) {
@@ -106,19 +132,29 @@ class Player {
                     requestAnimationFrame(this.progressStep);
                 }
             }
+
+            return true;
         };
 
         // Return the ID
         return sampleIndex;
     }
 
-    play(sampleIndex, spam = false, loop = false) {
+    async play(sampleIndex, spam = false, loop = false) {
         // Stop all sounds before playing if multiple are not allowed
         if (!spam) {
             this.stopAll();
         }
 
-        this.samples[sampleIndex].play(loop);
+        return this.samples[sampleIndex].play(loop);
+    }
+
+    playBlocked() {
+        this.blockedSamples.forEach((blockedSample) => {
+            blockedSample.sample.play(blockedSample.loop);
+        });
+
+        this.blockedSamples.length = 0;
     }
 
     stop(sampleIndex) {
@@ -157,5 +193,3 @@ class Player {
         return this.playing[sampleIndex].length > 0;
     }
 }
-
-export default Player;

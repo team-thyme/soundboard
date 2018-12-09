@@ -82,7 +82,7 @@ gulp.task('watch:styles', () => {
 gulp.task('clean:scripts', () => del([`${buildDir}/*.{js,js.map}`]));
 
 function createBundler(options = {}) {
-    return browserify(Object.assign({}, browserifyOptions, options))
+    return browserify({...browserifyOptions, ...options})
         .transform(babelify)
         .transform(svgify);
 }

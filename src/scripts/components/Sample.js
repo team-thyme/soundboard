@@ -72,8 +72,8 @@ class Sample {
         this.$sample.append(this.$progress);
     }
 
-    play(spam = false, loop = false) {
-        Player.instance.play(this.playerId, spam, loop);
+    async play(spam = false, loop = false) {
+        return Player.instance.play(this.playerId, spam, loop);
     }
 
     stop() {

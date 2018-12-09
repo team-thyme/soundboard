@@ -13,9 +13,9 @@
         <link rel="shortcut icon" href="favicon.ico">
         <link rel="icon" sizes="192x192" href="icon.png">
 
-        <link rel="stylesheet" href="build/style.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="build/style.css">
 
         <script src="build/script.js" defer></script>
     </head>
@@ -38,11 +38,17 @@
             </div>
         </header>
 
+        <div class="audio-blocked-overlay">
+            <div class="audio-blocked-overlay__icon material-icons">play_arrow</div>
+            <div class="audio-blocked-overlay__text">Alright let's do this</div>
+        </div>
+
         <div class="sample-container">
             <div class="sample-container__empty">
                 <div class="sample-container__empty-icon material-icons">search</div>
                 <div class="sample-container__empty-label">
-                    Whether&nbsp;you're&nbsp;looking&nbsp;for things&nbsp;that&nbsp;do&nbsp;what ...
+                    Whether&nbsp;you're&nbsp;looking&nbsp;for
+                    things&nbsp;that&nbsp;do&nbsp;what ...
                 </div>
             </div>
         </div>
@@ -61,10 +67,18 @@
                     <div class="button button--primary" data-action="save">Save</div>
                 </div>
                 <div class="modal__footer modal__footer--align-center">
-                          <span class="version">
-                            <span class="version__link" data-action="show-changelog-modal">Soundboard <span class="version__number" data-content="version-number"></span></span>
-                            <span class="version__link" data-action="play-version-sample" data-content="version-name"></span>
-                          </span>
+                    <span class="version">
+                        <span class="version__link" data-action="show-changelog-modal">
+                            Soundboard
+                            <span class="version__number" data-content="version-number"></span>
+                        </span>
+                        <span
+                            class="version__link"
+                            data-action="play-version-sample"
+                            data-content="version-name"
+                        >
+                        </span>
+                    </span>
                 </div>
             </div>
         </div>
