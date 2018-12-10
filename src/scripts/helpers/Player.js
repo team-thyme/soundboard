@@ -73,7 +73,9 @@ export default class Player {
 
         sample.play = async (loop) => {
             // Resume context if it is suspended due to a lack of user input
-            await this.audioContext.resume();
+            // Not awaited because that makes it hang indefinitely on Chrome on
+            // Android...
+            this.audioContext.resume();
 
             // Create an audio element source and link it to the context
             const audio = new Audio(url);
