@@ -4,6 +4,7 @@
 .sample {
     flex: 1 1 auto;
     margin: $spacing-base / 2;
+    max-width: calc(100% - #{$spacing-base});
     padding: $spacing-base $spacing-base * 1.5;
     position: relative;
 
