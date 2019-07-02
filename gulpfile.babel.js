@@ -35,12 +35,9 @@ const browserifyOptions = {
     debug: sourcemaps,
 };
 
-gulp.task('build', ['build:scripts', 'build:styles', 'build:iconfont']);
-gulp.task('watch', ['watch:scripts', 'watch:styles']);
-
 gulp.task('clean:styles', () => del([`${buildDir}/*.{css,css.map}`]));
 
-gulp.task('build:styles', ['clean:styles'], () => {
+const buildStyles = () => {
     const sassOptions = {
         importer(url) {
             let resolvedUrl = url;
@@ -69,14 +66,19 @@ gulp.task('build:styles', ['clean:styles'], () => {
         .pipe(gulpif(sourcemaps, gulpSourcemaps.write('./')))
         .pipe(gulp.dest(buildDir))
         .pipe(gulpif(livereload, gulpLivereload()));
-});
+};
+
+gulp.task('build:styles', gulp.series(
+    'clean:styles',
+    buildStyles
+));
 
 gulp.task('watch:styles', () => {
     if (livereload) {
         gulpLivereload.listen();
     }
 
-    gulp.watch('src/styles/**/*.scss', ['build:styles']);
+    gulp.watch('src/styles/**/*.scss', gulp.series('build:styles'));
 });
 
 gulp.task('clean:scripts', () => del([`${buildDir}/*.{js,js.map}`]));
@@ -104,7 +106,7 @@ function bundle(bundler) {
         .pipe(gulpif(livereload, gulpLivereload()));
 }
 
-gulp.task('build:scripts', ['clean:scripts'], () => {
+const buildScripts = () => {
     // Copy dist files to public once
     fs.copy(distDir, publicDir, { clobber: false }, (error) => {
         if (error && error.code !== 'EEXIST') {
@@ -113,12 +115,17 @@ gulp.task('build:scripts', ['clean:scripts'], () => {
     });
 
     // Below code plain just doesn't work while documentation states it should.
-    // let configCopied = gulp.src('config.dist.json')
-    //   .pipe(rename('config.json'))
-    //   .pipe(gulp.dest(publicDir, { overwrite: false }));
+    gulp.src('dist/config.json')
+      .pipe(rename('config.json'))
+      .pipe(gulp.dest(publicDir, { overwrite: false }));
 
     return bundle(createBundler());
-});
+};
+
+gulp.task('build:scripts', gulp.series(
+    'clean:scripts',
+    buildScripts
+));
 
 gulp.task('watch:scripts', () => {
     if (livereload) {
@@ -137,6 +144,22 @@ gulp.task('watch:scripts', () => {
 
 gulp.task('clean:iconfont', () => del([`${buildDir}/iconfont/`]));
 
-gulp.task('build:iconfont', ['clean:iconfont'], () =>
+const buildIconfont = () =>
     gulp.src('src/iconfont/**/*.{css,eot,svg,ttf,woff,woff2}')
-        .pipe(gulp.dest(`${buildDir}/iconfont`)));
+    .pipe(gulp.dest(`${buildDir}/iconfont`));
+
+gulp.task('build:iconfont', gulp.series(
+    'clean:iconfont',
+    buildIconfont
+));
+
+gulp.task('build', gulp.parallel(
+    'build:scripts',
+    'build:styles',
+    'build:iconfont'
+));
+
+gulp.task('watch', gulp.parallel(
+    'watch:scripts',
+    'watch:styles'
+));
