@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import '@babel/polyfill';
+import 'core-js/stable';
+import 'regenerator-runtime';
 import ApiClient from './helpers/ApiClient';
 import getConfig from './helpers/getConfig';
 import Intern from './helpers/Intern';
