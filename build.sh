@@ -13,7 +13,7 @@ echo "Building soundboard in \"$BUILD_MODE\" mode..."
 
 if [ "$BUILD_MODE" == 'production' ]; then
     composer install --no-dev --optimize-autoloader
-    npm install --production
+    npm install
     npm run build
     exit 0
 fi
