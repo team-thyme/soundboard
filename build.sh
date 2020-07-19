@@ -2,9 +2,10 @@
 
 case "$1" in
     prod*) BUILD_MODE='production' ;;
-    dev*) ;&
-    '') BUILD_MODE='development' ;;
-    watch) BUILD_MODE='watch' ;;
+    dev*) BUILD_MODE='development' ;;
+    watch) ;&
+    '') ;&
+    serve) BUILD_MODE='serve' ;;
     *) echo "Unknown build mode \"$1\"." && exit 1 ;;
 esac
 
@@ -25,7 +26,7 @@ if [ "$BUILD_MODE" == 'development' ]; then
     exit 0
 fi
 
-if [ "$BUILD_MODE" == 'watch' ]; then
+if [ "$BUILD_MODE" == 'serve' ]; then
     php -S 0.0.0.0:32658 public/api/index.php & \
     npm run dev-server & \
     npm run dev-build

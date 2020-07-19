@@ -3,7 +3,7 @@
     "scripts": {
         "build": "gulp build",
         "dev-build": "gulp build --sourcemaps --livereload && gulp watch --sourcemaps --livereload",
-        "dev-server": "ws --port 80 --directory public --spa index.html"
+        "dev-server": "ws --port 80 --directory public --spa index.html --rewrite \"/api/(.*) -> http://localhost:32658/$1\""
     },
     "dependencies": {
         "copy-to-clipboard": "^3.3.1",
