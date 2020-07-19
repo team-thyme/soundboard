@@ -142,8 +142,6 @@ The API is hosted on `/api` by default. All calls should be prefixed with this b
 <details>
   <summary>/samples/[file.ogg] - Obtain sample data.</summary>
 
-  This can be achieved by appending a sample's path to the `samples/` URL:
-
   ```
   GET /samples/voice/wow%20effect.ogg
   ```
