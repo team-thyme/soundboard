@@ -53,100 +53,100 @@ that will automatically rebuild the frontend. To live reload updated scripts and
 [one of these browser extensions](http://livereload.com/extensions/) installed.
 
 ### API methods
-The API is hosted on `/api` by default. All calls should be suffixed with this base URL.
+The API is hosted on `/api` by default. All calls should be prefixed with this base URL.
 
 <details>
-    <summary>/samples - Obtain an array with the info of all the available samples.</summary>
+  <summary>/samples - Obtain an array with the info of all the available samples.</summary>
 
-    ```
-    GET /samples
-    ```
+  ```
+  GET /samples
+  ```
 
-    Example output:
+  Example output:
 
-    ```
-    {
-      "samples": [
-        {
-          "url": "loop/yoshi's%20island.ogg",
-          "name": "yoshi's island",
-          "id": "3153b81e",
-          "mtime": 1465334423,
-          "categories": [
-            "loop"
-          ]
-        },
-        {
-          "url": "loop/de%20huilende%20rappers/boutjes%20moertjes%20stekkertjes snoertjes.ogg",
-          "name": "boutjes moertjes stekkertjes snoertjes",
-          "id": "e6d4f390",
-          "mtime": 1465333910,
-          "categories": [
-            "loop",
-            "de huilende rappers"
-          ]
-        }.
-        {
-          "url": "voice/wow%20effect3.ogg",
-          "name": "wow effect",
-          "id": "68851e0f",
-          "mtime": 1465670673,
-          "categories": [
-            "voice"
-          ]
-        }
-      ]
-    }
-    ```
+  ```
+  {
+    "samples": [
+      {
+        "url": "loop/yoshi's%20island.ogg",
+        "name": "yoshi's island",
+        "id": "3153b81e",
+        "mtime": 1465334423,
+        "categories": [
+          "loop"
+        ]
+      },
+      {
+        "url": "loop/de%20huilende%20rappers/boutjes%20moertjes%20stekkertjes snoertjes.ogg",
+        "name": "boutjes moertjes stekkertjes snoertjes",
+        "id": "e6d4f390",
+        "mtime": 1465333910,
+        "categories": [
+          "loop",
+          "de huilende rappers"
+        ]
+      }.
+      {
+        "url": "voice/wow%20effect3.ogg",
+        "name": "wow effect",
+        "id": "68851e0f",
+        "mtime": 1465670673,
+        "categories": [
+          "voice"
+        ]
+      }
+    ]
+  }
+  ```
 </details>
 
 <details>
-    <summary>/samples?query=[query] - Search in samples.</summary>
+  <summary>/samples?query=[query] - Search in samples.</summary>
 
-    ```
-    GET /samples?query=rappers|wow
-    ```
+  ```
+  GET /samples?query=rappers|wow
+  ```
 
-    Example output:
+  Example output:
 
-    ```
-    {
-      "samples": [
-        {
-          "url": "loop/de%20huilende%20rappers/boutjes%20moertjes%20stekkertjes%20snoertjes.ogg",
-          "name": "boutjes moertjes stekkertjes snoertjes",
-          "id": "e6d4f390",
-          "mtime": 1465333910,
-          "categories": [
-            "loop",
-            "de huilende rappers"
-          ]
-        }.
-        {
-          "url": "voice/wow%20effect.ogg",
-          "name": "wow effect",
-          "id": "68851e0f",
-          "mtime": 1465670673,
-          "categories": [
-            "voice"
-          ]
-        }
-      ]
-    }
-    ```
+  ```
+  {
+    "samples": [
+      {
+        "url": "loop/de%20huilende%20rappers/boutjes%20moertjes%20stekkertjes%20snoertjes.ogg",
+        "name": "boutjes moertjes stekkertjes snoertjes",
+        "id": "e6d4f390",
+        "mtime": 1465333910,
+        "categories": [
+          "loop",
+          "de huilende rappers"
+        ]
+      }.
+      {
+        "url": "voice/wow%20effect.ogg",
+        "name": "wow effect",
+        "id": "68851e0f",
+        "mtime": 1465670673,
+        "categories": [
+          "voice"
+        ]
+      }
+    ]
+  }
+  ```
 
-    Separating query arguments with a space will perform an AND match, and separating them by a pipe will perform an OR
-    match. This behavior mimics the frontend which does not use the API for this. API calls are time, and time is money.
+  Separating query arguments with a space will perform an AND match, and separating them by a pipe will perform an OR
+  match. This behavior mimics the frontend which does not use the API for this. API calls are time, and time is money.
 </details>
 
 <details>
-    <summary>/samples/[file.ogg] - Obtain sample data.</summary>
+  <summary>/samples/[file.ogg] - Obtain sample data.</summary>
 
-    This can be achieved by appending a sample's path to the `samples/` URL:
+  This can be achieved by appending a sample's path to the `samples/` URL:
 
-    ```
-    GET /samples/voice/wow%20effect.ogg
-    ```
+  ```
+  GET /samples/voice/wow%20effect.ogg
+  ```
 </details>
 
 ### Telegram bot
