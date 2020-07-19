@@ -1,7 +1,13 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-# TODO: Production optional (build.sh production)
+if [ "$1" == 'production' ]; then
+    echo 'Building soundboard in "production" mode...'
+    composer install --no-dev --optimize-autoloader
+    npm install --production
+else
+    echo 'Building soundboard in "development" mode...'
+    composer install
+    npm install
+fi
 
-composer install --no-dev --optimize-autoloader
-npm install --production
 npm run build
