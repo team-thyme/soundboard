@@ -1,5 +1,5 @@
-@import '~sass-import-once/sass-import-once';
-@import '__themes';
+@import '../../../node_modules/sass-import-once/sass-import-once';
+@import '_themes';
 
 $themes: map-merge($themes, (cirkeltrek: (
     primary: #e27000,

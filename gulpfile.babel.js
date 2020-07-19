@@ -31,7 +31,7 @@ const {
 } = argv;
 
 const browserifyOptions = {
-    entries: ['src/scripts/main.js'],
+    entries: ['frontend/src/main.js'],
     debug: sourcemaps,
 };
 
@@ -58,7 +58,7 @@ const buildStyles = () => {
         processors.push(cssnano());
     }
 
-    return gulp.src('src/styles/**/*.scss')
+    return gulp.src('frontend/styles/**/*.scss')
         .pipe(gulpif(sourcemaps, gulpSourcemaps.init()))
         .pipe(sass(sassOptions).on('error', sass.logError))
         .pipe(postcss(processors))
@@ -78,7 +78,7 @@ gulp.task('watch:styles', () => {
         gulpLivereload.listen();
     }
 
-    gulp.watch('src/styles/**/*.scss', gulp.series('build:styles'));
+    gulp.watch('frontend/styles/**/*.scss', gulp.series('build:styles'));
 });
 
 gulp.task('clean:scripts', () => del([`${buildDir}/*.{js,js.map}`]));
@@ -145,7 +145,7 @@ gulp.task('watch:scripts', () => {
 gulp.task('clean:iconfont', () => del([`${buildDir}/iconfont/`]));
 
 const buildIconfont = () =>
-    gulp.src('src/iconfont/**/*.{css,eot,svg,ttf,woff,woff2}')
+    gulp.src('frontend/iconfont/**/*.{css,eot,svg,ttf,woff,woff2}')
     .pipe(gulp.dest(`${buildDir}/iconfont`));
 
 gulp.task('build:iconfont', gulp.series(

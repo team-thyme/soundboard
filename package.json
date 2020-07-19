@@ -1,8 +1,4 @@
 {
-    "name": "soundboard-front-end",
-    "version": "3.1.0",
-    "description": "Front-end for Team Thyme's web-based soundboard",
-    "homepage": "https://github.com/villermen/soundboard-front-end",
     "private": true,
     "scripts": {
         "build": "gulp build",
