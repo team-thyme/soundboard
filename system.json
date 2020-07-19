@@ -1,9 +1,0 @@
-{
-    "versionNumber": "3.2.1",
-    "versionName": "what do you think of that",
-    "versionSampleId": "4ba49d58",
-    "repositoryUrl": "https://github.com/villermen/soundboard-front-end",
-
-    "contributeUrl": "https://docs.google.com/document/d/1tDlWfX2TtczI5IHLmffY4LPya1J1Z9ZWHW4pYlD8toM/edit?usp=sharing",
-    "apiBaseUrl": "http://localhost:32658"
-}

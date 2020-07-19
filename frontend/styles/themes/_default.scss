@@ -1,4 +1,4 @@
-@import '__themes';
+@import '_themes';
 
 $themes: map-merge($themes, (default: (
     primary: #25b192,

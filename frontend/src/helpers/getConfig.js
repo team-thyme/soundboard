@@ -1,4 +1,4 @@
-import system from '../../../system.json';
+import system from '../../system.json';
 
 let configPromise;
 

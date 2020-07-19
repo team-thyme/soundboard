@@ -1,11 +1,18 @@
-public/build/
-public/config.json
-public/index.html
+/public/build/
+/public/config.json
+/public/index.html
+
+# Sample files (we got that sweet copyright on our own voices)
+/samples/*
+!/samples/.gitkeep
 
 # IntellIJ
-.idea/
+/.idea/
 
 # NodeJS
-node_modules/
-.npmrc
-npm-debug.log
+/node_modules/
+/.npmrc
+/npm-debug.log
+
+# Composer
+/vendor/
