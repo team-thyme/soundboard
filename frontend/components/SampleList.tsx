@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from "react";
 import { List, WindowScroller } from 'react-virtualized';
 
 import { Sample } from '../api';
@@ -52,8 +52,22 @@ function computeLayout(itemWidths: number[], maxRowWidth: number): number[][] {
     return rows;
 }
 
+function useBodyWidth(): number {
+    const [width, setWidth] = useState(document.body.clientWidth);
+
+    useEffect(() => {
+        function handleResize() {
+            setWidth(document.body.clientWidth);
+        }
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return width;
+}
+
 export default function SampleList({ samples }: SampleListProps) {
-    const containerWidth = 1000;
+    const containerWidth = useBodyWidth();
     const rowHeight = sampleHeight + sampleMargin * 2;
 
     const widths = useSampleWidths(samples);

@@ -2,6 +2,8 @@
 
 html {
     height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 
     font: 16px $font-stack;
 }
