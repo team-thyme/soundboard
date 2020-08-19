@@ -6,11 +6,18 @@ function SearchBar() {
     const { query, setQuery } = useContext(SearchContext);
 
     return (
-        <input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-        />
+        <div className="SearchBar">
+            <input
+                className="SearchBar__input"
+                type="text"
+                value={query}
+                placeholder="Cook, Search, Delicious!"
+                onChange={(e) => setQuery(e.target.value)}
+            />
+            <button className="SearchBar__clear" onClick={() => setQuery('')}>
+                x
+            </button>
+        </div>
     );
 }
 

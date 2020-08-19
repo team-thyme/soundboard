@@ -1,3 +1,5 @@
+@import 'variables';
+
 $header-height: 80px;
 
 .Header {
@@ -5,15 +7,36 @@ $header-height: 80px;
     z-index: 1;
     top: 0;
     left: 0;
+    right: 0;
+    padding: 0 30px;
 
     display: flex;
-    width: 100%;
+    align-items: center;
     height: $header-height;
 
     background: var(--header-bg);
+
+    &__title,
+    &__buttons {
+        flex: 1 1 150px;
+    }
+
+    &__title {
+        font-family: $title-font-family;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+
+    &__search {
+        flex: 0 1 50%;
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
 
     &__pusher {
         height: $header-height;
     }
 }
-
