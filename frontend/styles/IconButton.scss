@@ -1,0 +1,31 @@
+.IconButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+
+    padding: 0;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+
+    &--search {
+        color: black;
+
+        &:hover,
+        &:focus {
+            background-color: rgba(black, 0.1);
+        }
+        &:active {
+            background-color: rgba(black, 0.2);
+        }
+    }
+
+    &--header {
+
+    }
+}

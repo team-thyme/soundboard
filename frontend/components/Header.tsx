@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import * as React from 'react';
 import { SearchContext } from './App';
+import IconButton from './IconButton';
 
 function SearchBar() {
     const { query, setQuery } = useContext(SearchContext);
@@ -14,9 +15,15 @@ function SearchBar() {
                 placeholder="Cook, Search, Delicious!"
                 onChange={(e) => setQuery(e.target.value)}
             />
-            <button className="SearchBar__clear" onClick={() => setQuery('')}>
-                x
-            </button>
+            {query && (
+                <div className="SearchBar__clear">
+                    <IconButton
+                        onClick={() => setQuery('')}
+                        kind="search"
+                        icon="times"
+                    />
+                </div>
+            )}
         </div>
     );
 }
