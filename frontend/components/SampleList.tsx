@@ -7,10 +7,10 @@ import { useTextMeasurer } from '../helpers/TextMeasurer';
 import {
     detailFont,
     nameFont,
-    sampleHeight,
+    sampleHeight, sampleListPadding,
     sampleMargin,
-    samplePaddingX,
-} from '../styles/sync-variables';
+    samplePaddingX
+} from "../styles/sync-variables";
 import SampleItem from './SampleItem';
 
 interface SampleListProps {
@@ -67,7 +67,7 @@ function useBodyWidth(): number {
 }
 
 export default function SampleList({ samples }: SampleListProps) {
-    const containerWidth = useBodyWidth();
+    const containerWidth = useBodyWidth() - sampleListPadding * 2;
     const rowHeight = sampleHeight + sampleMargin * 2;
 
     const widths = useSampleWidths(samples);

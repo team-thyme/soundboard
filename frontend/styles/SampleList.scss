@@ -1,6 +1,7 @@
 @import 'variables';
 
 .SampleList {
+    margin: $sampleListPadding;
     background: var(--sample-list-bg);
 
     &__row {
