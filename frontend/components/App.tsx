@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 import { fetchSamples, Sample } from '../api';
 import SampleList from './SampleList';
 
@@ -28,7 +28,10 @@ function useFilteredSamples(query: string): Sample[] {
             .replace(/\s+\|\s+/g, '|')
             // Split by any combination of whitespace characters
             .split(/[\s+&]+/g);
-        const regex = new RegExp(`.*${terms.map(term => `(?=.*${term}.*)`).join('')}.*`, 'i');
+        const regex = new RegExp(
+            `.*${terms.map((term) => `(?=.*${term}.*)`).join('')}.*`,
+            'i',
+        );
 
         return samples.filter((sample) => {
             let filterString = sample.name.replace(/[^\w\s|]/g, '');
@@ -37,7 +40,7 @@ function useFilteredSamples(query: string): Sample[] {
             });
 
             return regex.test(filterString);
-        })
+        });
     }, [samples, query]);
 }
 
@@ -47,7 +50,10 @@ export default function App() {
 
     return (
         <div>
-            <input onChange={(event => setQuery(event.target.value))} value={query} />
+            <input
+                onChange={(event) => setQuery(event.target.value)}
+                value={query}
+            />
             <SampleList samples={samples} />
         </div>
     );
