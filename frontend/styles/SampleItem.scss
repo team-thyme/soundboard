@@ -9,6 +9,7 @@
     justify-content: center;
 
     box-sizing: border-box;
+    max-width: calc(100% - #{2 * $sampleMargin});
     height: $sampleHeight;
     margin: $sampleMargin;
     padding: 0 $samplePaddingX;
@@ -26,6 +27,7 @@
 
     &__name,
     &__detail {
+        max-width: 100%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
