@@ -1,0 +1,42 @@
+html {
+    height: 100%;
+}
+body {
+    margin: 0;
+    height: 100%;
+}
+#root {
+    height: 100%;
+}
+
+.SampleList {
+    background: #e2e2e2;
+
+    &__row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    &__pusher {
+        flex: 10 0 auto;
+    }
+}
+
+.SampleItem {
+    flex: 1 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 5px;
+    padding: 10px;
+    background: #cccccc;
+
+    &__name,
+    &__categories {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
