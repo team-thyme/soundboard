@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import * as React from 'react';
+import { WindowScroller, List } from 'react-virtualized';
 
 import { Sample } from '../api';
 import TextMeasurer from '../helpers/TextMeasurer';
@@ -21,19 +22,22 @@ function useSampleWidths(samples: Sample[]): number[] {
     const detailMeasurer = useTextMeasurer('16px Times New Roman');
 
     function getWidth(sample: Sample): number {
-        return Math.max(
-            nameMeasurer.measureWidth(sample.name),
-            detailMeasurer.measureWidth(sample.categories.join(' / '))
-        ) + margin + padding;
+        return (
+            margin +
+            padding +
+            Math.max(
+                nameMeasurer.measureWidth(sample.name),
+                detailMeasurer.measureWidth(sample.categories.join(' / ')),
+            )
+        );
     }
 
     return useMemo(() => samples.map(getWidth), [samples]);
 }
 
-function computeLayout(
-    itemWidths: number[],
-    maxRowWidth: number,
-): number[][] {
+function computeLayout(itemWidths: number[], maxRowWidth: number): number[][] {
+    // TODO: Better layout computation. Perhaps do local search (with badness like LaTeX) after the current greedy approach.
+
     let rows = [[]];
     let rowWidth = 0;
     for (let i = 0; i < itemWidths.length; ++i) {
@@ -49,23 +53,47 @@ function computeLayout(
 }
 
 export default function SampleList({ samples }: SampleListProps) {
+    const containerWidth = 1000;
+    const rowHeight = 70;
+
     const widths = useSampleWidths(samples);
     // TODO: Use actual width as maxRowWidth
-    const layout = computeLayout(widths, 1000);
+    const layout = computeLayout(widths, containerWidth);
 
     return (
-        <div className="SampleList">
-            {layout.map((row, rowIndex) => (
-                <div key={rowIndex} className="SampleList__row">
-                    {row.map((index) => {
-                        const sample = samples[index];
-                        return <SampleItem key={sample.key} sample={sample} />;
-                    })}
-                    {(rowIndex === layout.length - 1) && (
-                        <div className="SampleList__pusher" />
+        <WindowScroller>
+            {({ height, isScrolling, onChildScroll, scrollTop }) => (
+                <List
+                    width={containerWidth}
+                    height={height}
+                    autoHeight
+                    isScrolling={isScrolling}
+                    onScroll={onChildScroll}
+                    scrollTop={scrollTop}
+                    rowHeight={rowHeight}
+                    rowCount={layout.length}
+                    rowRenderer={({ index: rowIndex, style }) => (
+                        <div
+                            key={rowIndex}
+                            className="SampleList__row"
+                            style={style}
+                        >
+                            {layout[rowIndex].map((index) => {
+                                const sample = samples[index];
+                                return (
+                                    <SampleItem
+                                        key={sample.key}
+                                        sample={sample}
+                                    />
+                                );
+                            })}
+                            {rowIndex === layout.length - 1 && (
+                                <div className="SampleList__pusher" />
+                            )}
+                        </div>
                     )}
-                </div>
-            ))}
-        </div>
+                />
+            )}
+        </WindowScroller>
     );
 }
