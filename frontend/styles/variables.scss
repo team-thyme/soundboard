@@ -1,10 +1,14 @@
 @import 'sync-variables';
 
+$font-stack: 'Work Sans', sans-serif;
+
 // Theme variables
 :root {
-    $sample-bg: #eee;
+    $sample-bg: #f3f3f3;
+
+    --sample-list-bg: #fff;
 
     --sample-bg: #{$sample-bg};
-    --sample-bg-hover: #{darken($sample-bg, 10%)};
-    --sample-bg-active: #{darken($sample-bg, 20%)};
+    --sample-bg-hover: #{darken($sample-bg, 5%)};
+    --sample-bg-active: #{darken($sample-bg, 10%)};
 }

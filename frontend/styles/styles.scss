@@ -1,5 +1,9 @@
+@import 'variables';
+
 html {
     height: 100%;
+
+    font: 16px $font-stack;
 }
 body {
     margin: 0;
@@ -11,4 +15,3 @@ body {
 
 @import 'SampleList';
 @import 'SampleItem';
-

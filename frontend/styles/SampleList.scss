@@ -1,7 +1,7 @@
 @import 'variables';
 
 .SampleList {
-    background: #e2e2e2;
+    background: var(--sample-list-bg);
 
     &__row {
         display: flex;
