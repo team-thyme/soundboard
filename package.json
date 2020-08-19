@@ -1,5 +1,8 @@
 {
     "private": true,
+    "scripts": {
+        "start": "parcel frontend/index.html --out-dir public/build --port=80"
+    },
     "devDependencies": {
         "parcel-bundler": "^1.12.4",
         "prettier": "^2.0.5",
