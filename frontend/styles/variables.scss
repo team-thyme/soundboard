@@ -1,1 +1,10 @@
 @import 'sync-variables';
+
+// Theme variables
+:root {
+    $sample-bg: #eee;
+
+    --sample-bg: #{$sample-bg};
+    --sample-bg-hover: #{darken($sample-bg, 10%)};
+    --sample-bg-active: #{darken($sample-bg, 20%)};
+}

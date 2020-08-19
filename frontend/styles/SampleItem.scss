@@ -13,7 +13,15 @@
     margin: $sampleMargin;
     padding: 0 $samplePaddingX;
 
-    background: #cccccc;
+    background: var(--sample-bg);
+    cursor: pointer;
+
+    &:hover {
+        background: var(--sample-bg-hover);
+    }
+    &:active {
+        background: var(--sample-bg-active);
+    }
 
     &__name,
     &__detail {
