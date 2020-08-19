@@ -1,0 +1,14 @@
+@import 'variables';
+
+.SampleList {
+    background: #e2e2e2;
+
+    &__row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    &__pusher {
+        flex: 10 0 auto;
+    }
+}

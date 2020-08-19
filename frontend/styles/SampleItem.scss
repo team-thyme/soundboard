@@ -1,0 +1,31 @@
+@import 'variables';
+
+.SampleItem {
+    flex: 1 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+    height: $sampleHeight;
+    margin: $sampleMargin;
+    padding: 0 $samplePaddingX;
+
+    background: #cccccc;
+
+    &__name,
+    &__detail {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__name {
+        font: $nameFont;
+    }
+    &__detail {
+        font: $detailFont;
+    }
+}

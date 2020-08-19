@@ -1,26 +1,30 @@
-import * as React from "react";
-import { useMemo } from "react";
-import { List, WindowScroller } from "react-virtualized";
+import * as React from 'react';
+import { useMemo } from 'react';
+import { List, WindowScroller } from 'react-virtualized';
 
-import { Sample } from "../api";
-import { useTextMeasurer } from "../helpers/TextMeasurer";
-import SampleItem from "./SampleItem";
+import { Sample } from '../api';
+import { useTextMeasurer } from '../helpers/TextMeasurer';
+import {
+    detailFont,
+    nameFont,
+    sampleHeight,
+    sampleMargin,
+    samplePaddingX,
+} from '../styles/variables';
+import SampleItem from './SampleItem';
 
 interface SampleListProps {
     samples: Sample[];
 }
 
 function useSampleWidths(samples: Sample[]): number[] {
-    const margin = 10;
-    const padding = 20;
-
-    const nameMeasurer = useTextMeasurer('16px Times New Roman');
-    const detailMeasurer = useTextMeasurer('16px Times New Roman');
+    const nameMeasurer = useTextMeasurer(nameFont);
+    const detailMeasurer = useTextMeasurer(detailFont);
 
     function getWidth(sample: Sample): number {
         return (
-            margin +
-            padding +
+            sampleMargin * 2 +
+            samplePaddingX * 2 +
             Math.max(
                 nameMeasurer.measureWidth(sample.name),
                 detailMeasurer.measureWidth(sample.categories.join(' / ')),
@@ -50,7 +54,7 @@ function computeLayout(itemWidths: number[], maxRowWidth: number): number[][] {
 
 export default function SampleList({ samples }: SampleListProps) {
     const containerWidth = 1000;
-    const rowHeight = 70;
+    const rowHeight = sampleHeight + sampleMargin * 2;
 
     const widths = useSampleWidths(samples);
     // TODO: Use actual width as maxRowWidth
@@ -60,6 +64,7 @@ export default function SampleList({ samples }: SampleListProps) {
         <WindowScroller>
             {({ height, isScrolling, onChildScroll, scrollTop }) => (
                 <List
+                    className="SampleList"
                     width={containerWidth}
                     height={height}
                     autoHeight

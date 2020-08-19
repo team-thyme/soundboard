@@ -9,7 +9,7 @@ export default function SampleItem({ sample }: SampleItemProps) {
     return (
         <div className="SampleItem">
             <span className="SampleItem__name">{sample.name}</span>
-            <span className="SampleItem__categories">
+            <span className="SampleItem__detail">
                 {sample.categories.join(' / ')}
             </span>
         </div>
