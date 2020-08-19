@@ -10,7 +10,7 @@ import {
     sampleHeight,
     sampleMargin,
     samplePaddingX,
-} from '../styles/variables';
+} from '../styles/sync-variables';
 import SampleItem from './SampleItem';
 
 interface SampleListProps {
