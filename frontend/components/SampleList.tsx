@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 import { List, WindowScroller } from 'react-virtualized';
 
 import { Sample } from '../api';
@@ -7,10 +7,11 @@ import { useTextMeasurer } from '../helpers/TextMeasurer';
 import {
     detailFont,
     nameFont,
-    sampleHeight, sampleListPadding,
+    sampleHeight,
+    sampleListPadding,
     sampleMargin,
-    samplePaddingX
-} from "../styles/sync-variables";
+    samplePaddingX,
+} from '../styles/sync-variables';
 import SampleItem from './SampleItem';
 
 interface SampleListProps {
@@ -79,6 +80,7 @@ export default function SampleList({ samples }: SampleListProps) {
             {({ height, isScrolling, onChildScroll, scrollTop }) => (
                 <List
                     className="SampleList"
+                    tabIndex={null}
                     width={containerWidth}
                     height={height}
                     autoHeight
