@@ -4,10 +4,11 @@ $font-stack: 'Work Sans', sans-serif;
 
 // Theme variables
 :root {
-    $sample-bg: #f3f3f3;
+    --header-bg: #61E294;
 
     --sample-list-bg: #fff;
 
+    $sample-bg: #f3f3f3;
     --sample-bg: #{$sample-bg};
     --sample-bg-hover: #{darken($sample-bg, 5%)};
     --sample-bg-active: #{darken($sample-bg, 10%)};

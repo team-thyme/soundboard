@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { fetchSamples, Sample } from '../api';
+import Header from './Header';
 import SampleList from './SampleList';
 
 function useSamples(): Sample[] {
@@ -56,17 +57,24 @@ function useFilteredSamples(query: string): Sample[] {
     }, [samples, query]);
 }
 
+export const SearchContext = React.createContext({
+    query: '',
+    setQuery: (_query: string) => {},
+});
+
 export default function App() {
     const [query, setQuery] = useState('');
     const samples = useFilteredSamples(query);
 
+    const searchContext = useMemo(() => ({ query, setQuery }), [
+        query,
+        setQuery,
+    ]);
+
     return (
-        <div>
-            <input
-                onChange={(event) => setQuery(event.target.value)}
-                value={query}
-            />
+        <SearchContext.Provider value={searchContext}>
+            <Header />
             <SampleList samples={samples} />
-        </div>
+        </SearchContext.Provider>
     );
 }
