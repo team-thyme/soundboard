@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 export default class TextMeasurer {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
@@ -24,4 +26,8 @@ export default class TextMeasurer {
         this.widthCache.set(text, width);
         return width;
     }
+}
+
+export function useTextMeasurer(font: string): TextMeasurer {
+    return useMemo(() => new TextMeasurer(font), [font]);
 }

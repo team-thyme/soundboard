@@ -1,17 +1,13 @@
-import { useMemo } from 'react';
-import * as React from 'react';
-import { WindowScroller, List } from 'react-virtualized';
+import * as React from "react";
+import { useMemo } from "react";
+import { List, WindowScroller } from "react-virtualized";
 
-import { Sample } from '../api';
-import TextMeasurer from '../helpers/TextMeasurer';
-import SampleItem from './SampleItem';
+import { Sample } from "../api";
+import { useTextMeasurer } from "../helpers/TextMeasurer";
+import SampleItem from "./SampleItem";
 
 interface SampleListProps {
     samples: Sample[];
-}
-
-function useTextMeasurer(font: string): TextMeasurer {
-    return useMemo(() => new TextMeasurer(font), [font]);
 }
 
 function useSampleWidths(samples: Sample[]): number[] {
