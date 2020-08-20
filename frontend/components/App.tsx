@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, Context } from 'react';
 import Header from './Header';
 import SampleList from './SampleList';
 
-export const SearchContext = React.createContext({
-    query: '',
-    setQuery: (_query: string) => {},
-});
+export const SearchContext: Context<{
+    query: string;
+    setQuery(query: string): void;
+}> = React.createContext(null);
 
 export default function App() {
     const [query, setQuery] = useState('');
