@@ -72,7 +72,6 @@ export default function SampleList({ samples }: SampleListProps) {
     const rowHeight = sampleHeight + sampleMargin * 2;
 
     const widths = useSampleWidths(samples);
-    // TODO: Use actual width as maxRowWidth
     const layout = computeLayout(widths, containerWidth);
 
     return (
