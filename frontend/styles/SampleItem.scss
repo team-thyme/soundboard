@@ -25,6 +25,16 @@
         background: var(--sample-bg-active);
     }
 
+    &--isPlaying {
+        background: var(--sample-playing-bg);
+        &:hover {
+            background: var(--sample-playing-bg-hover);
+        }
+        &:active {
+            background: var(--sample-playing-bg-active);
+        }
+    }
+
     &__name,
     &__detail {
         max-width: 100%;
