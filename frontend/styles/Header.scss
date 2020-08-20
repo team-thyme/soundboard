@@ -10,28 +10,32 @@ $header-height: 80px;
     right: 0;
     padding: 0 30px;
 
-    display: flex;
+    display: grid;
+    grid-template-areas: "title search buttons";
+    grid-template-columns: auto 50% auto;
+    column-gap: 15px;
     align-items: center;
+    align-content: center;
+    justify-content: space-between;
     height: $header-height;
 
     background: var(--header-bg);
 
-    &__title,
-    &__buttons {
-        flex: 1 1 150px;
-    }
-
     &__title {
+        grid-area: title;
+
         font-family: $title-font-family;
         font-weight: 600;
         font-size: 1.5rem;
     }
 
     &__search {
-        flex: 0 1 50%;
+        grid-area: search;
     }
 
     &__buttons {
+        grid-area: buttons;
+
         display: flex;
         justify-content: flex-end;
     }
