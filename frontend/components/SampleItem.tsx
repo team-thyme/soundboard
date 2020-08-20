@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Sample } from '../api';
+import { player } from "../helpers/Player";
 
 export interface SampleItemProps {
     sample: Sample;
@@ -12,7 +13,7 @@ export default function SampleItem({ sample }: SampleItemProps) {
             tabIndex={0}
             role="button"
             onClick={() => {
-                console.log('play', sample);
+                player.play(sample);
             }}
         >
             <span className="SampleItem__name">{sample.name}</span>
