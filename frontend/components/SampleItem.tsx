@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import * as React from 'react';
 import cx from 'classnames';
 import { Sample } from '../api';
@@ -9,11 +9,30 @@ export interface SampleItemProps {
 }
 
 function usePlayer(sample: Sample): { play(): void; isPlaying: boolean } {
-    // TODO: Get `isPlaying` state from Player instance when component is mounted
-    const [isPlaying, setPlaying] = useState(false);
+    const [isPlaying, setPlaying] = useState(() =>
+        player.isPlaying(sample.key),
+    );
+
+    useEffect(() => {
+        function handlePlay() {
+            setPlaying(true);
+        }
+        function handleEnded() {
+            setPlaying(false);
+        }
+
+        const { key } = sample;
+        player.on('play', key, handlePlay);
+        player.on('ended', key, handleEnded);
+
+        return () => {
+            player.off('play', key, handlePlay);
+            player.off('ended', key, handleEnded);
+        };
+    }, [sample]);
 
     const play = useCallback(() => {
-        setPlaying(true);
+        player.stopAll();
         player.play(sample);
     }, [sample]);
 
