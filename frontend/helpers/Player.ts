@@ -2,6 +2,7 @@ import { Sample } from '../api';
 
 interface PlayingData {
     audio: HTMLAudioElement;
+    analyserNode: AnalyserNode;
 }
 
 export default class Player {
@@ -29,8 +30,11 @@ export default class Player {
         if (playingData) {
             return playingData.audio.currentTime / playingData.audio.duration;
         }
-
         return 0;
+    }
+
+    getAnalyserNode(key: string): AnalyserNode {
+        return this.playing.get(key)?.analyserNode;
     }
 
     stop(key: string) {
@@ -56,10 +60,14 @@ export default class Player {
         // Android...
         this.audioContext.resume();
 
+        const analyserNode = this.audioContext.createAnalyser();
+        analyserNode.fftSize = 2048;
+        analyserNode.connect(this.gainNode);
+
         const audio = new Audio(url);
         audio.crossOrigin = 'anonymous';
         const source = this.audioContext.createMediaElementSource(audio);
-        source.connect(this.gainNode);
+        source.connect(analyserNode);
 
         const handleStop = () => {
             if (this.isPlaying(key)) {
@@ -77,6 +85,7 @@ export default class Player {
 
         this.playing.set(key, {
             audio,
+            analyserNode,
         });
         this.emit('play', key);
         this.watchProgressStart();
