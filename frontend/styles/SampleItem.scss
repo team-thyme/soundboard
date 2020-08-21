@@ -21,6 +21,8 @@
     background: var(--sample-bg);
     cursor: pointer;
 
+    user-select: none;
+
     &:hover {
         background: var(--sample-bg-hover);
     }
