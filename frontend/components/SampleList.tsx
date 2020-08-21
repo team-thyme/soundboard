@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { List, WindowScroller } from 'react-virtualized';
 
-import { fetchSamples, Sample } from "../api";
+import { fetchSamples, Sample } from '../api';
 import { useTextMeasurer } from '../helpers/TextMeasurer';
 import {
     detailFont,
@@ -12,7 +12,7 @@ import {
     sampleMargin,
     samplePaddingX,
 } from '../styles/sync-variables';
-import { SearchContext } from "./App";
+import { SearchContext } from './App';
 import SampleItem from './SampleItem';
 
 /**
@@ -44,6 +44,18 @@ function useSamples(): Sample[] {
  * React hook. Filters a list of samples using the given query.
  */
 function useFilteredSamples(samples: Sample[], query: string): Sample[] {
+    const indexedSamples = useMemo(
+        () =>
+            samples.map((sample) => {
+                let string = sample.name.replace(/[^\w\s|]/g, '');
+                sample.categories.forEach((category) => {
+                    string += ' ' + category.replace(/[^\w\s|]/g, '');
+                });
+                return string;
+            }),
+        [samples],
+    );
+
     return useMemo(() => {
         if (query.trim() === '') {
             return samples;
@@ -62,15 +74,11 @@ function useFilteredSamples(samples: Sample[], query: string): Sample[] {
             'i',
         );
 
-        return samples.filter((sample) => {
-            let filterString = sample.name.replace(/[^\w\s|]/g, '');
-            sample.categories.forEach((category) => {
-                filterString += ' ' + category.replace(/[^\w\s|]/g, '');
-            });
-
-            return regex.test(filterString);
+        // TODO: Searching samples is slow. It takes up to ~40ms to filter a list of 1000 samples.
+        return samples.filter((sample, index) => {
+            return regex.test(indexedSamples[index]);
         });
-    }, [samples, query]);
+    }, [samples, indexedSamples, query]);
 }
 
 /**
