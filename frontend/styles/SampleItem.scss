@@ -8,6 +8,9 @@
     align-items: center;
     justify-content: center;
 
+    position: relative;
+    overflow: hidden;
+
     box-sizing: border-box;
     max-width: calc(100% - #{2 * $sampleMargin});
     height: $sampleHeight;
@@ -37,6 +40,9 @@
 
     &__name,
     &__detail {
+        position: relative;
+        z-index: 1;
+
         max-width: 100%;
         overflow: hidden;
         white-space: nowrap;
@@ -48,5 +54,16 @@
     }
     &__detail {
         font: $detailFont;
+    }
+
+    &__progress {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(black, 0.1);
+
+        transform-origin: 0 0;
     }
 }

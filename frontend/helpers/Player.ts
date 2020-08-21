@@ -24,6 +24,15 @@ export default class Player {
         return this.playing.has(key);
     }
 
+    getProgress(key: string): number {
+        const playingData = this.playing.get(key);
+        if (playingData) {
+            return playingData.audio.currentTime / playingData.audio.duration;
+        }
+
+        return 0;
+    }
+
     stop(key: string) {
         const playingData = this.playing.get(key);
         if (playingData) {
@@ -70,7 +79,33 @@ export default class Player {
             audio,
         });
         this.emit('play', key);
+        this.watchProgressStart();
     }
+
+    // Watch progress stuff
+    private watchProgressRequestId: number = null;
+    private watchProgressStart() {
+        if (this.watchProgressRequestId === null) {
+            this.watchProgressRequestId = window.requestAnimationFrame(
+                this.watchProgress,
+            );
+        }
+    }
+    private watchProgress = () => {
+        if (this.playing.size === 0) {
+            this.watchProgressRequestId = null;
+            return;
+        }
+
+        this.playing.forEach((playingData, key) => {
+            // TODO: Add current progress as event argument
+            this.emit('progress', key);
+        });
+
+        this.watchProgressRequestId = window.requestAnimationFrame(
+            this.watchProgress,
+        );
+    };
 
     // Event stuff
     private eventTarget = new EventTarget();
