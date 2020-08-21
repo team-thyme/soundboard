@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useMemo, useState, useContext } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { List, WindowScroller } from 'react-virtualized';
 
 import { fetchSamples, Sample } from "../api";
@@ -80,18 +80,18 @@ function useSampleWidths(samples: Sample[]): number[] {
     const nameMeasurer = useTextMeasurer(nameFont);
     const detailMeasurer = useTextMeasurer(detailFont);
 
-    function getWidth(sample: Sample): number {
-        return (
+    const getWidth = useCallback(
+        (sample: Sample): number =>
             sampleMargin * 2 +
             samplePaddingX * 2 +
             Math.max(
                 nameMeasurer.measureWidth(sample.name),
                 detailMeasurer.measureWidth(sample.categories.join(' / ')),
-            )
-        );
-    }
+            ),
+        [nameMeasurer, detailMeasurer],
+    );
 
-    return useMemo(() => samples.map(getWidth), [samples]);
+    return useMemo(() => samples.map(getWidth), [samples, getWidth]);
 }
 
 function computeLayout(itemWidths: number[], maxRowWidth: number): number[][] {
