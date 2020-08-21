@@ -1,10 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from 'react';
 
 export default class TextMeasurer {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
 
-    private widthCache: Map<string, number> = new Map();
+    private widthCache: Record<string, number>;
 
     constructor(font: string) {
         this.canvas = document.createElement('canvas');
@@ -13,21 +13,36 @@ export default class TextMeasurer {
     }
 
     setFont(font: string) {
-        this.widthCache.clear();
+        this.widthCache = {};
         this.ctx.font = font;
     }
 
     measureWidth(text: string): number {
-        if (this.widthCache.has(text)) {
-            return this.widthCache.get(text);
+        if (text in this.widthCache) {
+            return this.widthCache[text];
         }
 
         const { width } = this.ctx.measureText(text);
-        this.widthCache.set(text, width);
+        this.widthCache[text] = width;
         return width;
     }
 }
 
+export function useFontReady(font: string): boolean {
+    const [fontReady, setFontReady] = useState(() =>
+        // @ts-ignore
+        document.fonts.check(font),
+    );
+    useEffect(() => {
+        // @ts-ignore
+        document.fonts.load(font).then(() => {
+            setFontReady(true);
+        });
+    }, [font]);
+    return fontReady;
+}
+
 export function useTextMeasurer(font: string): TextMeasurer {
-    return useMemo(() => new TextMeasurer(font), [font]);
+    const fontReady = useFontReady(font);
+    return useMemo(() => new TextMeasurer(font), [font, fontReady]);
 }
