@@ -132,7 +132,7 @@ export default function SampleItem({ sample }: SampleItemProps) {
     const { play, isPlaying, progress, analyserNode } = usePlayer(sample);
 
     return (
-        <div
+        <button
             className={cx('SampleItem', {
                 'SampleItem--isPlaying': isPlaying,
             })}
@@ -153,6 +153,6 @@ export default function SampleItem({ sample }: SampleItemProps) {
                     <VisualizeAnalyserNode analyserNode={analyserNode} />
                 </>
             )}
-        </div>
+        </button>
     );
 }

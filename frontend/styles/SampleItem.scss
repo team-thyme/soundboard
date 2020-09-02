@@ -17,6 +17,7 @@
     margin: $sampleMargin;
     padding: 0 $samplePaddingX;
 
+    border: 0;
     border-radius: 2px;
     background: var(--sample-bg);
     cursor: pointer;
@@ -28,6 +29,10 @@
     }
     &:active {
         background: var(--sample-bg-active);
+    }
+    &:focus {
+        outline: 2px solid black;
+        outline-offset: 2px;
     }
 
     &--isPlaying {
