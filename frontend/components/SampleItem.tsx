@@ -11,7 +11,7 @@ export interface SampleItemProps {
 function usePlayer(
     sample: Sample,
 ): {
-    play(): void;
+    togglePlay(): void;
     isPlaying: boolean;
     progress: number;
     analyserNode: AnalyserNode;
@@ -51,12 +51,14 @@ function usePlayer(
         };
     }, [sample]);
 
-    const play = useCallback(() => {
+    const togglePlay = useCallback(() => {
         player.stopAll();
-        player.play(sample);
+        if (!player.isPlaying(sample.key)) {
+            player.play(sample);
+        }
     }, [sample]);
 
-    return { play, isPlaying, progress, analyserNode };
+    return { togglePlay, isPlaying, progress, analyserNode };
 }
 
 function VisualizeAnalyserNode({
@@ -129,16 +131,18 @@ function VisualizeAnalyserNode({
 }
 
 export default function SampleItem({ sample }: SampleItemProps) {
-    const { play, isPlaying, progress, analyserNode } = usePlayer(sample);
+    const { togglePlay, isPlaying, progress, analyserNode } = usePlayer(sample);
 
     return (
         <button
             className={cx('SampleItem', {
                 'SampleItem--isPlaying': isPlaying,
             })}
-            tabIndex={0}
-            role="button"
-            onClick={play}
+            onClick={(e) => {
+                togglePlay();
+                e.preventDefault();
+                e.stopPropagation();
+            }}
         >
             <span className="SampleItem__name">{sample.name}</span>
             <span className="SampleItem__detail">

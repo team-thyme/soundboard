@@ -17,27 +17,6 @@ export default function App() {
         setQuery,
     ]);
 
-    // Handle keyboard shortcuts
-    useEffect(() => {
-        function handleKeyDown(e) {
-            if (e.target.tagName === 'INPUT') {
-                return;
-            }
-
-            switch (e.code) {
-                case 'Space':
-                    player.stopAll();
-                    e.preventDefault();
-                    break;
-            }
-        }
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    });
-
     return (
         <SearchContext.Provider value={searchContext}>
             <Header />
