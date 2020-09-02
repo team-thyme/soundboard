@@ -1,6 +1,6 @@
 // Theme variables
 :root {
-    --header-bg: #61E294;
+    --header-bg: #61e294;
 
     --sample-list-bg: #fff;
 
@@ -9,7 +9,7 @@
     --sample-bg-hover: #{darken($sample-bg, 5%)};
     --sample-bg-active: #{darken($sample-bg, 10%)};
 
-    $sample-playing-bg: #61E294;
+    $sample-playing-bg: #61e294;
     --sample-playing-bg: #{$sample-playing-bg};
     --sample-playing-bg-hover: #{darken($sample-playing-bg, 5%)};
     --sample-playing-bg-active: #{darken($sample-playing-bg, 10%)};
