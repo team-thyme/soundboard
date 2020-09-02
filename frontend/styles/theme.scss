@@ -13,4 +13,6 @@
     --sample-playing-bg: #{$sample-playing-bg};
     --sample-playing-bg-hover: #{darken($sample-playing-bg, 5%)};
     --sample-playing-bg-active: #{darken($sample-playing-bg, 10%)};
+
+    --sample-progress-bg: #70eea2;
 }
