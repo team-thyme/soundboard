@@ -83,8 +83,17 @@ function VisualizeAnalyserNode({
 
             // Set canvas size
             const { clientWidth, clientHeight } = wrapper;
-            canvas.width = clientWidth;
-            canvas.height = clientHeight;
+            const devicePixelRatio = window.devicePixelRatio || 1;
+
+            const width = clientWidth * devicePixelRatio;
+            const height = clientHeight * devicePixelRatio;
+            const maxWidth = 1000 * devicePixelRatio;
+
+            canvas.width = width;
+            canvas.height = height;
+
+            canvas.style.width = `${clientWidth}px`;
+            canvas.style.height = `${clientHeight}px`;
 
             // Get data from analyser node
             const bufferLength = analyserNode.frequencyBinCount;
@@ -92,19 +101,19 @@ function VisualizeAnalyserNode({
             analyserNode.getByteTimeDomainData(dataArray);
 
             // Canvas is transparent
-            ctx.clearRect(0, 0, clientWidth, clientHeight);
+            ctx.clearRect(0, 0, width, height);
 
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2 * devicePixelRatio;
             ctx.strokeStyle = 'black';
 
             ctx.beginPath();
             // Use constant slice width for all items smaller than 1000px, after that we just scale.
-            const sliceWidth = Math.max(clientWidth, 1000) / bufferLength;
+            const sliceWidth = Math.max(width, maxWidth) / bufferLength;
             let x = 0;
 
             for (let i = 0; i < bufferLength; i++) {
                 const v = dataArray[i] / 128.0;
-                const y = (v * clientHeight) / 2;
+                const y = (v * height) / 2;
 
                 if (i === 0) {
                     ctx.moveTo(x, y);
@@ -115,7 +124,7 @@ function VisualizeAnalyserNode({
                 x += sliceWidth;
             }
 
-            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.lineTo(width, height / 2);
             ctx.stroke();
         }
 
