@@ -4,7 +4,6 @@
         "start": "parcel serve frontend/index.html --out-dir public/build --port=80 --no-cache"
     },
     "devDependencies": {
-        "@types/": "fortawesome/react-fontawesome",
         "@types/react": "^16.9.46",
         "@types/react-dom": "^16.9.8",
         "@types/react-virtualized": "^9.21.10",
