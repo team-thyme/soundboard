@@ -964,12 +964,6 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
-"@types/@fortawesome/react-fontawesome":
-  version "0.1.11"
-  resolved "https://codeload.github.com/fortawesome/react-fontawesome/tar.gz/920c381aa974eb499f8c9d480b7a2b8f4081c695"
-  dependencies:
-    prop-types "^15.7.2"
-
 "@types/prop-types@*":
   version "15.7.3"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
