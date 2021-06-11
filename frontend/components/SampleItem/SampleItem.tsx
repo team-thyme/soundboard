@@ -12,14 +12,14 @@ export interface SampleItemProps {
 function usePlayer(sample: Sample): {
     togglePlay(options: TogglePlayOptions): void;
     isPlaying: boolean;
-    progress: number;
+    progresses: number[];
     analyserNode: AnalyserNode | null;
 } {
-    const [isPlaying, setPlaying] = useState(() =>
+    const [isPlaying, setPlaying] = useState<boolean>(() =>
         player.isPlaying(sample.key),
     );
-    const [progress, setProgress] = useState(() =>
-        player.getProgress(sample.key),
+    const [progresses, setProgresses] = useState<number[]>(() =>
+        player.getProgresses(sample.key),
     );
     const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(() =>
         player.getAnalyserNode(sample.key),
@@ -37,7 +37,7 @@ function usePlayer(sample: Sample): {
         }
 
         function handleProgress() {
-            setProgress(player.getProgress(key));
+            setProgresses(player.getProgresses(key));
         }
 
         const { key } = sample;
@@ -59,11 +59,12 @@ function usePlayer(sample: Sample): {
         [sample],
     );
 
-    return { togglePlay, isPlaying, progress, analyserNode };
+    return { togglePlay, isPlaying, progresses, analyserNode };
 }
 
 export default function SampleItem({ sample }: SampleItemProps) {
-    const { togglePlay, isPlaying, progress, analyserNode } = usePlayer(sample);
+    const { togglePlay, isPlaying, progresses, analyserNode } =
+        usePlayer(sample);
 
     return (
         <button
@@ -85,10 +86,14 @@ export default function SampleItem({ sample }: SampleItemProps) {
             </span>
             {isPlaying && (
                 <>
-                    <div
-                        className="SampleItem__progress"
-                        style={{ transform: `scaleX(${progress})` }}
-                    />
+                    {progresses.map((progress, index) => (
+                        <div
+                            key={index}
+                            className="SampleItem__progress"
+                            style={{ transform: `scaleX(${progress})` }}
+                        />
+                    ))}
+
                     <VisualizeAnalyserNode analyserNode={analyserNode} />
                 </>
             )}

@@ -14,5 +14,5 @@
     --sample-playing-bg-hover: #{darken($sample-playing-bg, 5%)};
     --sample-playing-bg-active: #{darken($sample-playing-bg, 10%)};
 
-    --sample-progress-bg: #70eea2;
+    --sample-progress-bg: #{rgba(lighten($sample-playing-bg, 30%), .4)};
 }

@@ -43,18 +43,18 @@ export default class Player {
     }
 
     /**
-     * Returns the current progress of the sample with the given key, or 0 if
-     * the sample is not currently playing.
-     *
-     * TODO: Return progress of all playing instances of the sample
+     * Returns the current progresses of each playing instance of the sample with
+     * the given key, or [] if the sample is not currently playing.
      */
-    getProgress(key: string): number {
+    getProgresses(key: string): number[] {
         const playingData = this.playing.get(key);
         if (playingData) {
-            const audioElement = playingData.audioElements[0];
-            return audioElement.currentTime / audioElement.duration;
+            return playingData.audioElements.map(
+                (audioElement) =>
+                    audioElement.currentTime / audioElement.duration,
+            );
         }
-        return 0;
+        return [];
     }
 
     /**
