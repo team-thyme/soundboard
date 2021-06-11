@@ -23,8 +23,6 @@ export default class Player {
     private audioContext: AudioContext;
     private gainNode: GainNode;
 
-    // TODO: Include multiple PlayingData's? Since multiple instances of a
-    //  sample can be playing at the same time.
     private playing: Map<string, PlayingData> = new Map();
 
     constructor() {
