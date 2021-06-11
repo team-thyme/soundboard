@@ -33,8 +33,8 @@ export default class Player {
         return 0;
     }
 
-    getAnalyserNode(key: string): AnalyserNode {
-        return this.playing.get(key)?.analyserNode;
+    getAnalyserNode(key: string): AnalyserNode | null {
+        return this.playing.get(key)?.analyserNode ?? null;
     }
 
     stop(key: string) {
@@ -92,7 +92,8 @@ export default class Player {
     }
 
     // Watch progress stuff
-    private watchProgressRequestId: number = null;
+    private watchProgressRequestId: number | null = null;
+
     private watchProgressStart() {
         if (this.watchProgressRequestId === null) {
             this.watchProgressRequestId = window.requestAnimationFrame(
@@ -100,6 +101,7 @@ export default class Player {
             );
         }
     }
+
     private watchProgress = () => {
         if (this.playing.size === 0) {
             this.watchProgressRequestId = null;
@@ -118,12 +120,15 @@ export default class Player {
 
     // Event stuff
     private eventTarget = new EventTarget();
+
     on(eventName: string, key: string, listener: any) {
         this.eventTarget.addEventListener(`${eventName} ${key}`, listener);
     }
+
     off(eventName: string, key: string, listener: any) {
         this.eventTarget.removeEventListener(`${eventName} ${key}`, listener);
     }
+
     private emit(eventName: string, key: string) {
         this.eventTarget.dispatchEvent(new Event(`${eventName} ${key}`));
     }

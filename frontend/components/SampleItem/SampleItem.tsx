@@ -1,6 +1,5 @@
 import cx from 'classnames';
-import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Sample } from '../../api';
 import { player } from '../../helpers/Player';
@@ -14,7 +13,7 @@ function usePlayer(sample: Sample): {
     togglePlay(): void;
     isPlaying: boolean;
     progress: number;
-    analyserNode: AnalyserNode;
+    analyserNode: AnalyserNode | null;
 } {
     const [isPlaying, setPlaying] = useState(() =>
         player.isPlaying(sample.key),
@@ -22,7 +21,7 @@ function usePlayer(sample: Sample): {
     const [progress, setProgress] = useState(() =>
         player.getProgress(sample.key),
     );
-    const [analyserNode, setAnalyserNode] = useState(() =>
+    const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(() =>
         player.getAnalyserNode(sample.key),
     );
 

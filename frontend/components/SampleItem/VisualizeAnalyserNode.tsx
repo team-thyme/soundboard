@@ -1,8 +1,7 @@
-import * as React from 'react';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface Props {
-    analyserNode: AnalyserNode;
+    analyserNode: AnalyserNode | null;
 }
 
 export default function VisualizeAnalyserNode({
@@ -15,13 +14,13 @@ export default function VisualizeAnalyserNode({
         function step() {
             requestId = window.requestAnimationFrame(step);
 
-            if (!analyserNode) {
+            if (!analyserNode || !wrapperRef.current || !canvasRef.current) {
                 return;
             }
 
             const wrapper = wrapperRef.current;
             const canvas = canvasRef.current;
-            const ctx = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
             // Set canvas size
             const { clientWidth, clientHeight } = wrapper;

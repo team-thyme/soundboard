@@ -22,7 +22,7 @@ export async function fetchSamples(): Promise<Sample[]> {
     }
 
     const data = await res.json();
-    return data.samples.map((sampleData) => ({
+    return data.samples.map((sampleData: any) => ({
         ...sampleData,
         mtime: sampleData.mtime * 1000,
         key: sampleData.path,

@@ -1,25 +1,30 @@
-import * as React from 'react';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { List, WindowScroller } from 'react-virtualized';
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState
+} from "react";
+import { List, WindowScroller } from "react-virtualized";
 
-import { fetchSamples, Sample } from '../api';
-import { useTextMeasurer } from '../helpers/TextMeasurer';
+import { fetchSamples, Sample } from "../api";
+import { useTextMeasurer } from "../helpers/TextMeasurer";
 import {
     detailFont,
     nameFont,
     sampleHeight,
     sampleListPadding,
     sampleMargin,
-    samplePaddingX,
-} from '../styles/sync-variables';
-import { SearchContext } from './App';
-import SampleItem from './SampleItem/SampleItem';
+    samplePaddingX
+} from "../styles/sync-variables";
+import { SearchContext } from "./App";
+import SampleItem from "./SampleItem/SampleItem";
 
 /**
  * React hook. Fetches samples from API, if needed.
  */
 function useSamples(): Sample[] {
-    const [samples, setSamples] = useState([]);
+    const [samples, setSamples] = useState<Sample[]>([]);
 
     useEffect(() => {
         fetchSamples().then((samples) => {
@@ -108,15 +113,15 @@ function useSampleWidths(samples: Sample[]): number[] {
 function computeLayout(itemWidths: number[], maxRowWidth: number): number[][] {
     // TODO: Better layout computation. Perhaps do local search (with badness like LaTeX) after the current greedy approach.
 
-    let rows = [[]];
+    let rows: number[][] = [[]];
     let rowWidth = 0;
-    for (let i = 0; i < itemWidths.length; ++i) {
-        if (rowWidth === 0 || rowWidth + itemWidths[i] < maxRowWidth) {
-            rowWidth += itemWidths[i];
-            rows[rows.length - 1].push(i);
+    for (let itemIndex = 0; itemIndex < itemWidths.length; ++itemIndex) {
+        if (rowWidth === 0 || rowWidth + itemWidths[itemIndex] < maxRowWidth) {
+            rowWidth += itemWidths[itemIndex];
+            rows[rows.length - 1].push(itemIndex);
         } else {
-            rowWidth = itemWidths[i];
-            rows.push([i]);
+            rowWidth = itemWidths[itemIndex];
+            rows.push([itemIndex]);
         }
     }
     return rows;

@@ -1,14 +1,14 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default class TextMeasurer {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
 
-    private widthCache: Record<string, number>;
+    private widthCache: Record<string, number> = {};
 
     constructor(font: string) {
         this.canvas = document.createElement('canvas');
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.setFont(font);
     }
 

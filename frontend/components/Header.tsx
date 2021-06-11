@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import * as React from 'react';
+import React, { useContext } from 'react';
+
 import { SearchContext } from './App';
 import IconButton from './IconButton';
 

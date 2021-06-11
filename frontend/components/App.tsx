@@ -1,21 +1,25 @@
-import * as React from 'react';
-import { useMemo, useState, Context, useEffect } from 'react';
+import React, { Context, useMemo, useState } from 'react';
+
 import Header from './Header';
 import SampleList from './SampleList';
-import { player } from '../helpers/Player';
 
 export const SearchContext: Context<{
     query: string;
     setQuery(query: string): void;
-}> = React.createContext(null);
+}> = React.createContext(
+    // This will cause errors if no SearchContext.Provider is used, but that
+    // should never happen. And I would prefer a hard error over it silently not
+    // working any day.
+    undefined as any,
+);
 
 export default function App() {
     // Search context
     const [query, setQuery] = useState('');
-    const searchContext = useMemo(() => ({ query, setQuery }), [
-        query,
-        setQuery,
-    ]);
+    const searchContext = useMemo(
+        () => ({ query, setQuery }),
+        [query, setQuery],
+    );
 
     return (
         <SearchContext.Provider value={searchContext}>

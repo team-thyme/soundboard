@@ -1,11 +1,8 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import App from "./components/App";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-// Initialize FontAwesome icons
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-library.add(faTimes);
+import App from './components/App';
+import './init-fontawesome';
 
 const container = document.getElementById('root');
-ReactDOM.render(<App/>, container);
+ReactDOM.render(<App />, container);
