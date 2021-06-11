@@ -2,7 +2,7 @@ import cx from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Sample } from '../../api';
-import { player } from '../../helpers/Player';
+import { player, PlayOptions } from '../../helpers/Player';
 import VisualizeAnalyserNode from './VisualizeAnalyserNode';
 
 export interface SampleItemProps {
@@ -10,7 +10,7 @@ export interface SampleItemProps {
 }
 
 function usePlayer(sample: Sample): {
-    togglePlay(): void;
+    togglePlay(options: PlayOptions): void;
     isPlaying: boolean;
     progress: number;
     analyserNode: AnalyserNode | null;
@@ -52,12 +52,12 @@ function usePlayer(sample: Sample): {
         };
     }, [sample]);
 
-    const togglePlay = useCallback(() => {
-        player.stopAll();
-        if (!player.isPlaying(sample.key)) {
-            player.play(sample);
-        }
-    }, [sample]);
+    const togglePlay = useCallback(
+        (options) => {
+            player.togglePlay(sample, options);
+        },
+        [sample],
+    );
 
     return { togglePlay, isPlaying, progress, analyserNode };
 }
@@ -71,7 +71,10 @@ export default function SampleItem({ sample }: SampleItemProps) {
                 'SampleItem--isPlaying': isPlaying,
             })}
             onClick={(e) => {
-                togglePlay();
+                togglePlay({
+                    spam: e.shiftKey,
+                    loop: e.ctrlKey,
+                });
                 e.preventDefault();
                 e.stopPropagation();
             }}

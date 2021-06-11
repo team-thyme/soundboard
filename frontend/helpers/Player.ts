@@ -1,14 +1,30 @@
 import { Sample } from '../api';
 
 interface PlayingData {
-    audio: HTMLAudioElement;
+    audioElements: HTMLAudioElement[];
     analyserNode: AnalyserNode;
+}
+
+/**
+ * Stops (pauses) all audio elements related to the given PlayingData.
+ */
+function stop(playingData: PlayingData) {
+    playingData.audioElements.forEach((audioElement) => {
+        audioElement.pause();
+    });
+}
+
+export interface PlayOptions {
+    spam?: boolean;
+    loop?: boolean;
 }
 
 export default class Player {
     private audioContext: AudioContext;
     private gainNode: GainNode;
 
+    // TODO: Include multiple PlayingData's? Since multiple instances of a
+    //  sample can be playing at the same time.
     private playing: Map<string, PlayingData> = new Map();
 
     constructor() {
@@ -28,7 +44,9 @@ export default class Player {
     getProgress(key: string): number {
         const playingData = this.playing.get(key);
         if (playingData) {
-            return playingData.audio.currentTime / playingData.audio.duration;
+            // TODO: Return progress from all playing instances
+            const audioElement = playingData.audioElements[0];
+            return audioElement.currentTime / audioElement.duration;
         }
         return 0;
     }
@@ -40,19 +58,25 @@ export default class Player {
     stop(key: string) {
         const playingData = this.playing.get(key);
         if (playingData) {
-            playingData.audio.pause();
+            stop(playingData);
         }
     }
 
     stopAll() {
-        this.playing.forEach((playingData) => {
-            playingData.audio.pause();
-        });
+        this.playing.forEach(stop);
     }
 
-    async play({ key, url }: Sample) {
-        if (this.isPlaying(key)) {
-            this.stop(key);
+    async togglePlay(
+        { key, url }: Sample,
+        { spam = false, loop = false }: PlayOptions = {},
+    ) {
+        // No need to stop anything when spamming
+        if (!spam) {
+            if (this.isPlaying(key)) {
+                player.stop(key);
+                return;
+            }
+            player.stopAll();
         }
 
         // Resume context if it is suspended due to a lack of user input
@@ -60,19 +84,38 @@ export default class Player {
         // Android...
         this.audioContext.resume();
 
-        const analyserNode = this.audioContext.createAnalyser();
-        analyserNode.fftSize = 2048;
-        analyserNode.connect(this.gainNode);
+        // Use existing analyser node or create a new one if this sample isn't
+        // already playing.
+        let analyserNode = this.getAnalyserNode(key);
+        if (analyserNode === null) {
+            analyserNode = this.audioContext.createAnalyser();
+            analyserNode.fftSize = 2048;
+            analyserNode.connect(this.gainNode);
+        }
 
         const audio = new Audio(url);
         audio.crossOrigin = 'anonymous';
+        audio.loop = loop;
         const source = this.audioContext.createMediaElementSource(audio);
         source.connect(analyserNode);
 
         const handleStop = () => {
-            if (this.isPlaying(key)) {
-                audio.removeAttribute('src');
-                audio.load();
+            const playingData = this.playing.get(key);
+            if (!playingData) {
+                return;
+            }
+
+            // Unload the audio file
+            audio.removeAttribute('src');
+            audio.load();
+
+            // Remove this audio element from the list
+            playingData.audioElements = playingData.audioElements.filter(
+                (other) => other !== audio,
+            );
+
+            // Sample only fully ends once there are no more playing instances
+            if (playingData.audioElements.length === 0) {
                 this.playing.delete(key);
                 this.emit('ended', key);
             }
@@ -83,10 +126,14 @@ export default class Player {
 
         await audio.play();
 
-        this.playing.set(key, {
-            audio,
+        // "Emplace" playingData with new audio element appended to the list
+        const playingData = this.playing.get(key) ?? {
+            audioElements: [],
             analyserNode,
-        });
+        };
+        playingData.audioElements.push(audio);
+        this.playing.set(key, playingData);
+
         this.emit('play', key);
         this.watchProgressStart();
     }
