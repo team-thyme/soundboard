@@ -4,6 +4,33 @@ interface Props {
     analyserNode: AnalyserNode | null;
 }
 
+/**
+ * Get the styles for rendering the sound visualization from CSS custom
+ * properties set on the `wrapper` element.
+ *
+ * Since the visualization is updated every frame we visually update effectively
+ * immediately when the property gets updated.
+ */
+function getVisualizeStyle(
+    wrapper: HTMLDivElement,
+    devicePixelRatio: number,
+): { lineWidth: number; strokeStyle: string } {
+    const computedStyle = getComputedStyle(wrapper);
+
+    const lineWidth = parseFloat(
+        computedStyle.getPropertyValue('--sample-visualize-line-width'),
+    );
+
+    const strokeStyle = computedStyle.getPropertyValue(
+        '--sample-visualize-color',
+    );
+
+    return {
+        lineWidth: lineWidth * devicePixelRatio,
+        strokeStyle,
+    };
+}
+
 export default function VisualizeAnalyserNode({
     analyserNode,
 }: Props): JSX.Element {
@@ -44,8 +71,13 @@ export default function VisualizeAnalyserNode({
             // Canvas is transparent
             ctx.clearRect(0, 0, width, height);
 
-            ctx.lineWidth = 2 * devicePixelRatio;
-            ctx.strokeStyle = 'black';
+            // Get styles from CSS custom properties
+            const { lineWidth, strokeStyle } = getVisualizeStyle(
+                wrapper,
+                devicePixelRatio,
+            );
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = strokeStyle;
 
             ctx.beginPath();
             // Use constant slice width for all items smaller than 1000px, after that we just scale.

@@ -40,4 +40,7 @@
     --sample-playing-color: var(--sample-color);
 
     --sample-progress-bg: #{rgba(lighten($sample-playing-bg, 30%), .4)};
+
+    --sample-visualize-line-width: 2px; // Only supports pixels!
+    --sample-visualize-color: #{$text-color};
 }
