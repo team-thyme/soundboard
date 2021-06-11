@@ -14,11 +14,15 @@ html {
 
     font: 16px $font-stack;
 }
+
 body {
     margin: 0;
     height: 100%;
 }
+
 #root {
+    display: flex;
+    flex-direction: column;
     height: 100%;
 }
 

@@ -1,24 +1,25 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, {
     useCallback,
     useContext,
     useEffect,
     useMemo,
-    useState
-} from "react";
-import { List, WindowScroller } from "react-virtualized";
+    useState,
+} from 'react';
+import { List, WindowScroller } from 'react-virtualized';
 
-import { fetchSamples, Sample } from "../api";
-import { useTextMeasurer } from "../helpers/TextMeasurer";
+import { fetchSamples, Sample } from '../api';
+import { useTextMeasurer } from '../helpers/TextMeasurer';
 import {
     detailFont,
     nameFont,
     sampleHeight,
     sampleListPadding,
     sampleMargin,
-    samplePaddingX
-} from "../styles/sync-variables";
-import { SearchContext } from "./App";
-import SampleItem from "./SampleItem/SampleItem";
+    samplePaddingX,
+} from '../styles/sync-variables';
+import { SearchContext } from './App';
+import SampleItem from './SampleItem/SampleItem';
 
 /**
  * React hook. Fetches samples from API, if needed.
@@ -111,8 +112,11 @@ function useSampleWidths(samples: Sample[]): number[] {
 }
 
 function computeLayout(itemWidths: number[], maxRowWidth: number): number[][] {
-    // TODO: Better layout computation. Perhaps do local search (with badness like LaTeX) after the current greedy approach.
+    if (itemWidths.length === 0) {
+        return [];
+    }
 
+    // TODO: Better layout computation. Perhaps do local search (with badness like LaTeX) after the current greedy approach.
     let rows: number[][] = [[]];
     let rowWidth = 0;
     for (let itemIndex = 0; itemIndex < itemWidths.length; ++itemIndex) {
@@ -189,6 +193,18 @@ export default function SampleList() {
                             {rowIndex === layout.length - 1 && (
                                 <div className="SampleList__pusher" />
                             )}
+                        </div>
+                    )}
+                    noRowsRenderer={() => (
+                        <div className="SampleList__noResults">
+                            <FontAwesomeIcon
+                                className="SampleList__noResultsIcon"
+                                icon="search"
+                                size="2x"
+                            />
+                            <span className="SampleList__noResultsLabel">
+                                How about searching for samples that do exist?
+                            </span>
                         </div>
                     )}
                 />

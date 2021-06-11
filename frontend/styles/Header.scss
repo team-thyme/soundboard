@@ -41,6 +41,6 @@ $header-height: 80px;
     }
 
     &__pusher {
-        height: $header-height;
+        flex: 0 0 $header-height;
     }
 }
