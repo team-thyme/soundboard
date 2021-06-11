@@ -2,7 +2,7 @@ import cx from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Sample } from '../../api';
-import { player, PlayOptions } from '../../helpers/Player';
+import { player, TogglePlayOptions } from '../../helpers/Player';
 import VisualizeAnalyserNode from './VisualizeAnalyserNode';
 
 export interface SampleItemProps {
@@ -10,7 +10,7 @@ export interface SampleItemProps {
 }
 
 function usePlayer(sample: Sample): {
-    togglePlay(options: PlayOptions): void;
+    togglePlay(options: TogglePlayOptions): void;
     isPlaying: boolean;
     progress: number;
     analyserNode: AnalyserNode | null;

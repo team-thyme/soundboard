@@ -14,7 +14,7 @@ function stop(playingData: PlayingData) {
     });
 }
 
-export interface PlayOptions {
+export interface TogglePlayOptions {
     spam?: boolean;
     loop?: boolean;
 }
@@ -66,7 +66,7 @@ export default class Player {
 
     async togglePlay(
         { key, url }: Sample,
-        { spam = false, loop = false }: PlayOptions = {},
+        { spam = false, loop = false }: TogglePlayOptions = {},
     ) {
         // No need to stop anything when spamming
         if (!spam) {
