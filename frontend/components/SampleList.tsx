@@ -13,7 +13,7 @@ import {
     samplePaddingX,
 } from '../styles/sync-variables';
 import { SearchContext } from './App';
-import SampleItem from './SampleItem';
+import SampleItem from './SampleItem/SampleItem';
 
 /**
  * React hook. Fetches samples from API, if needed.
