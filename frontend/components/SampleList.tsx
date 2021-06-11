@@ -166,6 +166,7 @@ export default function SampleList() {
                             key={rowIndex}
                             className="SampleList__row"
                             style={style}
+                            role="row"
                         >
                             {layout[rowIndex].map((index) => {
                                 const sample = samples[index];
