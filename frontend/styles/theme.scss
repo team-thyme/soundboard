@@ -2,24 +2,42 @@
 :root {
     $text-color: #000;
 
+    // Header
     --header-bg: #61e294;
+    --header-color: #{$text-color};
 
+    // SearchBar
+    --search-bar-bg: #fff;
+    --search-bar-color: #{$text-color};
+    --search-bar-placeholder-color: #{rgba($text-color, 0.5)};
+
+    // IconButton
+    --icon-button-search-color: #{$text-color};
+    --icon-button-search-bg-hover: #{rgba($text-color, 0.1)};
+    --icon-button-search-bg-active: #{rgba($text-color, 0.2)};
+
+    // SampleList
     $sample-list-bg: #fff;
     --sample-list-bg: #{$sample-list-bg};
 
+    $no-results-color: mix($sample-list-bg, $text-color, 50%);
+    --no-results-color: #{$no-results-color};
+    --no-results-icon-color: #{lighten($no-results-color, 10%)};
+
+    // SampleItem
     $sample-bg: #f3f3f3;
     --sample-bg: #{$sample-bg};
     --sample-bg-hover: #{darken($sample-bg, 5%)};
     --sample-bg-active: #{darken($sample-bg, 10%)};
+
+    --sample-color: #{$text-color};
 
     $sample-playing-bg: #61e294;
     --sample-playing-bg: #{$sample-playing-bg};
     --sample-playing-bg-hover: #{darken($sample-playing-bg, 5%)};
     --sample-playing-bg-active: #{darken($sample-playing-bg, 10%)};
 
-    --sample-progress-bg: #{rgba(lighten($sample-playing-bg, 30%), .4)};
+    --sample-playing-color: var(--sample-color);
 
-    $no-results-color: mix($sample-list-bg, $text-color, 50%);
-    --no-results-color: #{$no-results-color};
-    --no-results-icon-color: #{lighten($no-results-color, 10%)};
+    --sample-progress-bg: #{rgba(lighten($sample-playing-bg, 30%), .4)};
 }

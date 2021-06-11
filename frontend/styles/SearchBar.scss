@@ -12,6 +12,13 @@
 
         font: inherit;
         font-weight: 500;
+
+        background: var(--search-bar-bg);
+        color: var(--search-bar-color);
+
+        &::placeholder {
+            color: var(--search-bar-placeholder-color);
+        }
     }
 
     &__clear {

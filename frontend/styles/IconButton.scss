@@ -14,14 +14,14 @@
     background-color: transparent;
 
     &--search {
-        color: black;
+        color: var(--icon-button-search-color);
 
         &:hover,
         &:focus {
-            background-color: rgba(black, 0.1);
+            background-color: var(--icon-button-search-bg-hover);
         }
         &:active {
-            background-color: rgba(black, 0.2);
+            background-color: var(--icon-button-search-bg-active);
         }
     }
 
