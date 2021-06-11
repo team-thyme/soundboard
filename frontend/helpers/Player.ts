@@ -35,24 +35,40 @@ export default class Player {
         this.gainNode.gain.value = 0.1;
     }
 
+    /**
+     * Returns whether the sample with the given key is currently playing.
+     */
     isPlaying(key: string): boolean {
         return this.playing.has(key);
     }
 
+    /**
+     * Returns the current progress of the sample with the given key, or 0 if
+     * the sample is not currently playing.
+     *
+     * TODO: Return progress of all playing instances of the sample
+     */
     getProgress(key: string): number {
         const playingData = this.playing.get(key);
         if (playingData) {
-            // TODO: Return progress from all playing instances
             const audioElement = playingData.audioElements[0];
             return audioElement.currentTime / audioElement.duration;
         }
         return 0;
     }
 
+    /**
+     * Returns the AnalyserNode for the sample with the given key, or null if
+     * the sample is not currently playing. All playing instances of the sample
+     * feed into the same AnalyserNode.
+     */
     getAnalyserNode(key: string): AnalyserNode | null {
         return this.playing.get(key)?.analyserNode ?? null;
     }
 
+    /**
+     * Stops all playing instances of the sample with the given key.
+     */
     stop(key: string) {
         const playingData = this.playing.get(key);
         if (playingData) {
@@ -60,10 +76,25 @@ export default class Player {
         }
     }
 
+    /**
+     * Stops all playing instances of all playing samples.
+     */
     stopAll() {
         this.playing.forEach(stop);
     }
 
+    /**
+     * Toggles playing the given sample.
+     *
+     * The interaction of the `spam` option and the current playing state of the
+     * sample is as follows:
+     * - !spam && !playing => stop all samples, start playing the given sample
+     * - !spam && playing => stop playing the given sample
+     * - spam => start playing the given sample
+     *
+     * The `loop` option will simply set the new playing instance (be it spammed
+     * or not) to loop indefinitely.
+     */
     async togglePlay(
         { key, url }: Sample,
         { spam = false, loop = false }: TogglePlayOptions = {},
