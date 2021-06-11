@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "start": "parcel serve frontend/index.html --out-dir public/build --port=80 --no-cache",
-        "start:production": "cross-env NODE_ENV=production yarn start --no-hmr"
+        "start:production": "cross-env NODE_ENV=production yarn start --no-hmr",
+        "test:types": "tsc"
     },
     "devDependencies": {
         "@tsconfig/recommended": "^1.0.1",
