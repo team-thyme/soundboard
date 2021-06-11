@@ -44,39 +44,42 @@ function useSamples(): Sample[] {
  * React hook. Filters a list of samples using the given query.
  */
 function useFilteredSamples(samples: Sample[], query: string): Sample[] {
-    const indexedSamples = useMemo(
-        () =>
-            samples.map((sample) => {
-                let string = sample.name.replace(/[^\w\s|]/g, '');
-                sample.categories.forEach((category) => {
-                    string += ' ' + category.replace(/[^\w\s|]/g, '');
-                });
-                return string;
-            }),
-        [samples],
-    );
+    // Only word- and whitespace-chars are allowed in the indices and query
+    const ALLOWED_CHARS_REGEX = /[^\w\s]/g;
+
+    // Prepare the normalized sample index. The sample don't generally change,
+    // so most of the time we only have to do this once.
+    //
+    // Example:
+    // { name: 'tof', categories: ['voice', 'skik'] } => 'tof voice skik'
+    const indexedSamples = useMemo(() => {
+        return samples.map((sample) => {
+            let string = sample.name.replace(ALLOWED_CHARS_REGEX, '');
+            sample.categories.forEach((category) => {
+                string += ' ' + category.replace(ALLOWED_CHARS_REGEX, '');
+            });
+            return string.toLowerCase();
+        });
+    }, [samples]);
 
     return useMemo(() => {
-        if (query.trim() === '') {
+        // Normalize the query to match the prepared sample indices
+        const normalizedQuery = query
+            .replace(ALLOWED_CHARS_REGEX, '')
+            .toLowerCase()
+            .trim();
+
+        // Early return for empty queries
+        if (normalizedQuery === '') {
             return samples;
         }
 
-        // Prepare regex
-        const terms = query
-            // Strip non-alphanumeric characters (will be done in target as well)
-            .replace(/[^\w\s|]/g, '')
-            // Enable OR-searching when whitespace is around the pipe character "|"
-            .replace(/\s+\|\s+/g, '|')
-            // Split by any combination of whitespace characters
-            .split(/[\s+&]+/g);
-        const regex = new RegExp(
-            `.*${terms.map((term) => `(?=.*${term}.*)`).join('')}.*`,
-            'i',
-        );
+        // Split the query into an array of terms
+        const terms = normalizedQuery.split(/[\s+&]+/g);
 
-        // TODO: Searching samples is slow. It takes up to ~40ms to filter a list of 1000 samples.
         return samples.filter((sample, index) => {
-            return regex.test(indexedSamples[index]);
+            // Every term must be included in the sample text
+            return terms.every((term) => indexedSamples[index].includes(term));
         });
     }, [samples, indexedSamples, query]);
 }
@@ -129,6 +132,7 @@ function useBodyWidth(): number {
         function handleResize() {
             setWidth(document.body.clientWidth);
         }
+
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
