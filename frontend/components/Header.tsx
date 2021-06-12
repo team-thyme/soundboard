@@ -9,8 +9,9 @@ function SearchBar() {
     return (
         <div className="SearchBar">
             <input
+                name="query"
                 className="SearchBar__input"
-                type="text"
+                type="search"
                 value={query}
                 placeholder="Cook, Search, Delicious!"
                 onChange={(e) => setQuery(e.target.value)}
