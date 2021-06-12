@@ -23,6 +23,7 @@ $header-height: 80px;
     color: var(--header-color);
 
     &__title {
+        margin: 0;
         grid-area: title;
 
         font-family: $title-font-family;

@@ -22,6 +22,7 @@ function SearchBar() {
                         onClick={() => setQuery('')}
                         kind="search"
                         icon="times"
+                        title="Clear input"
                     />
                 </div>
             )}
@@ -32,13 +33,29 @@ function SearchBar() {
 export default function Header() {
     return (
         <>
-            <div className="Header">
-                <div className="Header__title">Soundboard</div>
+            <header className="Header">
+                <h1 className="Header__title">Soundboard</h1>
                 <div className="Header__search">
                     <SearchBar />
                 </div>
-                <div className="Header__buttons">Buttons</div>
-            </div>
+                <div className="Header__buttons">
+                    <IconButton
+                        icon="palette"
+                        kind="header"
+                        title="Change theme"
+                    />
+                    <IconButton
+                        icon="volume-up"
+                        kind="header"
+                        title="Change volume"
+                    />
+                    <IconButton
+                        icon="plus-square"
+                        kind="header"
+                        title="Request a sample"
+                    />
+                </div>
+            </header>
             <div className="Header__pusher" />
         </>
     );

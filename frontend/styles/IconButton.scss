@@ -13,6 +13,8 @@
     color: inherit;
     background-color: transparent;
 
+    cursor: pointer;
+
     &--search {
         color: var(--icon-button-search-color);
 
@@ -26,6 +28,20 @@
     }
 
     &--header {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
 
+        color: var(--icon-button-header-color);
+
+        &:hover,
+        &:focus {
+            background-color: var(--icon-button-header-bg-hover);
+            color: var(--icon-button-header-color-hover);
+        }
+        &:active {
+            background-color: var(--icon-button-header-bg-active);
+            color: var(--icon-button-header-color-active);
+        }
     }
 }

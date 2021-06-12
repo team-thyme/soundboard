@@ -1,9 +1,11 @@
 // Theme variables
 :root {
     $text-color: #000;
+    $accent-color: #61e294;
 
     // Header
-    --header-bg: #61e294;
+    $header-bg: $accent-color;
+    --header-bg: #{$header-bg};
     --header-color: #{$text-color};
 
     // SearchBar
@@ -15,6 +17,12 @@
     --icon-button-search-color: #{$text-color};
     --icon-button-search-bg-hover: #{rgba($text-color, 0.1)};
     --icon-button-search-bg-active: #{rgba($text-color, 0.2)};
+
+    --icon-button-header-color: #{mix($header-bg, $text-color, 20%)};
+    --icon-button-header-bg-hover: #{rgba($text-color, 0.1)};
+    --icon-button-header-color-hover: #{mix($header-bg, $text-color, 10%)};
+    --icon-button-header-bg-active: #{rgba($text-color, 0.15)};
+    --icon-button-header-color-active: #{mix($header-bg, $text-color, 0%)};
 
     // SampleList
     $sample-list-bg: #fff;
@@ -32,7 +40,7 @@
 
     --sample-color: #{$text-color};
 
-    $sample-playing-bg: #61e294;
+    $sample-playing-bg: $accent-color;
     --sample-playing-bg: #{$sample-playing-bg};
     --sample-playing-bg-hover: #{darken($sample-playing-bg, 5%)};
     --sample-playing-bg-active: #{darken($sample-playing-bg, 10%)};
