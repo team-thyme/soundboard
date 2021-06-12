@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Sample } from '../../api';
 import { player, TogglePlayOptions } from '../../helpers/Player';
@@ -67,33 +67,36 @@ export default function SampleItem({ sample }: SampleItemProps) {
     const { togglePlay, isPlaying, progresses, analyserNode } =
         usePlayer(sample);
 
-    const menuItems = [
-        {
-            title: 'Play / Pause',
-            shortcut: 'Click',
-            onClick: () => {
-                togglePlay();
+    const contextMenuItems = useMemo(
+        () => [
+            {
+                title: isPlaying ? 'Stop' : 'Play',
+                shortcut: 'Click',
+                onClick: () => {
+                    togglePlay();
+                },
             },
-        },
-        {
-            title: 'Loop',
-            shortcut: 'Ctrl + Click',
-            onClick: () => {
-                togglePlay({ loop: true });
+            {
+                title: 'Loop',
+                shortcut: 'Ctrl + Click',
+                onClick: () => {
+                    togglePlay({ loop: true });
+                },
             },
-        },
-        {
-            title: 'Spam',
-            shortcut: 'Shift + Click',
-            onClick: () => {
-                togglePlay({ spam: true });
+            {
+                title: 'Spam',
+                shortcut: 'Shift + Click',
+                onClick: () => {
+                    togglePlay({ spam: true });
+                },
             },
-        },
-        { title: 'Copy URL', disabled: true },
-    ];
+            { title: 'Copy URL', disabled: true },
+        ],
+        [togglePlay, isPlaying],
+    );
 
     return (
-        <ContextMenu items={menuItems}>
+        <ContextMenu items={contextMenuItems}>
             {(props) => (
                 <button
                     className={cx('SampleItem', {
