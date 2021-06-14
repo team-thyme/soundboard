@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Sample } from '../../api';
 import { baseUrl } from '../../config';
+import download from '../../helpers/download';
 import { player, TogglePlayOptions } from '../../helpers/Player';
 import ContextMenu from '../ContextMenu';
 import VisualizeAnalyserNode from './VisualizeAnalyserNode';
@@ -101,6 +102,16 @@ export default function SampleItem({ sample }: SampleItemProps) {
                         const url = baseUrl + sample.id;
                         await navigator.clipboard.writeText(url);
                     }
+                },
+            },
+            {
+                title: 'Download',
+                onClick: () => {
+                    const fileName = decodeURIComponent(sample.path).replace(
+                        /\//g,
+                        '_',
+                    );
+                    download(sample.url, fileName);
                 },
             },
         ],
