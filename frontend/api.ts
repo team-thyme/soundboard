@@ -1,3 +1,5 @@
+import { apiBaseUrl } from './config';
+
 export interface Sample {
     // from server
     path: string;
@@ -12,8 +14,7 @@ export interface Sample {
 }
 
 export async function fetchSamples(): Promise<Sample[]> {
-    // TODO: Get URL from config
-    const url = 'https://viller.men/soundboard/api/samples';
+    const url = `${apiBaseUrl}/samples`;
 
     // TODO: Remove 'force-cache'
     const res = await fetch(url, { cache: 'force-cache' });
