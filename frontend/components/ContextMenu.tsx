@@ -3,6 +3,7 @@ import React, {
     MouseEventHandler,
     ReactNode,
     useCallback,
+    useEffect,
     useMemo,
     useState,
 } from 'react';
@@ -27,10 +28,26 @@ export default function ContextMenu(props: ContextMenuProps) {
         [setOpen],
     );
 
+    // Close the context menu when the user presses the Escape key
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        function handleKeyDown(e: KeyboardEvent) {
+            if (e.key === 'Escape') {
+                setOpen(false);
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [open]);
+
+    // Popper
     const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
         null,
     );
-
     const virtualReference = useMemo(
         () => ({
             getBoundingClientRect() {
@@ -46,7 +63,6 @@ export default function ContextMenu(props: ContextMenuProps) {
         }),
         [position],
     );
-
     const { styles, attributes } = usePopper(virtualReference, popperElement, {
         placement: 'bottom-start',
         strategy: 'fixed',
