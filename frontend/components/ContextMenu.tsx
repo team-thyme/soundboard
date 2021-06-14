@@ -100,6 +100,7 @@ function Menu({ items, closeMenu }: MenuProps) {
                     <li key={index} className="ContextMenu__item">
                         <Item
                             {...item}
+                            autoFocus={index === 0}
                             onClick={(e) => {
                                 item.onClick?.(e);
                                 closeMenu();
