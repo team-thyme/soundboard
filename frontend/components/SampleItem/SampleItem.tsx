@@ -2,6 +2,7 @@ import cx from 'classnames';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Sample } from '../../api';
+import { baseUrl } from '../../config';
 import { player, TogglePlayOptions } from '../../helpers/Player';
 import ContextMenu from '../ContextMenu';
 import VisualizeAnalyserNode from './VisualizeAnalyserNode';
@@ -90,9 +91,20 @@ export default function SampleItem({ sample }: SampleItemProps) {
                     togglePlay({ spam: true });
                 },
             },
-            { title: 'Copy URL', disabled: true },
+            {
+                title: 'Copy URL',
+                onClick: async () => {
+                    const { state } = await navigator.permissions.query({
+                        name: 'clipboard-write',
+                    });
+                    if (state === 'granted' || state === 'prompt') {
+                        const url = baseUrl + sample.id;
+                        await navigator.clipboard.writeText(url);
+                    }
+                },
+            },
         ],
-        [togglePlay, isPlaying],
+        [togglePlay, isPlaying, sample],
     );
 
     return (
