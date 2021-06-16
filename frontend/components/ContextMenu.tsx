@@ -89,7 +89,6 @@ export default function ContextMenu(props: ContextMenuProps) {
                                 }}
                             />
                         </div>
-                        ,
                     </div>,
                     document.getElementById('root') as HTMLDivElement,
                 )}
