@@ -1,19 +1,29 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { ButtonHTMLAttributes } from 'react';
+import cx from 'classnames';
+import React from 'react';
 
-interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface OwnProps {
     icon: IconProp;
     kind: 'search' | 'header';
+    innerRef?: React.ForwardedRef<HTMLButtonElement>;
 }
+
+export type IconButtonProps = OwnProps &
+    React.ComponentPropsWithoutRef<'button'>;
 
 export default function IconButton({
     icon,
     kind,
+    innerRef,
     ...otherProps
 }: IconButtonProps) {
     return (
-        <button className={`IconButton IconButton--${kind}`} {...otherProps}>
+        <button
+            ref={innerRef}
+            className={cx('IconButton', `IconButton--${kind}`)}
+            {...otherProps}
+        >
             <FontAwesomeIcon icon={icon} />
         </button>
     );

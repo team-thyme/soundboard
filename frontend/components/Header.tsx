@@ -1,7 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
+import { usePopper } from 'react-popper';
 
 import { SearchContext } from './App';
-import IconButton from './IconButton';
+import IconButton, { IconButtonProps } from './IconButton';
+import Modal, { ModalLayer } from './Modal';
 
 function SearchBar() {
     const { query, setQuery } = useContext(SearchContext);
@@ -30,6 +33,86 @@ function SearchBar() {
     );
 }
 
+interface ModalIconButtonProps extends Omit<IconButtonProps, 'innerRef'> {
+    children: React.ReactNode;
+}
+
+function ModalIconButton({
+    children,
+    ...iconButtonProps
+}: ModalIconButtonProps) {
+    const [isOpen, setOpen] = useState(false);
+
+    // Close the modal when the user presses the Escape key
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        function handleKeyDown(e: KeyboardEvent) {
+            if (e.key === 'Escape') {
+                setOpen(false);
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen]);
+
+    const [referenceElement, setReferenceElement] =
+        useState<HTMLButtonElement | null>(null);
+    const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
+        null,
+    );
+    const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(
+        null,
+    );
+
+    const { styles, attributes } = usePopper(referenceElement, popperElement, {
+        placement: 'bottom',
+        modifiers: [
+            { name: 'arrow', options: { element: arrowElement } },
+            { name: 'preventOverflow', options: { padding: 10 } },
+        ],
+    });
+
+    return (
+        <>
+            <IconButton
+                {...iconButtonProps}
+                innerRef={setReferenceElement}
+                onClick={() => {
+                    setOpen(!isOpen);
+                }}
+            />
+            {isOpen &&
+                ReactDOM.createPortal(
+                    <ModalLayer
+                        onMouseDown={(e) => {
+                            // Close when ModalLayer is pressed
+                            if (e.target === e.currentTarget) {
+                                setOpen(false);
+                            }
+                        }}
+                    >
+                        <Modal
+                            innerRef={setPopperElement}
+                            arrowProps={{
+                                ref: setArrowElement,
+                                style: styles.arrow,
+                            }}
+                            style={styles.popper}
+                            {...attributes.popper}
+                        >
+                            {children}
+                        </Modal>
+                    </ModalLayer>,
+                    document.querySelector('#root') as HTMLDivElement,
+                )}
+        </>
+    );
+}
+
 export default function Header() {
     return (
         <>
@@ -39,16 +122,20 @@ export default function Header() {
                     <SearchBar />
                 </div>
                 <div className="Header__buttons">
-                    <IconButton
+                    <ModalIconButton
                         icon="palette"
                         kind="header"
                         title="Change theme"
-                    />
-                    <IconButton
+                    >
+                        Change theme
+                    </ModalIconButton>
+                    <ModalIconButton
                         icon="volume-up"
                         kind="header"
                         title="Change volume"
-                    />
+                    >
+                        Change volume
+                    </ModalIconButton>
                     <IconButton
                         icon="plus-square"
                         kind="header"
