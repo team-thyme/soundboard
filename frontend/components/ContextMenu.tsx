@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
+import useKeydown from "../hooks/useKeydown";
 
 interface ContextMenuProps {
     children(props: { onContextMenu: MouseEventHandler<any> }): ReactNode;
@@ -29,20 +30,7 @@ export default function ContextMenu(props: ContextMenuProps) {
     );
 
     // Close the context menu when the user presses the Escape key
-    useEffect(() => {
-        if (!open) {
-            return;
-        }
-
-        function handleKeyDown(e: KeyboardEvent) {
-            if (e.key === 'Escape') {
-                setOpen(false);
-            }
-        }
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [open]);
+    useKeydown('Escape', () => setOpen(false), open);
 
     // Popper
     const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(

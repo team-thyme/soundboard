@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
+import useKeydown from '../hooks/useKeydown';
 
 import { SearchContext } from './App';
 import IconButton, { IconButtonProps } from './IconButton';
@@ -44,20 +45,7 @@ function ModalIconButton({
     const [isOpen, setOpen] = useState(false);
 
     // Close the modal when the user presses the Escape key
-    useEffect(() => {
-        if (!isOpen) {
-            return;
-        }
-
-        function handleKeyDown(e: KeyboardEvent) {
-            if (e.key === 'Escape') {
-                setOpen(false);
-            }
-        }
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isOpen]);
+    useKeydown('Escape', () => setOpen(false), isOpen);
 
     const [referenceElement, setReferenceElement] =
         useState<HTMLButtonElement | null>(null);
