@@ -1,4 +1,4 @@
-import React, { Context, useMemo, useState } from 'react';
+import React, { Context, useEffect, useMemo, useState } from 'react';
 
 import Header from './Header';
 import SampleList from './SampleList';
@@ -20,13 +20,40 @@ function useSearchContextValue(): SearchContextValue {
     return useMemo(() => ({ query, setQuery }), [query, setQuery]);
 }
 
+export enum Theme {
+    Default = 'default',
+    Cirkeltrek = 'cirkeltrek',
+}
+
+type ThemeContextValue = {
+    theme: Theme;
+    setTheme(theme: Theme): void;
+};
+
+export const ThemeContext: Context<ThemeContextValue> = React.createContext(
+    undefined as any,
+);
+
+function useThemeContextValue(): ThemeContextValue {
+    const [theme, setTheme] = useState(Theme.Default);
+
+    useEffect(() => {
+        document.body.setAttribute('data-theme', theme);
+    }, [theme]);
+
+    return useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
+}
+
 export default function App() {
     const searchContext = useSearchContextValue();
+    const themeContext = useThemeContextValue();
 
     return (
         <SearchContext.Provider value={searchContext}>
-            <Header />
-            <SampleList />
+            <ThemeContext.Provider value={themeContext}>
+                <Header />
+                <SampleList />
+            </ThemeContext.Provider>
         </SearchContext.Provider>
     );
 }
