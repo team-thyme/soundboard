@@ -6,6 +6,7 @@ import useKeydown from '../hooks/useKeydown';
 import { SearchContext } from './App';
 import IconButton, { IconButtonProps } from './IconButton';
 import Modal, { ModalLayer } from './Modal';
+import ThemeSelect from './ThemeSelect';
 
 function SearchBar() {
     const { query, setQuery } = useContext(SearchContext);
@@ -115,7 +116,7 @@ export default function Header() {
                         kind="header"
                         title="Change theme"
                     >
-                        Change theme
+                        <ThemeSelect />
                     </ModalIconButton>
                     <ModalIconButton
                         icon="volume-up"

@@ -1,7 +1,7 @@
 {
     "extends": "@tsconfig/recommended/tsconfig.json",
     "compilerOptions": {
-        "lib": ["es2015", "dom"],
+        "lib": ["es2017", "dom"],
         "jsx": "react",
         "noEmit": true
     },
