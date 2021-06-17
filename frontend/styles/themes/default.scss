@@ -1,5 +1,6 @@
 // Theme variables
-:root {
+:root,
+[data-theme='default'] {
     $text-color: #000;
     $accent-color: #61e294;
 

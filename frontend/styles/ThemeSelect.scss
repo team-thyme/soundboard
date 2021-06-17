@@ -1,0 +1,27 @@
+@import './variables';
+
+.ThemeThumb {
+    &__header {
+        fill: var(--header-bg);
+    }
+
+    &__search {
+        fill: var(--search-bar-bg);
+    }
+
+    &__headerTitle {
+        font-family: $title-font-family;
+        font-weight: 600;
+
+        fill: var(--header-color);
+    }
+
+    &__headerIcon {
+        font-weight: bold;
+        fill: var(--icon-button-header-color);
+    }
+
+    &__sampleList {
+        fill: var(--sample-list-bg);
+    }
+}
