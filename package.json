@@ -3,17 +3,22 @@
     "scripts": {
         "start": "parcel serve frontend/index.html --out-dir public/build --port=80 --no-cache",
         "start:production": "cross-env NODE_ENV=production yarn start --no-hmr",
-        "test:types": "tsc"
+        "test:types": "tsc",
+        "test": "jest"
     },
     "devDependencies": {
         "@tsconfig/recommended": "^1.0.1",
+        "@types/jest": "^26.0.23",
         "@types/react": "^17.0.11",
         "@types/react-dom": "^17.0.7",
         "@types/react-virtualized": "^9.21.11",
         "cross-env": "^7.0.3",
+        "jest": "^27.0.4",
         "parcel-bundler": "^1.12.5",
         "prettier": "^2.3.1",
         "sass": "^1.34.1",
+        "ts-jest": "^27.0.3",
+        "ts-node": "^10.0.0",
         "typescript": "^4.3.2"
     },
     "dependencies": {
