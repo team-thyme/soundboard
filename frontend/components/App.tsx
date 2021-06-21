@@ -1,7 +1,7 @@
 import React, { Context, useEffect, useMemo, useState } from 'react';
 
 import Header from './Header';
-import SampleList from './SampleList';
+import SampleList from './SampleList/SampleList';
 
 type SearchContextValue = {
     query: string;

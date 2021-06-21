@@ -8,8 +8,8 @@ import React, {
 } from 'react';
 import { List, WindowScroller } from 'react-virtualized';
 
-import { fetchSamples, Sample } from '../api';
-import { useTextMeasurer } from '../helpers/TextMeasurer';
+import { fetchSamples, Sample } from '../../api';
+import { useTextMeasurer } from '../../helpers/TextMeasurer';
 import {
     detailFont,
     nameFont,
@@ -17,9 +17,9 @@ import {
     sampleListPadding,
     sampleMargin,
     samplePaddingX,
-} from '../styles/sync-variables';
-import { SearchContext } from './App';
-import SampleItem from './SampleItem/SampleItem';
+} from '../../styles/sync-variables';
+import { SearchContext } from '../App';
+import SampleItem from '../SampleItem/SampleItem';
 
 /**
  * React hook. Fetches samples from API, if needed.
