@@ -10,7 +10,7 @@ export default function computeLayout(
     let rows: number[][] = [[]];
     let rowWidth = 0;
     for (let itemIndex = 0; itemIndex < itemWidths.length; ++itemIndex) {
-        if (rowWidth === 0 || rowWidth + itemWidths[itemIndex] < maxRowWidth) {
+        if (rowWidth === 0 || rowWidth + itemWidths[itemIndex] <= maxRowWidth) {
             rowWidth += itemWidths[itemIndex];
             rows[rows.length - 1].push(itemIndex);
         } else {
