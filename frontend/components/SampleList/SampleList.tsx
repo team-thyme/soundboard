@@ -161,6 +161,8 @@ export default function SampleList() {
                             className="SampleList__row"
                             style={style}
                             role="row"
+                            // Used to color rows differently in "cirkeltrek" theme
+                            data-index-mod3={rowIndex % 3}
                         >
                             {layout[rowIndex].map((index) => {
                                 const sample = samples[index];

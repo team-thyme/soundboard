@@ -8,8 +8,6 @@
     margin: $sampleListPadding $sampleListPadding 0;
     padding-bottom: $sampleListPadding;
 
-    background: var(--sample-list-bg);
-
     &__row {
         display: flex;
         flex-direction: row;
