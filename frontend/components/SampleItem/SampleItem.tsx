@@ -95,13 +95,8 @@ export default function SampleItem({ sample }: SampleItemProps) {
             {
                 title: 'Copy URL',
                 onClick: async () => {
-                    const { state } = await navigator.permissions.query({
-                        name: 'clipboard-write',
-                    });
-                    if (state === 'granted' || state === 'prompt') {
-                        const url = baseUrl + sample.id;
-                        await navigator.clipboard.writeText(url);
-                    }
+                    const url = baseUrl + sample.id;
+                    await navigator.clipboard.writeText(url);
                 },
             },
             {

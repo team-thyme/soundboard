@@ -3,13 +3,13 @@ import React, {
     MouseEventHandler,
     ReactNode,
     useCallback,
-    useEffect,
     useMemo,
     useState,
 } from 'react';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
-import useKeydown from "../hooks/useKeydown";
+
+import useKeydown from '../hooks/useKeydown';
 
 interface ContextMenuProps {
     children(props: { onContextMenu: MouseEventHandler<any> }): ReactNode;
@@ -39,14 +39,7 @@ export default function ContextMenu(props: ContextMenuProps) {
     const virtualReference = useMemo(
         () => ({
             getBoundingClientRect() {
-                return {
-                    top: position.y,
-                    left: position.x,
-                    right: position.x,
-                    bottom: position.y,
-                    width: 0,
-                    height: 0,
-                };
+                return new DOMRect(position.x, position.y, 0, 0);
             },
         }),
         [position],
