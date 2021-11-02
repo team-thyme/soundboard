@@ -7,6 +7,10 @@ interface PlayingData {
 
 interface PlayingInstance {
     audioElement: HTMLAudioElement;
+
+    // Used for extrapolating progress in browsers with low resolution player times
+    lastPlayerTime: number;
+    lastActualTime: number;
 }
 
 /**
@@ -53,11 +57,24 @@ export default class Player {
     getProgresses(key: string): number[] {
         const playingData = this.playing.get(key);
         if (playingData) {
-            return playingData.instances.map(
-                (instance) =>
-                    instance.audioElement.currentTime /
-                    instance.audioElement.duration,
-            );
+            return playingData.instances.map((instance) => {
+                let currentTime = instance.audioElement.currentTime;
+
+                // If currentTime is the same as it was last frame(s), try to
+                // extrapolate by considering the time that has passed since
+                // the last update.
+                if (currentTime === instance.lastPlayerTime) {
+                    currentTime =
+                        instance.lastPlayerTime +
+                        (Date.now() - instance.lastActualTime) / 1000;
+                } else {
+                    // New currentTime -> synchronize the instance
+                    instance.lastPlayerTime = currentTime;
+                    instance.lastActualTime = Date.now();
+                }
+
+                return currentTime / instance.audioElement.duration;
+            });
         }
         return [];
     }
@@ -167,6 +184,8 @@ export default class Player {
         };
         playingData.instances.push({
             audioElement: audio,
+            lastPlayerTime: -1,
+            lastActualTime: -1,
         });
         this.playing.set(key, playingData);
 
