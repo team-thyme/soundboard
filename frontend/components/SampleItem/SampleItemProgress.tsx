@@ -31,14 +31,10 @@ export default function SampleItemProgress(props: {
     const progresses = usePlayerProgress(sample);
 
     return (
-        <>
+        <svg className="SampleItem__progress">
             {progresses.map((progress, index) => (
-                <div
-                    key={index}
-                    className="SampleItem__progress"
-                    style={{ transform: `scaleX(${progress})` }}
-                />
+                <rect key={index} width={`${progress * 100}%`} height="100%" />
             ))}
-        </>
+        </svg>
     );
 }
