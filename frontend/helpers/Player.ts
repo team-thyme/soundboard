@@ -63,7 +63,10 @@ export default class Player {
                 // If currentTime is the same as it was last frame(s), try to
                 // extrapolate by considering the time that has passed since
                 // the last update.
-                if (currentTime === instance.lastPlayerTime) {
+                if (
+                    currentTime > 0 &&
+                    currentTime === instance.lastPlayerTime
+                ) {
                     currentTime =
                         instance.lastPlayerTime +
                         (Date.now() - instance.lastActualTime) / 1000;
