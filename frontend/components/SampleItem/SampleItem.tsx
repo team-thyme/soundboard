@@ -6,6 +6,7 @@ import { baseUrl } from '../../config';
 import download from '../../helpers/download';
 import { player, TogglePlayOptions } from '../../helpers/Player';
 import ContextMenu from '../ContextMenu';
+import SampleItemProgress from './SampleItemProgress';
 import VisualizeAnalyserNode from './VisualizeAnalyserNode';
 
 export interface SampleItemProps {
@@ -15,14 +16,10 @@ export interface SampleItemProps {
 function usePlayer(sample: Sample): {
     togglePlay(options?: TogglePlayOptions): void;
     isPlaying: boolean;
-    progresses: number[];
     analyserNode: AnalyserNode | null;
 } {
     const [isPlaying, setPlaying] = useState<boolean>(() =>
         player.isPlaying(sample.key),
-    );
-    const [progresses, setProgresses] = useState<number[]>(() =>
-        player.getProgresses(sample.key),
     );
     const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(() =>
         player.getAnalyserNode(sample.key),
@@ -39,19 +36,13 @@ function usePlayer(sample: Sample): {
             setAnalyserNode(null);
         }
 
-        function handleProgress() {
-            setProgresses(player.getProgresses(key));
-        }
-
         const { key } = sample;
         player.on('play', key, handlePlay);
         player.on('ended', key, handleEnded);
-        player.on('progress', key, handleProgress);
 
         return () => {
             player.off('play', key, handlePlay);
             player.off('ended', key, handleEnded);
-            player.off('progress', key, handleProgress);
         };
     }, [sample]);
 
@@ -62,7 +53,7 @@ function usePlayer(sample: Sample): {
         [sample],
     );
 
-    return { togglePlay, isPlaying, progresses, analyserNode };
+    return { togglePlay, isPlaying, analyserNode };
 }
 
 // TODO: Move sample navigation code to SampleList
@@ -140,8 +131,7 @@ function findClosest(
 }
 
 export default function SampleItem({ sample }: SampleItemProps) {
-    const { togglePlay, isPlaying, progresses, analyserNode } =
-        usePlayer(sample);
+    const { togglePlay, isPlaying, analyserNode } = usePlayer(sample);
 
     const contextMenuItems = useMemo(
         () => [
@@ -223,14 +213,7 @@ export default function SampleItem({ sample }: SampleItemProps) {
                     </span>
                     {isPlaying && (
                         <>
-                            {progresses.map((progress, index) => (
-                                <div
-                                    key={index}
-                                    className="SampleItem__progress"
-                                    style={{ transform: `scaleX(${progress})` }}
-                                />
-                            ))}
-
+                            <SampleItemProgress sample={sample} />
                             <VisualizeAnalyserNode
                                 analyserNode={analyserNode}
                             />
