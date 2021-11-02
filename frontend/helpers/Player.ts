@@ -1,15 +1,19 @@
 import { Sample } from '../api';
 
 interface PlayingData {
-    audioElements: HTMLAudioElement[];
+    instances: PlayingInstance[];
     analyserNode: AnalyserNode;
+}
+
+interface PlayingInstance {
+    audioElement: HTMLAudioElement;
 }
 
 /**
  * Stops (pauses) all audio elements related to the given PlayingData.
  */
 function stop(playingData: PlayingData) {
-    playingData.audioElements.forEach((audioElement) => {
+    playingData.instances.forEach(({ audioElement }) => {
         audioElement.pause();
     });
 }
@@ -49,9 +53,10 @@ export default class Player {
     getProgresses(key: string): number[] {
         const playingData = this.playing.get(key);
         if (playingData) {
-            return playingData.audioElements.map(
-                (audioElement) =>
-                    audioElement.currentTime / audioElement.duration,
+            return playingData.instances.map(
+                (instance) =>
+                    instance.audioElement.currentTime /
+                    instance.audioElement.duration,
             );
         }
         return [];
@@ -139,12 +144,12 @@ export default class Player {
             audio.load();
 
             // Remove this audio element from the list
-            playingData.audioElements = playingData.audioElements.filter(
-                (other) => other !== audio,
+            playingData.instances = playingData.instances.filter(
+                (instance) => instance.audioElement !== audio,
             );
 
             // Sample only fully ends once there are no more playing instances
-            if (playingData.audioElements.length === 0) {
+            if (playingData.instances.length === 0) {
                 this.playing.delete(key);
                 this.emit('ended', key);
             }
@@ -157,10 +162,12 @@ export default class Player {
 
         // "Emplace" playingData with new audio element appended to the list
         const playingData = this.playing.get(key) ?? {
-            audioElements: [],
+            instances: [],
             analyserNode,
         };
-        playingData.audioElements.push(audio);
+        playingData.instances.push({
+            audioElement: audio,
+        });
         this.playing.set(key, playingData);
 
         this.emit('play', key);
