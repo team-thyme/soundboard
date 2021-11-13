@@ -22,7 +22,7 @@ $z-index-box-shadow: 4;
     padding: 0 $samplePaddingX;
 
     border: 0;
-    border-radius: var(--sample-border-radius);
+    border-radius: $border-radius-base;
     background: var(--sample-bg);
     color: var(--sample-color);
     cursor: pointer;
@@ -36,7 +36,7 @@ $z-index-box-shadow: 4;
         z-index: $z-index-box-shadow;
         inset: 0;
 
-        border-radius: var(--sample-border-radius);
+        border-radius: $border-radius-base;
         box-shadow: var(--sample-box-shadow);
     }
 
