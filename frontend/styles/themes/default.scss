@@ -1,8 +1,14 @@
+@function make-shadow($edge-color, $bottom-color) {
+    @return inset 0 -1px $bottom-color, inset 0 0 0 1px $edge-color;
+}
+
 // Theme variables
 :root,
 [data-theme='default'] {
     $text-color: #000;
     $accent-color: #61e294;
+
+    --border-radius: 5px;
 
     // Header
     $header-bg: $accent-color;
@@ -26,7 +32,7 @@
     --icon-button-header-color-active: #{mix($header-bg, $text-color, 0%)};
 
     // SampleList
-    $sample-list-bg: #fff;
+    $sample-list-bg: #f9f9f9;
     --sample-list-bg: #{$sample-list-bg};
 
     $no-results-color: mix($sample-list-bg, $text-color, 50%);
@@ -34,10 +40,18 @@
     --no-results-icon-color: #{lighten($no-results-color, 10%)};
 
     // SampleItem
-    $sample-bg: #f3f3f3;
+    --sample-border-radius: var(--border-radius);
+
+    $sample-bg: #fff;
     --sample-bg: #{$sample-bg};
-    --sample-bg-hover: #{darken($sample-bg, 5%)};
-    --sample-bg-active: #{darken($sample-bg, 10%)};
+    --sample-bg-hover: #{darken($sample-bg, 4%)};
+    --sample-bg-active: #{darken($sample-bg, 6%)};
+
+    $sample-edge-shadow: rgba(black, 0.1);
+    $sample-bottom-shadow: rgba(black, 0.12);
+    --sample-box-shadow: #{make-shadow($sample-edge-shadow, $sample-bottom-shadow)};
+    --sample-box-shadow-hover: var(--sample-box-shadow);
+    --sample-box-shadow-active: #{make-shadow($sample-edge-shadow, transparent)};
 
     --sample-color: #{$text-color};
 
@@ -45,6 +59,10 @@
     --sample-playing-bg: #{$sample-playing-bg};
     --sample-playing-bg-hover: #{darken($sample-playing-bg, 5%)};
     --sample-playing-bg-active: #{darken($sample-playing-bg, 10%)};
+
+    --sample-playing-box-shadow: var(--sample-box-shadow);
+    --sample-playing-box-shadow-hover: var(--sample-box-shadow-hover);
+    --sample-playing-box-shadow-active: var(--sample-box-shadow-active);
 
     --sample-playing-color: var(--sample-color);
 

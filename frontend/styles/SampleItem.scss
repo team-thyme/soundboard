@@ -1,5 +1,10 @@
 @import 'variables';
 
+$z-index-progress: 1;
+$z-index-visualize: 2;
+$z-index-text: 3;
+$z-index-box-shadow: 4;
+
 .SampleItem {
     flex: 1 0 auto;
 
@@ -17,20 +22,40 @@
     padding: 0 $samplePaddingX;
 
     border: 0;
-    border-radius: 2px;
+    border-radius: var(--sample-border-radius);
     background: var(--sample-bg);
     color: var(--sample-color);
     cursor: pointer;
 
     user-select: none;
 
+    // Apply box-shadow on pseudo-element to overlay progress/visualization
+    &::after {
+        content: '';
+        position: absolute;
+        z-index: $z-index-box-shadow;
+        inset: 0;
+
+        border-radius: var(--sample-border-radius);
+        box-shadow: var(--sample-box-shadow);
+    }
+
     &:hover {
         background: var(--sample-bg-hover);
+        &::after {
+            box-shadow: var(--sample-box-shadow-hover);
+        }
     }
     &:active {
         background: var(--sample-bg-active);
+        &::after {
+            box-shadow: var(--sample-box-shadow-active);
+        }
     }
     &:focus {
+        outline: none;
+    }
+    &:focus-visible {
         outline: 2px solid black;
         outline-offset: 2px;
     }
@@ -38,18 +63,28 @@
     &--isPlaying {
         background: var(--sample-playing-bg);
         color: var(--sample-playing-color);
+        &::after {
+            box-shadow: var(--sample-playing-box-shadow);
+        }
+
         &:hover {
             background: var(--sample-playing-bg-hover);
+            &::after {
+                box-shadow: var(--sample-playing-box-shadow-hover);
+            }
         }
         &:active {
             background: var(--sample-playing-bg-active);
+            &::after {
+                box-shadow: var(--sample-playing-box-shadow-active);
+            }
         }
     }
 
     &__name,
     &__detail {
         position: relative;
-        z-index: 3;
+        z-index: $z-index-text;
 
         max-width: 100%;
         overflow: hidden;
@@ -66,7 +101,7 @@
 
     &__progress {
         position: absolute;
-        z-index: 1;
+        z-index: $z-index-progress;
         inset: 0;
         width: 100%;
         height: 100%;
@@ -76,7 +111,7 @@
 
     &__visualize {
         position: absolute;
-        z-index: 2;
+        z-index: $z-index-visualize;
         inset: 0;
 
         opacity: 0.3;
