@@ -7,6 +7,10 @@
 [data-theme='default'] {
     $text-color: #000;
     $accent-color: #61e294;
+    $gray: #405162;
+
+    --text-primary-color: #{$text-color};
+    --text-secondary-color: #{$gray};
 
     // Header
     $header-bg: $accent-color;
@@ -30,7 +34,7 @@
     --icon-button-header-color-active: #{mix($header-bg, $text-color, 0%)};
 
     // SampleList
-    $sample-list-bg: #f9f9f9;
+    $sample-list-bg: mix($gray, white, 4%);
     --sample-list-bg: #{$sample-list-bg};
 
     $no-results-color: mix($sample-list-bg, $text-color, 50%);
@@ -40,8 +44,8 @@
     // SampleItem
     $sample-bg: #fff;
     --sample-bg: #{$sample-bg};
-    --sample-bg-hover: #{darken($sample-bg, 4%)};
-    --sample-bg-active: #{darken($sample-bg, 6%)};
+    --sample-bg-hover: #{mix($gray, $sample-bg, 5%)};
+    --sample-bg-active: #{mix($gray, $sample-bg, 8%)};
 
     $sample-edge-shadow: rgba(black, 0.1);
     $sample-bottom-shadow: rgba(black, 0.12);
@@ -66,4 +70,16 @@
 
     --sample-visualize-line-width: 2px; // Only supports pixels!
     --sample-visualize-color: #{$text-color};
+
+    // ContextMenu
+    --context-menu-layer-bg: #{rgba(black, 0.1)};
+
+    --context-menu-bg: white;
+    --context-menu-box-shadow:
+        0 3px 15px #{rgba(black, 0.1)},
+        0 1px 2px #{rgba(black, 0.15)};
+
+    --context-menu-item-bg: none;
+    --context-menu-item-bg-hover: #{mix($gray, white, 5%)};
+    --context-menu-item-bg-active: #{mix($gray, white, 8%)};
 }

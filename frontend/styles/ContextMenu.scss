@@ -1,4 +1,4 @@
-// TODO: Theme ContextMenu styles
+@import 'variables';
 
 .ContextMenuLayer {
     position: fixed;
@@ -8,22 +8,21 @@
     bottom: 0;
     z-index: 2;
 
-    background: rgba(black, 0.1);
+    background: var(--context-menu-layer-bg);
 }
 
 .ContextMenu {
     width: 240px;
-    padding: 10px;
+    padding: 5px;
 
-    background: white;
-    border-radius: 3px;
-    box-shadow:
-        0 3px 15px rgba(black, 0.1),
-        0 1px 2px rgba(black, 0.15);
+    background: var(--context-menu-bg);
+    border-radius: $border-radius-large;
+    box-shadow: var(--context-menu-box-shadow);
 
     &__items {
         display: flex;
         flex-direction: column;
+        gap: 5px;
 
         margin: 0;
         padding: 0;
@@ -40,21 +39,21 @@
     align-items: baseline;
 
     width: 100%;
-    padding: 10px;
+    padding: 7px 10px;
 
-    background: none;
+    background: var(--context-menu-item-bg);
     border: none;
     font: inherit;
 
-    border-radius: 2px;
+    border-radius: $border-radius-base;
     cursor: pointer;
 
     &:hover,
-    &:focus {
-        background: darken(white, 5%);
+    &:focus-visible {
+        background: var(--context-menu-item-bg-hover);
     }
     &:active {
-        background: darken(white, 10%);
+        background: var(--context-menu-item-bg-active);
     }
 
     &:disabled {
@@ -66,13 +65,13 @@
 
     &__title {
         margin-right: auto;
-
-        font-weight: 500;
+        color: var(--text-primary-color);
     }
 
     &__shortcut {
         margin-left: 20px;
 
         font-size: 14px;
+        color: var(--text-secondary-color);
     }
 }
