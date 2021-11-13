@@ -8,8 +8,6 @@
     $text-color: #000;
     $accent-color: #61e294;
 
-    --border-radius: 5px;
-
     // Header
     $header-bg: $accent-color;
     --header-bg: #{$header-bg};
@@ -40,8 +38,6 @@
     --no-results-icon-color: #{lighten($no-results-color, 10%)};
 
     // SampleItem
-    --sample-border-radius: var(--border-radius);
-
     $sample-bg: #fff;
     --sample-bg: #{$sample-bg};
     --sample-bg-hover: #{darken($sample-bg, 4%)};
