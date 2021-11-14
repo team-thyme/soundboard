@@ -9,7 +9,7 @@ import React, {
     useState,
 } from 'react';
 import ReactDOM from 'react-dom';
-import { usePopper } from 'react-popper';
+import { Modifier, usePopper } from 'react-popper';
 
 import useKeydown from '../hooks/useKeydown';
 
@@ -25,6 +25,26 @@ interface ContextMenuProps {
 
     items: ContextMenuItem[];
 }
+
+const transformOriginModifier: Modifier<'transformOrigin'> = {
+    name: 'transformOrigin',
+    enabled: true,
+    phase: 'beforeWrite',
+    requires: ['popperOffsets'],
+    fn: ({ state, options }) => {
+        const { x: refX, y: refY } = state.rects.reference;
+        const { x: popperX, y: popperY } = state.modifiersData.popperOffsets!;
+
+        const offsetX = refX - popperX;
+        const offsetY = refY - popperY;
+
+        // @ts-ignore
+        state.elements.inner = state.elements.popper.firstElementChild;
+        state.styles.inner = {
+            transformOrigin: `${offsetX}px ${offsetY}px`,
+        };
+    },
+};
 
 export default function ContextMenu(props: ContextMenuProps) {
     const [open, setOpen] = useState(false);
@@ -56,6 +76,7 @@ export default function ContextMenu(props: ContextMenuProps) {
     const { styles, attributes } = usePopper(virtualReference, popperElement, {
         placement: 'bottom-start',
         strategy: 'fixed',
+        modifiers: [transformOriginModifier],
     });
 
     return (
@@ -73,6 +94,7 @@ export default function ContextMenu(props: ContextMenuProps) {
                             {...attributes.popper}
                         >
                             <Menu
+                                style={styles.inner}
                                 items={props.items}
                                 closeMenu={() => {
                                     setOpen(false);
@@ -86,12 +108,18 @@ export default function ContextMenu(props: ContextMenuProps) {
     );
 }
 
-interface MenuProps {
+interface MenuOwnProps {
     items: ContextMenuItem[];
     closeMenu: () => void;
 }
 
-function Menu({ items, closeMenu }: MenuProps) {
+type MenuProps = MenuOwnProps &
+    Omit<
+        React.ComponentPropsWithoutRef<'div'>,
+        keyof MenuOwnProps | 'onClick' | 'role' | 'className'
+    >;
+
+function Menu({ items, closeMenu, ...otherProps }: MenuProps) {
     return (
         <div
             role="menu"
@@ -99,6 +127,7 @@ function Menu({ items, closeMenu }: MenuProps) {
             onClick={(e) => {
                 e.stopPropagation();
             }}
+            {...otherProps}
         >
             <ul className="ContextMenu__items">
                 {items.map((item, index) => (

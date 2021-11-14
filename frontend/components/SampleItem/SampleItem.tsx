@@ -183,6 +183,7 @@ export default function SampleItem({ sample }: SampleItemProps) {
     );
 
     return (
+        // TODO: Add a ContextMenuWrapper / -Manager or something. Because currently popper is initialized for every item!
         <ContextMenu items={contextMenuItems}>
             {(props) => (
                 <button
