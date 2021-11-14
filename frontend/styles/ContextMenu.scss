@@ -63,6 +63,17 @@
         cursor: default;
     }
 
+    &__icon {
+        width: 1em;
+        margin-right: .5em;
+        margin-left: -.1em;
+
+        * {
+            max-width: 1em;
+            fill: var(--text-secondary-color);
+        }
+    }
+
     &__title {
         margin-right: auto;
         color: var(--text-primary-color);

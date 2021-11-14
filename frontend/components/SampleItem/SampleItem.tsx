@@ -5,7 +5,7 @@ import { Sample } from '../../api';
 import { baseUrl } from '../../config';
 import download from '../../helpers/download';
 import { player, TogglePlayOptions } from '../../helpers/Player';
-import ContextMenu from '../ContextMenu';
+import ContextMenu, { ContextMenuItem } from "../ContextMenu";
 import SampleItemProgress from './SampleItemProgress';
 import VisualizeAnalyserNode from './VisualizeAnalyserNode';
 
@@ -134,8 +134,9 @@ export default function SampleItem({ sample }: SampleItemProps) {
     const { togglePlay, isPlaying, analyserNode } = usePlayer(sample);
 
     const contextMenuItems = useMemo(
-        () => [
+        (): ContextMenuItem[] => [
             {
+                icon: isPlaying ? 'stop' : 'play',
                 title: isPlaying ? 'Stop' : 'Play',
                 shortcut: 'Click',
                 onClick: () => {
@@ -143,6 +144,7 @@ export default function SampleItem({ sample }: SampleItemProps) {
                 },
             },
             {
+                icon: 'repeat',
                 title: 'Loop',
                 shortcut: 'Ctrl + Click',
                 onClick: () => {
@@ -150,6 +152,7 @@ export default function SampleItem({ sample }: SampleItemProps) {
                 },
             },
             {
+                icon: 'fire',
                 title: 'Spam',
                 shortcut: 'Shift + Click',
                 onClick: () => {
@@ -157,6 +160,7 @@ export default function SampleItem({ sample }: SampleItemProps) {
                 },
             },
             {
+                icon: 'link',
                 title: 'Copy URL',
                 onClick: async () => {
                     const url = baseUrl + sample.id;
@@ -164,6 +168,7 @@ export default function SampleItem({ sample }: SampleItemProps) {
                 },
             },
             {
+                icon: 'download',
                 title: 'Download',
                 onClick: () => {
                     const fileName = decodeURIComponent(sample.path).replace(
