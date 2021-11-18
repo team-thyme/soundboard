@@ -2,14 +2,14 @@
 @use 'themes/default';
 @use 'themes/cirkeltrek';
 
-@import 'root';
+@use 'root';
 
 // Components
-@import 'Header';
-@import 'SearchBar';
-@import 'IconButton';
-@import 'SampleList';
-@import 'SampleItem';
-@import 'ContextMenu';
-@import 'Modal';
-@import 'ThemeSelect';
+@use 'components/Header';
+@use 'components/SearchBar';
+@use 'components/IconButton';
+@use 'components/SampleList';
+@use 'components/SampleItem';
+@use 'components/ContextMenu';
+@use 'components/Modal';
+@use 'components/ThemeSelect';
