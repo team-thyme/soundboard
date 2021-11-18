@@ -1,3 +1,5 @@
+@import './variables';
+
 .SearchBar {
     position: relative;
     height: 60px;
@@ -8,12 +10,13 @@
         height: 100%;
         padding: 20px;
         border: 0;
-        border-radius: 2px;
+        border-radius: $border-radius-large;
 
         font: inherit;
         font-weight: 500;
 
         background: var(--search-bar-bg);
+        box-shadow: var(--search-bar-box-shadow);
         color: var(--search-bar-color);
 
         &::placeholder {
@@ -31,7 +34,7 @@
     &__clear {
         position: absolute;
         top: 0;
-        right: 15px;
+        right: 10px;
         bottom: 0;
         margin: auto;
 
