@@ -20,6 +20,7 @@
         color: var(--search-bar-color);
 
         &::placeholder {
+            opacity: 1;
             color: var(--search-bar-placeholder-color);
         }
 
