@@ -155,6 +155,7 @@ export default function SampleList() {
                     scrollTop={scrollTop}
                     rowHeight={rowHeight}
                     rowCount={layout.length}
+                    overscanRowCount={3}
                     rowRenderer={({ index: rowIndex, style }) => (
                         <div
                             key={rowIndex}
