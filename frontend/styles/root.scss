@@ -1,0 +1,28 @@
+@use 'variables' as *;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    font: 16px $font-stack;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+
+    background: var(--sample-list-bg);
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

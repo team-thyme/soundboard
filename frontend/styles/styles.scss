@@ -1,36 +1,10 @@
-@import 'variables';
-
 // Themes
-@import 'themes/default';
-@import 'themes/cirkeltrek';
+@use 'themes/default';
+@use 'themes/cirkeltrek';
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
+@import 'root';
 
-html {
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-
-    font: 16px $font-stack;
-}
-
-body {
-    margin: 0;
-    height: 100%;
-
-    background: var(--sample-list-bg);
-}
-
-#root {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
+// Components
 @import 'Header';
 @import 'SearchBar';
 @import 'IconButton';

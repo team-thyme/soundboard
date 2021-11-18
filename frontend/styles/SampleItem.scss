@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables' as *;
 
 $z-index-progress: 1;
 $z-index-visualize: 2;
