@@ -29,7 +29,7 @@ fully supported. Other browsers give mixed results, but who uses those anyway?
 1. Download the [latest release](https://github.com/team-thyme/soundboard/releases) or clone the current sources.
 2. Build the application using `./build.sh production`.
 3. Make the `public/` directory publicly accessible (E.g., by symlinking it from your web root).
-4. Add some wav/mp3/ogg samples to the `public/samples/` directory.
+4. Add some webm/ogg/mp3/wav samples to the `public/samples/` directory.
 5. If hosting the frontend from a subdirectory, change the href of the `<base>` tag in `public/index.html` to point to
    your subdirectory. This allows the page to load its resources and arguments no matter where it is called from
 
@@ -44,7 +44,7 @@ Optional steps:
 
 > Building the frontend requires [Node.js](https://nodejs.org/). [Apache HTTP Server](https://www.apache.org/) is recommended for hosting the front-end, as it will work without having to set up redirecting to index.html manually.
 
-- Add wav/mp3/ogg files to `samples/` to instantly add them to the API
+- Add webm/ogg/mp3/wav files to `samples/` to instantly add them to the API
 - Have multiple samples with the same name by suffixing them with digits
 
 ## Development
