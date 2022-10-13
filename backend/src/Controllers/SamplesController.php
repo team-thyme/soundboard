@@ -74,6 +74,7 @@ class SamplesController extends Controller
 
             case 'webm':
                 $contentType = 'audio/webm';
+                break;
 
             default:
                 throw new NotFoundException($request, $response);
