@@ -13,6 +13,8 @@ import ThemeManager from './helpers/ThemeManager';
 import playFromUri from './helpers/playFromUri';
 import randomizeTitle from './helpers/randomizeTitle';
 
+console.log(OGVCompat.supported('OGVPlayer'));
+
 SettingsManager.init();
 ThemeManager.init();
 Player.init();
