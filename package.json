@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "build": "parcel build frontend/index.html --out-dir public/build",
         "start": "parcel serve frontend/index.html --out-dir public/build --port=80 --no-cache",
         "start:production": "cross-env NODE_ENV=production yarn start --no-hmr",
         "test:types": "tsc",
