@@ -27,7 +27,7 @@ if [ "$BUILD_MODE" == 'development' ]; then
 fi
 
 if [ "$BUILD_MODE" == 'serve' ]; then
-    php -S 0.0.0.0:32658 public/api/index.php & \
+    composer run dev-server & \
     npm run dev-server & \
     npm run dev-build
     exit 0

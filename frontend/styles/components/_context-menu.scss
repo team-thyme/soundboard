@@ -7,7 +7,7 @@
 
     .context-menu-item {
         display: block;
-        padding: $spacing-base/4 $spacing-base;
+        padding: calc($spacing-base / 4) $spacing-base;
     }
 }
 

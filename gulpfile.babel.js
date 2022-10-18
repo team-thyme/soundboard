@@ -8,27 +8,28 @@ import fs from 'fs-extra';
 import gulp from 'gulp';
 import gulpif from 'gulp-if';
 import gulpLivereload from 'gulp-livereload';
-import gulpSourcemaps from 'gulp-sourcemaps';
 import log from 'fancy-log';
 import path from 'path';
 import postcss from 'gulp-postcss';
 import rename from 'gulp-rename';
-import sass from 'gulp-sass';
+import gulpSass from 'gulp-sass';
 import sourceStream from 'vinyl-source-stream';
 import svgify from 'svg-browserify';
 import uglify from 'gulp-uglify';
 import watchify from 'watchify';
 import { argv } from 'yargs';
+import sass from 'sass';
 
 const publicDir = `${__dirname}/public`;
 const distDir = `${__dirname}/dist`;
 const buildDir = `${publicDir}/build`;
 
 const {
-    compress = true,
     livereload = false,
     sourcemaps = false,
 } = argv;
+
+// TODO: Reimplement sourcemaps (with vinyl-sourcemap?)
 
 const browserifyOptions = {
     entries: ['frontend/src/main.js'],
@@ -36,43 +37,29 @@ const browserifyOptions = {
 };
 
 gulp.task('clean:styles', () => del([`${buildDir}/*.{css,css.map}`]));
-
-const buildStyles = () => {
-    const sassOptions = {
-        importer(url) {
-            let resolvedUrl = url;
-
-            if (url[0] === '~') {
-                resolvedUrl = path.resolve('node_modules', url.substr(1));
-            }
-
-            return { file: resolvedUrl };
-        },
-    };
-
-    const processors = [
-        autoprefixer({ browsers: ['last 1 version'] }),
-    ];
-
-    if (compress) {
-        processors.push(cssnano());
-    }
-
+gulp.task('build:styles', gulp.series('clean:styles', () => {
     return gulp.src('frontend/styles/**/*.scss')
-        .pipe(gulpif(sourcemaps, gulpSourcemaps.init()))
-        .pipe(sass(sassOptions).on('error', sass.logError))
-        .pipe(postcss(processors))
+        .pipe(gulpSass(sass)({
+            importers: [
+                (url) => {
+                    let resolvedUrl = url;
+
+                    if (url[0] === '~') {
+                        resolvedUrl = path.resolve('node_modules', url.substr(1));
+                    }
+
+                    return { file: resolvedUrl };
+                }
+            ],
+        }))
+        .pipe(postcss([
+            autoprefixer(),
+            cssnano(),
+        ]))
         .pipe(rename('style.css'))
-        .pipe(gulpif(sourcemaps, gulpSourcemaps.write('./')))
         .pipe(gulp.dest(buildDir))
         .pipe(gulpif(livereload, gulpLivereload()));
-};
-
-gulp.task('build:styles', gulp.series(
-    'clean:styles',
-    buildStyles
-));
-
+}));
 gulp.task('watch:styles', () => {
     if (livereload) {
         gulpLivereload.listen();
@@ -99,9 +86,7 @@ function bundle(bundler) {
         .pipe(sourceStream('main.js'))
         .pipe(rename('script.js'))
         .pipe(buffer())
-        .pipe(gulpif(sourcemaps, gulpSourcemaps.init({ loadMaps: true })))
-        .pipe(gulpif(compress, uglify()))
-        .pipe(gulpif(sourcemaps, gulpSourcemaps.write('./')))
+        .pipe(uglify())
         .pipe(gulp.dest(buildDir))
         .pipe(gulpif(livereload, gulpLivereload()));
 }
