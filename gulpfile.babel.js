@@ -99,10 +99,17 @@ const buildScripts = () => {
         }
     });
 
+    fs.copy(`${__dirname}/node_modules/ogv/dist`, `${buildDir}/ogv`, { clobber: false}, (error) => {
+        if (error && error.code !== 'EEXIST') {
+            throw error;
+        }
+    });
+
     // Below code plain just doesn't work while documentation states it should.
-    gulp.src('dist/config.json')
-      .pipe(rename('config.json'))
-      .pipe(gulp.dest(publicDir, { overwrite: false }));
+    gulp
+        .src('dist/config.json')
+        .pipe(rename('config.json'))
+        .pipe(gulp.dest(publicDir, { overwrite: false }));
 
     return bundle(createBundler());
 };

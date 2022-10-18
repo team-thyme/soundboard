@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import SettingsManager from './SettingsManager';
 import Modal from '../components/Modal';
+import { OGVPlayer, OGVCompat, OGVVersion, OGVLoader } from 'ogv';
 
 export default class Player {
     static instance;
@@ -30,33 +31,50 @@ export default class Player {
      */
     onBlocked;
 
+    newFangledOgvThingy;
+
     static init() {
         this.instance = new Player();
     }
 
     constructor() {
-        // Set up volume control using a gain node
-        const gainNode = this.audioContext.createGain();
-        gainNode.connect(this.audioContext.destination);
+        if (!OGVCompat.supported('OGVPlayer')) {
+            throw Error('No OGV support =(');
+        }
 
-        // Initial volume
-        gainNode.gain.value = SettingsManager.instance.get('volume');
+        OGVLoader.base = '/build/ogv';
 
-        // Bind to volume changes
+        const player = new OGVPlayer();
+        player.volume = SettingsManager.instance.get('volume');
         SettingsManager.instance.on('volume', (volume) => {
-            gainNode.gain.value = volume;
+            player.volume = volume;
         });
 
-        // Set the gain node as the destination node
-        this.audioDestinationNode = gainNode;
+        this.newFangledOgvThingy = player;
 
-        // Stop playing everything on space (except when a modal is active)
-        $(window).on('keydown', (e) => {
-            if (e.which === 32 && !Modal.isModalActive()) {
-                e.preventDefault();
-                this.stopAll();
-            }
-        });
+
+        // // Set up volume control using a gain node
+        // const gainNode = this.audioContext.createGain();
+        // gainNode.connect(this.audioContext.destination);
+        //
+        // // Initial volume
+        // gainNode.gain.value = SettingsManager.instance.get('volume');
+        //
+        // // Bind to volume changes
+        // SettingsManager.instance.on('volume', (volume) => {
+        //     gainNode.gain.value = volume;
+        // });
+        //
+        // // Set the gain node as the destination node
+        // this.audioDestinationNode = gainNode;
+        //
+        // // Stop playing everything on space (except when a modal is active)
+        // $(window).on('keydown', (e) => {
+        //     if (e.which === 32 && !Modal.isModalActive()) {
+        //         e.preventDefault();
+        //         this.stopAll();
+        //     }
+        // });
     }
 
     // TODO: Sample object
@@ -72,70 +90,74 @@ export default class Player {
         this.playing[sampleIndex] = [];
 
         sample.play = async (loop) => {
-            // Resume context if it is suspended due to a lack of user input
-            // Not awaited because that makes it hang indefinitely on Chrome on
-            // Android...
-            this.audioContext.resume();
+            this.newFangledOgvThingy.src = sample.url;
+            this.newFangledOgvThingy.play();
 
-            // Create an audio element source and link it to the context
-            const audio = new Audio(url);
-            audio.crossOrigin = 'anonymous';
-            const source = this.audioContext.createMediaElementSource(audio);
-            source.connect(this.audioDestinationNode);
 
-            audio.loop = loop;
-
-            // Add to playing
-            this.playing[sampleIndex].push(audio);
-
-            // Stop audio when play failed or it has ended
-            const stop = () => {
-                const audioIndex = this.playing[sampleIndex].indexOf(audio);
-
-                if (audioIndex >= 0) {
-                    // Remove from playing
-                    this.playing[sampleIndex].splice(audioIndex, 1);
-
-                    // Trigger onStop only when we just removed the last playing instance of this sample
-                    if (this.playing[sampleIndex].length === 0) {
-                        sample.onStop();
-                    }
-                }
-            };
-
-            audio.onpause = stop;
-            audio.onended = stop;
-
-            try {
-                await audio.play();
-            } catch (error) {
-                stop();
-
-                if (
-                    error instanceof DOMException &&
-                    error.name === 'NotAllowedError'
-                ) {
-                    // Audio requires user interaction
-                    this.blockedSamples.push({sample, loop});
-                    this.onBlocked?.();
-                }
-
-                return false;
-            }
-
-            // Trigger onPlay only when this is the first instance of this sample to start playing
-            if (this.playing[sampleIndex].length === 1) {
-                sample.onPlay();
-
-                // Request animation frame (only once)
-                if (!this.frameRequested) {
-                    this.frameRequested = true;
-
-                    requestAnimationFrame(this.progressStep);
-                }
-            }
-
-            return true;
+            // // Resume context if it is suspended due to a lack of user input
+            // // Not awaited because that makes it hang indefinitely on Chrome on
+            // // Android...
+            // this.audioContext.resume();
+            //
+            // // Create an audio element source and link it to the context
+            // const audio = new Audio(url);
+            // audio.crossOrigin = 'anonymous';
+            // const source = this.audioContext.createMediaElementSource(audio);
+            // source.connect(this.audioDestinationNode);
+            //
+            // audio.loop = loop;
+            //
+            // // Add to playing
+            // this.playing[sampleIndex].push(audio);
+            //
+            // // Stop audio when play failed or it has ended
+            // const stop = () => {
+            //     const audioIndex = this.playing[sampleIndex].indexOf(audio);
+            //
+            //     if (audioIndex >= 0) {
+            //         // Remove from playing
+            //         this.playing[sampleIndex].splice(audioIndex, 1);
+            //
+            //         // Trigger onStop only when we just removed the last playing instance of this sample
+            //         if (this.playing[sampleIndex].length === 0) {
+            //             sample.onStop();
+            //         }
+            //     }
+            // };
+            //
+            // audio.onpause = stop;
+            // audio.onended = stop;
+            //
+            // try {
+            //     await audio.play();
+            // } catch (error) {
+            //     stop();
+            //
+            //     if (
+            //         error instanceof DOMException &&
+            //         error.name === 'NotAllowedError'
+            //     ) {
+            //         // Audio requires user interaction
+            //         this.blockedSamples.push({sample, loop});
+            //         this.onBlocked?.();
+            //     }
+            //
+            //     return false;
+            // }
+            //
+            // // Trigger onPlay only when this is the first instance of this sample to start playing
+            // if (this.playing[sampleIndex].length === 1) {
+            //     sample.onPlay();
+            //
+            //     // Request animation frame (only once)
+            //     if (!this.frameRequested) {
+            //         this.frameRequested = true;
+            //
+            //         requestAnimationFrame(this.progressStep);
+            //     }
+            // }
+            //
+            // return true;
         };
 
         // Return the ID
