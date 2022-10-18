@@ -1,0 +1,52 @@
+[data-theme='default-classic'] {
+    $text-color: #fff;
+    $accent-color: #25b192;
+    $gray: #ddd;
+
+    // Header
+    $header-bg: $accent-color;
+    --header-bg: #{$header-bg};
+    --header-color: #{$text-color};
+
+    // IconButton
+    --icon-button-header-color: #{$text-color};
+    --icon-button-header-bg-hover: #{rgba($text-color, 0.1)};
+    --icon-button-header-color-hover: var(--icon-button-header-color);
+    --icon-button-header-bg-active: #{rgba($text-color, 0.15)};
+    --icon-button-header-color-active: var(--icon-button-header-color);
+
+    // SampleList
+    $sample-list-bg: #232323;
+    --sample-list-bg: #{$sample-list-bg};
+
+    $no-results-color: mix($sample-list-bg, $text-color, 50%);
+    --no-results-color: #{$no-results-color};
+    --no-results-icon-color: #{lighten($no-results-color, 10%)};
+
+    // SampleItem
+    $sample-bg: #2d2d2d;
+    --sample-bg: #{$sample-bg};
+    --sample-bg-hover: #{mix($gray, $sample-bg, 10%)};
+    --sample-bg-active: #{mix($gray, $sample-bg, 16%)};
+
+    --sample-box-shadow: none;
+    --sample-box-shadow-hover: var(--sample-box-shadow);
+    --sample-box-shadow-active: var(--sample-box-shadow);
+
+    --sample-color: #{$text-color};
+
+    $sample-playing-bg: $accent-color;
+    --sample-playing-bg: #{$sample-playing-bg};
+    --sample-playing-bg-hover: #{darken($sample-playing-bg, 5%)};
+    --sample-playing-bg-active: #{darken($sample-playing-bg, 10%)};
+
+    --sample-playing-box-shadow: var(--sample-box-shadow);
+    --sample-playing-box-shadow-hover: var(--sample-box-shadow-hover);
+    --sample-playing-box-shadow-active: var(--sample-box-shadow-active);
+
+    --sample-playing-color: var(--sample-color);
+
+    --sample-progress-bg: #{rgba(lighten($sample-playing-bg, 30%), .4)};
+
+    --sample-visualize-color: var(--sample-playing-color);
+}

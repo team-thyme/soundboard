@@ -23,6 +23,7 @@ function useSearchContextValue(): SearchContextValue {
 export enum Theme {
     Default = 'default',
     Cirkeltrek = 'cirkeltrek',
+    DefaultClassic = 'default-classic',
 }
 
 type ThemeContextValue = {

@@ -72,7 +72,7 @@
     --sample-progress-bg: #{rgba(lighten($sample-playing-bg, 30%), .4)};
 
     --sample-visualize-line-width: 1.5px; // Only supports pixels!
-    --sample-visualize-color: #{$text-color};
+    --sample-visualize-color: var(--sample-playing-color);
 
     // ContextMenu
     --context-menu-bg: white;
