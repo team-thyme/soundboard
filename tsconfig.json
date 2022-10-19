@@ -2,6 +2,7 @@
     "extends": "@tsconfig/recommended/tsconfig.json",
     "compilerOptions": {
         "lib": ["es2017", "dom"],
+        "jsx": "react-jsx",
         "noEmit": true
     },
     "include": ["frontend/**/*"]
