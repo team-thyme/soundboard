@@ -16,5 +16,14 @@
 /.npmrc
 /npm-debug.log
 
+# Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # Composer
 /vendor/

@@ -7,6 +7,9 @@
         "test:types": "tsc",
         "test": "jest"
     },
+    "resolutions": {
+        "deasync": "0.1.28"
+    },
     "devDependencies": {
         "@tsconfig/recommended": "^1.0.1",
         "@types/jest": "^26.0.23",
