@@ -68,7 +68,10 @@ gulp.task('watch:styles', () => {
     gulp.watch('frontend/styles/**/*.scss', gulp.series('build:styles'));
 });
 
-gulp.task('clean:scripts', () => del([`${buildDir}/*.{js,js.map}`]));
+gulp.task('clean:scripts', () => del([
+    `${buildDir}/*.{js,js.map}`,
+    `${buildDir}/ogv`,
+]));
 
 function createBundler(options = {}) {
     return browserify({...browserifyOptions, ...options})
@@ -92,14 +95,26 @@ function bundle(bundler) {
 }
 
 const buildScripts = () => {
-    // Copy dist files to public once
-    fs.copy(distDir, publicDir, { clobber: false }, (error) => {
+    // Copy relevant ogv.js workers.
+    fs.copy(`${__dirname}/node_modules/ogv/dist`, `${buildDir}/ogv`, {
+        overwrite: true,
+        filter: (file) => {
+            const baseName = path.basename(file);
+            return (
+                baseName === 'dist' ||
+                baseName === 'ogv-worker-audio.js' ||
+                baseName.startsWith('ogv-decoder-audio-') ||
+                baseName.startsWith('ogv-demuxer-')
+            );
+        }
+    }, (error) => {
         if (error && error.code !== 'EEXIST') {
             throw error;
         }
     });
 
-    fs.copy(`${__dirname}/node_modules/ogv/dist`, `${buildDir}/ogv`, { clobber: false}, (error) => {
+    // Copy dist files to public once
+    fs.copy(distDir, publicDir, { overwrite: false }, (error) => {
         if (error && error.code !== 'EEXIST') {
             throw error;
         }
