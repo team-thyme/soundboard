@@ -149,7 +149,7 @@ export default class Player {
                 source.connect(this.audioDestinationNode);
             }
 
-            audio.loop = loop;
+            audio.loop = loop; // Note: Does not work with OGVPlayer.
 
             // Add to playing
             this.playing[sampleIndex].push(audio);
