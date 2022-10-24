@@ -1,40 +1,98 @@
 import $ from 'jquery';
 import SettingsManager from './SettingsManager';
 import Modal from '../components/Modal';
+import { OGVPlayer, OGVCompat, OGVLoader } from 'ogv';
+
+/**
+ * @typedef {Object} Sample
+ * @property {(loop: Boolean) => Promise<Boolean>} play
+ * @property {String} url
+ * @property {() => void} onPlay
+ * @property {() => void} onStop
+ * @property {(progress: Number) => void} onProgress
+ */
 
 export default class Player {
+    /** @type {Player} */
     static instance;
 
-    // The registered samples
+    /**
+     * The registered samples.
+     *
+     * @type {Sample[]}
+     */
     samples = [];
 
-    // An array of audio nodes that are currently playing per sample
+    /**
+     * An array of audio nodes that are currently playing per sample.
+     *
+     * @type {HTMLAudioElement[][]}
+     */
     playing = [];
 
-    // Used to create audio sources and as destination for the playing samples
+    /** @type {Boolean} */
+    samplesArePlaying = false;
+
+    /**
+     * Used to create audio sources and as destination for the playing samples.
+     *
+     * @type {AudioContext}
+     */
     audioContext = new AudioContext();
 
     // The audio node to connect the created audio to
     audioDestinationNode;
 
-    // Whether an animation frame is requested, indicating that no new loop has to be spawned
-    frameRequested = false;
-
     // When samples are blocked from playing due to browser policies, they end
     // up here: [{sample, loop}]
+    /** @type {{sample: Sample, loop: Boolean}[]} */
     blockedSamples = [];
 
     /**
-     * The function assigned to this property will be called when a sample is
-     * blocked from playing.
+     * The function assigned to this property will be called when a sample is blocked from playing.
+     *
+     * @type {(() => void)|null}
      */
-    onBlocked;
+    onBlocked = null;
+
+    /**
+     * Whether to use overcomplicated ogv.js backup audio source for expensive bricks without support for open formats
+     * (Apple devices).
+     *
+     * @type {Boolean}
+     */
+    useOgvFallback = false;
+
+    /**
+     * Whether to play a silent regular audio element before any real audio to have expensive bricks (again, iPhones) to
+     * play them on the correct (media) channel instead of the ringer channel. Copy of
+     * https://github.com/brion/ogv.js/blob/e0adc6189741ebf99ef19300bb52fa5f567eff77/src/js/OGVPlayer.js#L922-L927
+     * but without creating an additional context which we want available _before_ the first play. TODO: Could use a PR.
+     *
+     * @type {Boolean}
+     */
+    silencePlease = false;
 
     static init() {
         this.instance = new Player();
     }
 
     constructor() {
+        // Configure OGV fallback.
+        if (new Audio().canPlayType('audio/ogg;codecs=opus') === '') {
+            console.info('OGG/Opus not supported. Initializing OGV...');
+
+            if (OGVCompat.supported('OGVPlayer')) {
+                this.useOgvFallback = true;
+                this.silencePlease = true;
+                OGVLoader.base = 'build/ogv';
+            } else {
+                console.warn('No support for Opus audio or OGV. Falling back to native playback.');
+            }
+        } else {
+            console.info('Using native audio playback for OGG/Opus. Thanks for using a real browser!');
+        }
+
         // Set up volume control using a gain node
         const gainNode = this.audioContext.createGain();
         gainNode.connect(this.audioContext.destination);
@@ -47,7 +105,6 @@ export default class Player {
             gainNode.gain.value = volume;
         });
 
-        // Set the gain node as the destination node
         this.audioDestinationNode = gainNode;
 
         // Stop playing everything on space (except when a modal is active)
@@ -59,7 +116,6 @@ export default class Player {
         });
     }
 
-    // TODO: Sample object
     registerSample(url, onPlay, onStop, onProgress) {
         const sample = {
             url,
@@ -77,13 +133,23 @@ export default class Player {
             // Android...
             this.audioContext.resume();
 
-            // Create an audio element source and link it to the context
-            const audio = new Audio(url);
-            audio.crossOrigin = 'anonymous';
-            const source = this.audioContext.createMediaElementSource(audio);
-            source.connect(this.audioDestinationNode);
+            /** @type {HTMLAudioElement|OGVPlayer} */
+            let audio;
+            if (this.useOgvFallback && url.match(/\.(ogg|webm)$/)) {
+                audio = new OGVPlayer({
+                    audioContext: this.audioContext,
+                    audioDestination: this.audioDestinationNode,
+                });
+                audio.src = url;
+            } else {
+                // Create an audio element source and link it to the context
+                audio = new Audio(url);
+                audio.crossOrigin = 'anonymous';
+                const source = this.audioContext.createMediaElementSource(audio);
+                source.connect(this.audioDestinationNode);
+            }
 
-            audio.loop = loop;
+            audio.loop = loop; // Note: Does not work with OGVPlayer.
 
             // Add to playing
             this.playing[sampleIndex].push(audio);
@@ -107,6 +173,15 @@ export default class Player {
             audio.onended = stop;
 
             try {
+                // First try playing the most silent audio you've ever heard. Should trigger same not allowed error
+                // handling upon failure to deal with playing from URL.
+                if (this.silencePlease) {
+                    const silence = new Audio('data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU5LjE2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAACAAAEEwCZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZ//////////////////////////////////////////////////////////////////8AAAAATGF2YzU5LjE4AAAAAAAAAAAAAAAAJAZAAAAAAAAABBMIw3vfAAAAAAAAAAAAAAAAAAAAAP/7kGQAD/AAAGkAAAAIAAANIAAAAQAAAaQAAAAgAAA0gAAABExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7kmRAj/AAAGkAAAAIAAANIAAAAQAAAaQAAAAgAAA0gAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=');
+                    await silence.play();
+                    this.silencePlease = false;
+                    console.info('Did you hear that? I thought I heard something.'); // "Must have been my imagination."
+                }
+
                 await audio.play();
             } catch (error) {
                 stop();
@@ -128,9 +203,8 @@ export default class Player {
                 sample.onPlay();
 
                 // Request animation frame (only once)
-                if (!this.frameRequested) {
-                    this.frameRequested = true;
-
+                if (!this.samplesArePlaying) {
+                    this.samplesArePlaying = true;
                     requestAnimationFrame(this.progressStep);
                 }
             }
@@ -176,17 +250,20 @@ export default class Player {
         this.playing.forEach((playing, sampleIndex) => {
             if (playing.length > 0) {
                 // Use the last playing sample to reflect the most recently started sample
-                const progress = (playing[playing.length - 1].currentTime / playing[playing.length - 1].duration) * 100;
-                this.samples[sampleIndex].onProgress(progress);
+                const currentTime = Number(playing[playing.length - 1].currentTime);
+                const duration = Number(playing[playing.length - 1].duration);
+                if (duration && isFinite(duration)) {
+                    const progress = (currentTime / duration) * 100;
+                    this.samples[sampleIndex].onProgress(progress);
+                }
 
                 samplesArePlaying = true;
             }
         });
 
-        this.frameRequested = samplesArePlaying;
-
-        // Keep requesting an animation frame until all no samples are playing
-        if (this.frameRequested) {
+        // Keep requesting an animation frame until no samples are playing
+        this.samplesArePlaying = samplesArePlaying;
+        if (this.samplesArePlaying) {
             window.requestAnimationFrame(this.progressStep);
         }
     };

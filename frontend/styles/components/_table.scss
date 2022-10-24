@@ -27,7 +27,7 @@
     }
 
     .table__sort-icon {
-        margin-left: $spacing-base / 2;
+        margin-left: calc($spacing-base / 2);
     }
 }
 
@@ -39,7 +39,7 @@
     }
 
     .table__sort-icon {
-        margin-right: $spacing-base / 2;
+        margin-right: calc($spacing-base / 2);
     }
 }
 

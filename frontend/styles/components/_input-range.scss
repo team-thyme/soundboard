@@ -36,11 +36,11 @@ input[type=range] {
     }
 
     @include thumb {
-        margin-top: ($track-height - $thumb-size) / 2;
+        margin-top: calc(($track-height - $thumb-size) / 2);
         width: $thumb-size;
         height: $thumb-size;
 
-        border-radius: $thumb-size / 2;
+        border-radius: calc($thumb-size / 2);
 
         transition:
             transform $transition-fast ease,
@@ -49,7 +49,7 @@ input[type=range] {
 
     width: 100%;
     margin: -5px 0;
-    padding: (($thumb-size - $track-height) / 2 + 5px) 0;
+    padding: calc(($thumb-size - $track-height) / 2 + 5px) 0;
 
     -webkit-appearance: none;
     background: transparent;
