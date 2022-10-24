@@ -8,7 +8,6 @@ import fs from 'fs-extra';
 import gulp from 'gulp';
 import gulpif from 'gulp-if';
 import gulpLivereload from 'gulp-livereload';
-import log from 'fancy-log';
 import path from 'path';
 import postcss from 'gulp-postcss';
 import rename from 'gulp-rename';
@@ -19,6 +18,7 @@ import uglify from 'gulp-uglify';
 import watchify from 'watchify';
 import { argv } from 'yargs';
 import sass from 'sass';
+import gulpSourcemaps from 'gulp-sourcemaps';
 
 const publicDir = `${__dirname}/public`;
 const distDir = `${__dirname}/dist`;
@@ -28,8 +28,6 @@ const {
     livereload = false,
     sourcemaps = false,
 } = argv;
-
-// TODO: Reimplement sourcemaps (with vinyl-sourcemap?)
 
 const browserifyOptions = {
     entries: ['frontend/src/main.js'],
@@ -80,16 +78,19 @@ function createBundler(options = {}) {
 }
 
 function bundle(bundler) {
-    log('[browserify] Bundle start');
+    console.log('[browserify] Bundle start');
 
-    return bundler.bundle(() => log('[browserify] Bundle completed'))
+    return bundler
+        .bundle(() => console.log('[browserify] Bundle completed'))
         .on('error', (err) => {
-            log('[browserify]', err.toString());
+            console.log('[browserify]', err.toString());
         })
         .pipe(sourceStream('main.js'))
         .pipe(rename('script.js'))
         .pipe(buffer())
+        .pipe(gulpif(sourcemaps, gulpSourcemaps.init({ loadMaps: true })))
         .pipe(uglify())
+        .pipe(gulpif(sourcemaps, gulpSourcemaps.write('./')))
         .pipe(gulp.dest(buildDir))
         .pipe(gulpif(livereload, gulpLivereload()));
 }
@@ -143,7 +144,7 @@ gulp.task('watch:scripts', () => {
         .plugin(watchify);
 
     bundler.on('update', () => {
-        log('[watch:scripts] Scripts changed, starting build');
+        console.log('[watch:scripts] Scripts changed, starting build');
         bundle(bundler);
     });
     bundle(bundler);
