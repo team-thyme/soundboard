@@ -2,10 +2,9 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <!-- Change this to the href of the directory this file is hosted in (suffixed with a slash) -->
-        <base href="/">
-<!--        <meta name="viewport" content="initial-scale=1">-->
-<!--        <meta name="mobile-web-app-capable" content="yes">-->
+        <base href="{{ env.BASE_URL }}">
+        <meta name="viewport" content="initial-scale=1">
+        <meta name="mobile-web-app-capable" content="yes">
         <title>Soundboard</title>
         <link rel="shortcut icon" href="favicon.ico">
         <link rel="icon" sizes="192x192" href="icon.png">
@@ -27,9 +26,9 @@
             <div class="header__button" data-action="show-settings-modal">
                 <i class="material-icons">settings</i>
             </div>
-            <div class="header__button" data-action="show-contribution-modal">
+            <a class="header__button" href="{{ env.CONTRIBUTE_URL }}" target="_blank">
                 <i class="material-icons">library_add</i>
-            </div>
+            </a>
         </header>
         <div class="audio-blocked-overlay">
             <div class="audio-blocked-overlay__icon material-icons">play_arrow</div>
@@ -59,15 +58,15 @@
                 </div>
                 <div class="modal__footer modal__footer--align-center">
                     <span class="version">
-                        <span class="version__link" data-action="show-changelog-modal">
+                        <a class="version__link" href="{{ env.REPOSITORY_URL }}" target="_blank">
                             Soundboard
-                            <span class="version__number" data-content="version-number"></span>
-                        </span>
+                            <span class="version__number">{{ env.VERSION }}</span>
+                        </a>
                         <span
                             class="version__link"
                             data-action="play-version-sample"
-                            data-content="version-name"
                         >
+                            {{ env.VERSION_NAME }}
                         </span>
                     </span>
                 </div>
