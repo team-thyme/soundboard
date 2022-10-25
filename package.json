@@ -6,13 +6,10 @@
     },
     "dependencies": {
         "copy-to-clipboard": "^3.3.1",
-        "core-js": "^3.10.2",
-        "fast-bind": "^1.0.0",
+        "events": "^3.3.0",
         "jquery": "^3.6.0",
         "jquery-contextmenu": "^2.9.2",
         "ogv": "^1.8.9",
-        "regenerator-runtime": "^0.13.7",
-        "sass": "^1.55.0",
         "store2": "^2.12.0",
         "underscore": "^1.13.1"
     },
@@ -21,9 +18,10 @@
         "@parcel/optimizer-data-url": "^2.7.0",
         "@parcel/transformer-inline-string": "^2.7.0",
         "@parcel/transformer-sass": "^2.7.0",
-        "events": "^3.3.0",
+        "core-js": "^3.26.0",
         "parcel": "^2.7.0",
-        "parcel-reporter-static-files-copy": "github:villermen/parcel-reporter-static-files-copy#master"
+        "parcel-reporter-static-files-copy": "github:villermen/parcel-reporter-static-files-copy#master",
+        "sass": "^1.55.0"
     },
     "staticFiles": [
         {

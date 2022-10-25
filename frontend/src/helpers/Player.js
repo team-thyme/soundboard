@@ -85,7 +85,7 @@ export default class Player {
             if (OGVCompat.supported('OGVPlayer')) {
                 this.useOgvFallback = true;
                 this.silencePlease = true;
-                OGVLoader.base = 'build/ogv';
+                OGVLoader.base = 'ogv';
             } else {
                 console.warn('No support for Opus audio or OGV. Falling back to native playback.');
             }
