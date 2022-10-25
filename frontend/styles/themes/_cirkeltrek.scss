@@ -1,4 +1,3 @@
-@import '../../../node_modules/sass-import-once/sass-import-once';
 @import '_themes';
 
 $themes: map-merge($themes, (cirkeltrek: (
@@ -14,7 +13,7 @@ $themes: map-merge($themes, (cirkeltrek: (
     sample-shadow: rgba(0,0,0,0.15)
 )));
 
-@include exports('cirkeltrek', false) {
+@mixin cirkeltrek {
     $colors: (0: #ae1c28, 1: #ffffff, 2: #21468b);
 
     body.theme--cirkeltrek {

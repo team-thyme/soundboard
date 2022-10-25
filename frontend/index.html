@@ -1,25 +1,19 @@
 <!doctype html>
 <html>
     <head>
-        <meta charset="utf-8">
-
+        <meta charset="utf-8" />
         <!-- Change this to the href of the directory this file is hosted in (suffixed with a slash) -->
         <base href="/">
-
-        <meta name="viewport" content="initial-scale=1">
-        <meta name="mobile-web-app-capable" content="yes">
-
+<!--        <meta name="viewport" content="initial-scale=1">-->
+<!--        <meta name="mobile-web-app-capable" content="yes">-->
         <title>Soundboard</title>
         <link rel="shortcut icon" href="favicon.ico">
         <link rel="icon" sizes="192x192" href="icon.png">
-
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="build/style.css">
-
-        <script src="build/script.js" defer></script>
+        <link rel="stylesheet" href="styles/main.scss">
+        <script type="module" src="src/main.js"></script>
     </head>
-
     <body>
         <header class="header">
             <div class="header__search">
@@ -37,12 +31,10 @@
                 <i class="material-icons">library_add</i>
             </div>
         </header>
-
         <div class="audio-blocked-overlay">
             <div class="audio-blocked-overlay__icon material-icons">play_arrow</div>
             <div class="audio-blocked-overlay__text">Alright let's do this</div>
-        </div>
-
+        </div>\
         <div class="sample-container">
             <div class="sample-container__empty">
                 <div class="sample-container__empty-icon material-icons">search</div>
@@ -52,7 +44,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Settings modal -->
         <div class="modal" id="settings-modal">
             <div class="modal__dialog">
@@ -82,7 +73,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Requests modal -->
         <div class="modal" id="request-modal">
             <div class="modal__dialog">
