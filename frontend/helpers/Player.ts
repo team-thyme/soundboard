@@ -32,6 +32,7 @@ export default class Player {
     private gainNode: GainNode;
 
     private playing: Map<string, PlayingData> = new Map();
+    private blockedSamples: { sample: Sample, options: TogglePlayOptions }[] = [];
 
     constructor() {
         this.audioContext = new AudioContext();
@@ -108,6 +109,14 @@ export default class Player {
         this.playing.forEach(stop);
     }
 
+    playBlockedSamples(): void {
+        const blockedSamples = [...this.blockedSamples];
+        this.blockedSamples = [];
+        blockedSamples.forEach(({ sample, options}) => {
+            this.togglePlay(sample, options);
+        });
+    }
+
     /**
      * Toggles playing the given sample.
      *
@@ -121,9 +130,12 @@ export default class Player {
      * or not) to loop indefinitely.
      */
     async togglePlay(
-        { key, url }: Sample,
-        { spam = false, loop = false }: TogglePlayOptions = {},
+        sample: Sample,
+        options: TogglePlayOptions = {},
     ) {
+        const { key, url } = sample;
+        const { spam = false, loop = false } = options;
+
         // No need to stop anything when spamming
         if (!spam) {
             if (this.isPlaying(key)) {
@@ -153,15 +165,23 @@ export default class Player {
         const source = this.audioContext.createMediaElementSource(audio);
         source.connect(analyserNode);
 
+        let audioStopped = false;
         const handleStop = () => {
+            if (!audioStopped) {
+                audio.removeEventListener('pause', handleStop);
+                audio.removeEventListener('ended', handleStop);
+
+                // Unload the audio file
+                audio.removeAttribute('src');
+                audio.load();
+
+                audioStopped = true;
+            }
+
             const playingData = this.playing.get(key);
             if (!playingData) {
                 return;
             }
-
-            // Unload the audio file
-            audio.removeAttribute('src');
-            audio.load();
 
             // Remove this audio element from the list
             playingData.instances = playingData.instances.filter(
@@ -178,7 +198,22 @@ export default class Player {
         audio.addEventListener('pause', handleStop);
         audio.addEventListener('ended', handleStop);
 
-        await audio.play();
+        try {
+            await audio.play();
+        } catch (error) {
+            handleStop();
+
+            if (
+                error instanceof DOMException &&
+                error.name === 'NotAllowedError'
+            ) {
+                // Audio requires user interaction
+                this.blockedSamples.push({ sample, options });
+                this.emit('blocked', '*');
+            }
+
+            return;
+        }
 
         // "Emplace" playingData with new audio element appended to the list
         const playingData = this.playing.get(key) ?? {

@@ -2,6 +2,7 @@ import React, { Context, useEffect, useMemo, useState } from 'react';
 
 import Header from './Header';
 import SampleList from './SampleList/SampleList';
+import BlockedOverlay from './BlockedOverlay';
 
 type SearchContextValue = {
     query: string;
@@ -54,6 +55,7 @@ export default function App() {
             <ThemeContext.Provider value={themeContext}>
                 <Header />
                 <SampleList />
+                <BlockedOverlay />
             </ThemeContext.Provider>
         </SearchContext.Provider>
     );
