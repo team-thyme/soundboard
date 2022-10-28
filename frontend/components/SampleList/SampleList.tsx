@@ -5,11 +5,13 @@ import React, {
     useDeferredValue,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
 import { fetchSamples, Sample } from '../../api';
+import { player } from '../../helpers/Player';
 import { useTextMeasurer } from '../../helpers/TextMeasurer';
 import {
     detailFont,
@@ -131,8 +133,48 @@ function useBodyWidth(): number {
     return width;
 }
 
+function usePlaySamplesFromURI(allSamples: Sample[]): void {
+    const playedFromURI = useRef(false);
+    useEffect(() => {
+        if (playedFromURI.current || allSamples.length === 0) {
+            return;
+        }
+
+        // Get path relative to base URI
+        const path = window.location.href.substring(document.baseURI.length);
+        const pathParts = path
+            .split('/')
+            .map((part) => part.trim())
+            .filter((part) => part !== '');
+
+        // Select samples to play
+        const selectedSamples: Sample[] = [];
+        pathParts.forEach((part) => {
+            const matchingSamples = allSamples.filter(
+                (sample) =>
+                    sample.id === part && !selectedSamples.includes(sample),
+            );
+            const index = Math.floor(Math.random() * matchingSamples.length);
+            selectedSamples.push(matchingSamples[index]);
+        });
+
+        // Play the selected samples
+        selectedSamples.forEach((sample) => {
+            player.togglePlay(sample);
+        });
+
+        // Don't play from URI again
+        playedFromURI.current = true;
+    }, [allSamples]);
+}
+
 export default function SampleList() {
     const allSamples = useSamples();
+
+    // TODO: This is not the right place to be playing a sample from URI, but it
+    //  is currently the only place we have access to all fetched samples.
+    usePlaySamplesFromURI(allSamples);
+
     const { query } = useContext(SearchContext);
     const deferredQuery = useDeferredValue(query);
     const samples = useFilteredSamples(allSamples, deferredQuery);
