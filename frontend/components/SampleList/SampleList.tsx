@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, {
     useCallback,
     useContext,
+    useDeferredValue,
     useEffect,
     useMemo,
     useState,
@@ -133,7 +134,8 @@ function useBodyWidth(): number {
 export default function SampleList() {
     const allSamples = useSamples();
     const { query } = useContext(SearchContext);
-    const samples = useFilteredSamples(allSamples, query);
+    const deferredQuery = useDeferredValue(query);
+    const samples = useFilteredSamples(allSamples, deferredQuery);
 
     const containerWidth = useBodyWidth() - sampleListPadding * 2;
     const rowHeight = sampleHeight + sampleMargin * 2;
