@@ -3,12 +3,16 @@
 .SampleList {
     flex: 1 0 auto;
 
-    // Use padding-bottom instead of margin-bottom, since margin tends to get
-    // cut off at the end of a flex container.
+    position: relative;
+    z-index: 0;
+
+    // Bottom margin is added via the virtualization
     margin: $sampleListPadding $sampleListPadding 0;
-    padding-bottom: $sampleListPadding;
 
     &__row {
+        position: absolute;
+        width: 100%;
+
         display: flex;
         flex-direction: row;
     }

@@ -6,7 +6,7 @@ import React, {
     useMemo,
     useState,
 } from 'react';
-import { List, WindowScroller } from 'react-virtualized';
+import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
 import { fetchSamples, Sample } from '../../api';
 import { useTextMeasurer } from '../../helpers/TextMeasurer';
@@ -139,60 +139,70 @@ export default function SampleList() {
     const rowHeight = sampleHeight + sampleMargin * 2;
 
     const widths = useSampleWidths(samples);
-    const layout = computeLayout(widths, containerWidth);
+    const layout = useMemo(
+        () => computeLayout(widths, containerWidth),
+        [widths, containerWidth],
+    );
+
+    // TODO: Account for offset caused by header & padding; as it stands the rows
+    //  end up a bit lower on the page than the virtualizer expects. This is very
+    //  noticeable when you use a negative `overscan`.
+    const rowVirtualizer = useWindowVirtualizer({
+        count: layout.length,
+        estimateSize: () => rowHeight,
+        paddingEnd: sampleListPadding,
+    });
+
+    // Force range recalculation, since the range is not calculated correctly on
+    // the first render.
+    // TODO: Find another way to fix this.
+    // @ts-expect-error TS2341: calculateRange() is a private method
+    rowVirtualizer.calculateRange();
+
+    if (layout.length === 0) {
+        return (
+            <div className="SampleList">
+                <div className="SampleList__noResults">
+                    <FontAwesomeIcon
+                        className="SampleList__noResultsIcon"
+                        icon="search"
+                        size="2x"
+                    />
+                    <span className="SampleList__noResultsLabel">
+                        How about searching for samples that do exist?
+                    </span>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <WindowScroller>
-            {({ height, isScrolling, onChildScroll, scrollTop }) => (
-                <List
-                    className="SampleList"
-                    tabIndex={null}
-                    width={containerWidth}
-                    height={height}
-                    autoHeight
-                    isScrolling={isScrolling}
-                    onScroll={onChildScroll}
-                    scrollTop={scrollTop}
-                    rowHeight={rowHeight}
-                    rowCount={layout.length}
-                    overscanRowCount={3}
-                    rowRenderer={({ index: rowIndex, style }) => (
-                        <div
-                            key={rowIndex}
-                            className="SampleList__row"
-                            style={style}
-                            role="row"
-                            // Used to color rows differently in "cirkeltrek" theme
-                            data-index-mod3={rowIndex % 3}
-                        >
-                            {layout[rowIndex].map((index) => {
-                                const sample = samples[index];
-                                return (
-                                    <SampleItem
-                                        key={sample.key}
-                                        sample={sample}
-                                    />
-                                );
-                            })}
-                            {rowIndex === layout.length - 1 && (
-                                <div className="SampleList__pusher" />
-                            )}
-                        </div>
-                    )}
-                    noRowsRenderer={() => (
-                        <div className="SampleList__noResults">
-                            <FontAwesomeIcon
-                                className="SampleList__noResultsIcon"
-                                icon="search"
-                                size="2x"
-                            />
-                            <span className="SampleList__noResultsLabel">
-                                How about searching for samples that do exist?
-                            </span>
-                        </div>
-                    )}
-                />
-            )}
-        </WindowScroller>
+        <div
+            className="SampleList"
+            style={{ height: rowVirtualizer.getTotalSize() }}
+        >
+            {rowVirtualizer
+                .getVirtualItems()
+                .map(({ index: rowIndex, start }) => (
+                    <div
+                        key={rowIndex}
+                        className="SampleList__row"
+                        style={{ top: start }}
+                        role="row"
+                        // Used to color rows differently in "cirkeltrek" theme
+                        data-index-mod3={rowIndex % 3}
+                    >
+                        {layout[rowIndex].map((index) => {
+                            const sample = samples[index];
+                            return (
+                                <SampleItem key={sample.key} sample={sample} />
+                            );
+                        })}
+                        {rowIndex === layout.length - 1 && (
+                            <div className="SampleList__pusher" />
+                        )}
+                    </div>
+                ))}
+        </div>
     );
 }
