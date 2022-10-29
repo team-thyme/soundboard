@@ -38,6 +38,8 @@ $z-index-box-shadow: 4;
 
         border-radius: $border-radius-base;
         box-shadow: var(--sample-box-shadow);
+
+        pointer-events: none;
     }
 
     &:hover {
