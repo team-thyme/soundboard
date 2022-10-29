@@ -1,10 +1,12 @@
+@use '../variables' as *;
+
 .ModalLayer {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 2;
+    z-index: $z-index-modal;
 
     background: rgba(black, 0.1);
 }
