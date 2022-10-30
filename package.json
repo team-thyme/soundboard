@@ -21,7 +21,7 @@
         "core-js": "^3.26.0",
         "dotenv": "^16.0.3",
         "parcel": "^2.7.0",
-        "parcel-reporter-static-files-copy": "github:villermen/parcel-reporter-static-files-copy#master",
+        "parcel-reporter-static-files-copy": "github:elwin013/parcel-reporter-static-files-copy#pull/21",
         "posthtml-expressions": "^1.10.0",
         "rimraf": "^3.0.2",
         "sass": "^1.55.0"
