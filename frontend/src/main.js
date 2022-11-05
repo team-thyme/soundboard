@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'core-js/stable';
 import 'regenerator-runtime';
+import config from './config';
 import ApiClient from './helpers/ApiClient';
 import Intern from './helpers/Intern';
 import Player from './helpers/Player';
@@ -50,7 +51,7 @@ new Search({
 
 // Load config and use it to initialize other components
 (async () => {
-    const apiClient = new ApiClient(process.env.API_BASE_URL);
+    const apiClient = new ApiClient(config.apiBaseUrl);
 
     // Get samples and add them to the container
     const samples = await apiClient.getSamples();
@@ -58,11 +59,19 @@ new Search({
     playFromUri(sampleContainer);
 
     // Register modals that rely on configuration
+    $('[data-action="show-contribution-modal"]').on('click', () => {
+        window.open(config.contributeUrl, '_blank');
+    });
+
+    $('[data-action="show-changelog-modal"]').on('click', () => {
+        window.open(config.repositoryUrl, '_blank');
+    });
+
     $('[data-action="play-version-sample"]').on('click', () => {
-        sampleContainer.playRandomWithId(process.env.VERSION_SAMPLE);
+        sampleContainer.playRandomWithId(config.versionSampleId);
     });
 
     // Version in settings modal
-    $('[data-content=version-number]').text(`v${process.env.VERSION}`);
-    $('[data-content=version-name]').text(process.env.VERSION_NAME);
+    $('[data-content=version-number]').text(`v${config.versionNumber}`);
+    $('[data-content=version-name]').text(config.versionName)
 })();

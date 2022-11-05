@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <base href="{{ env.BASE_URL }}">
+        <base href="/">
         <meta name="viewport" content="initial-scale=1">
         <meta name="mobile-web-app-capable" content="yes">
         <title>Soundboard</title>
@@ -26,9 +26,9 @@
             <div class="header__button" data-action="show-settings-modal">
                 <i class="material-icons">settings</i>
             </div>
-            <a class="header__button" href="{{ env.CONTRIBUTE_URL }}" target="_blank">
+            <div class="header__button" data-action="show-contribution-modal">
                 <i class="material-icons">library_add</i>
-            </a>
+            </div>
         </header>
         <div class="audio-blocked-overlay">
             <div class="audio-blocked-overlay__icon material-icons">play_arrow</div>
@@ -58,15 +58,15 @@
                 </div>
                 <div class="modal__footer modal__footer--align-center">
                     <span class="version">
-                        <a class="version__link" href="{{ env.REPOSITORY_URL }}" target="_blank">
+                        <span class="version__link" data-action="show-changelog-modal">
                             Soundboard
-                            <span class="version__number">{{ env.VERSION }}</span>
-                        </a>
+                            <span class="version__number" data-content="version-number"></span>
+                        </span>
                         <span
                             class="version__link"
                             data-action="play-version-sample"
+                            data-content="version-name"
                         >
-                            {{ env.VERSION_NAME }}
                         </span>
                     </span>
                 </div>
