@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'jquery-contextmenu';
 import copy from 'copy-to-clipboard';
+import config from '../config';
 
 export default class SampleContainer {
     /** @type jQuery */
@@ -70,10 +71,9 @@ export default class SampleContainer {
                 copy: {
                     name: 'Copy url',
                     callback: (key, opt) => {
-                        // Get url to sample by letting the browser resolve it relatively
-                        // (takes into account the base url set)
+                        // Get URL to sample by letting the browser resolve it relative to current hostname.
                         const anchor = document.createElement('a');
-                        anchor.href = opt.$trigger.data('sample').id;
+                        anchor.href = `${config.baseUrl}${opt.$trigger.data('sample').id}`;
                         copy(anchor.href);
                     },
                 },
