@@ -33,8 +33,7 @@ fully supported. Other browsers give mixed results, but who uses those anyway?
 
 You can adjust behavior of the soundboard by adjusting the environment variables. Copy `.env.dist` to `.env` and modify
 as desired. Point to the right API base URL by adjusting `API_BASE_URL`. When hosting the frontend from a subdirectory
-you will have to change the `BASE_URL` variable (only works for `build.sh production` when NPM script-shell is set to
-Bash).
+you will have to change the `BASE_URL` variable.
 
 Optional steps:
 
