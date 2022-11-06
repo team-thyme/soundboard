@@ -2,6 +2,7 @@ import $ from 'jquery';
 import SettingsManager from './SettingsManager';
 import Modal from '../components/Modal';
 import { OGVPlayer, OGVCompat, OGVLoader } from 'ogv';
+import config from '../config';
 
 /**
  * @typedef {Object} Sample
@@ -85,7 +86,7 @@ export default class Player {
             if (OGVCompat.supported('OGVPlayer')) {
                 this.useOgvFallback = true;
                 this.silencePlease = true;
-                OGVLoader.base = 'ogv';
+                OGVLoader.base = `${config.baseUrl}ogv`;
             } else {
                 console.warn('No support for Opus audio or OGV. Falling back to native playback.');
             }
