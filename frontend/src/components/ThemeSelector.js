@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { themes } from '../helpers/ThemeManager';
-import svg from '../../theme-thumb.svg';
+import themeThumbSvg from 'bundle-text:../../theme-thumb.svg';
 
 class ThemeSelector {
 
@@ -38,7 +38,7 @@ class ThemeSelector {
     }
 
     static createThumb(theme) {
-        return $(svg).addClass(`theme-thumb--${theme} theme-thumb--fluid`);
+        return $(themeThumbSvg).addClass(`theme-thumb--${theme} theme-thumb--fluid`);
     }
 
     get value() {

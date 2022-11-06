@@ -1,18 +1,19 @@
-/public/build/
-/public/config.json
-/public/index.html
-
 # Sample files (we got that sweet copyright on our own voices)
 /samples/*
 !/samples/.gitkeep
 
-# IntellIJ
+# IDE stuff
 /.idea/
 
-# NodeJS
+# Frontend
 /node_modules/
 /.npmrc
 /npm-debug.log
+/public/
+/.parcel-cache/
 
-# Composer
+# Backend
 /vendor/
+
+# Environment variables
+/.env

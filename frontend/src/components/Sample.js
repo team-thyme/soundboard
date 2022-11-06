@@ -1,4 +1,4 @@
-import fastBind from 'fast-bind';
+
 import Player from '../helpers/Player';
 import { $div } from '../helpers/jquery-utils';
 
@@ -34,9 +34,9 @@ class Sample {
 
         this.playerId = Player.instance.registerSample(
             this.url,
-            fastBind.call(this.handlePlay, this),
-            fastBind.call(this.handleStop, this),
-            fastBind.call(this.handleProgress, this),
+            this.handlePlay.bind(this),
+            this.handleStop.bind(this),
+            this.handleProgress.bind(this),
         );
 
         this.createElements();

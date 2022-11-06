@@ -28,7 +28,6 @@ fi
 
 if [ "$BUILD_MODE" == 'serve' ]; then
     composer run dev-server & \
-    npm run dev-server & \
-    npm run dev-build
+    npm run dev-server
     exit 0
 fi

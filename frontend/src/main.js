@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import 'core-js/stable';
 import 'regenerator-runtime';
+import config from './config';
 import ApiClient from './helpers/ApiClient';
-import getConfig from './helpers/getConfig';
 import Intern from './helpers/Intern';
 import Player from './helpers/Player';
 import SampleContainer from './components/SampleContainer';
@@ -51,7 +51,6 @@ new Search({
 
 // Load config and use it to initialize other components
 (async () => {
-    const config = await getConfig();
     const apiClient = new ApiClient(config.apiBaseUrl);
 
     // Get samples and add them to the container
@@ -74,5 +73,5 @@ new Search({
 
     // Version in settings modal
     $('[data-content=version-number]').text(`v${config.versionNumber}`);
-    $('[data-content=version-name]').text(config.versionName);
+    $('[data-content=version-name]').text(config.versionName)
 })();
