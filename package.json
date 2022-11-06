@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "dev-server": "parcel serve frontend/index.html --dist-dir=public --port=80",
-        "build": "npm run clean && parcel build frontend/index.html --dist-dir=public --no-source-maps --public-url=${BASE_URL:=/}",
+        "build": "npm run clean && parcel build frontend/index.html --dist-dir=public --no-source-maps",
+        "build-production": "npm run build -- --public-url=${BASE_URL:=/}",
         "clean": "rimraf 'public/*' 'public/.*'"
     },
     "dependencies": {

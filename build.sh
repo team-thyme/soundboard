@@ -12,9 +12,10 @@ esac
 echo "Building soundboard in \"$BUILD_MODE\" mode..."
 
 if [ "$BUILD_MODE" == 'production' ]; then
+    source .env
     composer install --no-dev --optimize-autoloader
     npm install
-    npm run build
+    npm run build-production
     exit 0
 fi
 
