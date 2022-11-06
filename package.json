@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "dev-server": "parcel serve frontend/index.html --dist-dir=public --port=80",
-        "build": "rimraf public/* public/.* && cross-env-shell parcel build frontend/index.html --dist-dir=public --no-source-maps --public-url=$BASE_URL"
+        "build": "npm run clean && env-cmd --silent cross-env BASE_URL=${BASE_URL:/} parcel build frontend/index.html --dist-dir=public --no-source-maps --public-url=\"$BASE_URL\"",
+        "clean": "rimraf public/* public/.*"
     },
     "dependencies": {
         "copy-to-clipboard": "^3.3.1",
@@ -15,12 +16,12 @@
     },
     "devDependencies": {
         "@babel/core": "^7.19.6",
+        "@naholyr/cross-env": "^1.0.0",
         "@parcel/optimizer-data-url": "^2.7.0",
         "@parcel/transformer-inline-string": "^2.7.0",
         "@parcel/transformer-sass": "^2.7.0",
         "core-js": "^3.26.0",
-        "cross-env": "^7.0.3",
-        "dotenv": "^16.0.3",
+        "env-cmd": "^10.1.0",
         "parcel": "^2.7.0",
         "parcel-reporter-static-files-copy": "github:elwin013/parcel-reporter-static-files-copy#pull/21",
         "rimraf": "^3.0.2",

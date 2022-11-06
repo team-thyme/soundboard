@@ -15,5 +15,5 @@
 # Backend
 /vendor/
 
-# Environment variable overrides.
-/.env.local
+# Environment variables
+/.env
