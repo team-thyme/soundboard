@@ -32,8 +32,14 @@ fully supported. Other browsers give mixed results, but who uses those anyway?
 4. Add some webm/ogg/mp3/wav samples to the `samples/` directory.
 
 You can adjust behavior of the soundboard by adjusting the environment variables. Copy `.env.dist` to `.env` and modify
-as desired. Point to the right API base URL by adjusting `API_BASE_URL`. When hosting the frontend from a subdirectory
-you will have to change the `BASE_URL` variable.
+as desired. Point to the right API base URL by adjusting `API_BASE_URL`.
+
+When hosting the frontend from a subdirectory you will have to manually set the `BASE_URL` variable. For example:
+
+```bash
+BASE_URL=/soundboard/ npm run build
+BASE_URL=/soundboard/ ./build.sh production
+```
 
 Optional steps:
 
