@@ -5,5 +5,5 @@ export default {
     repositoryUrl: 'https://github.com/team-thyme/soundboard',
     baseUrl: (process.env.BASE_URL || '/'),
     apiBaseUrl: (process.env.API_BASE_URL || 'http://localhost:32658'),
-    contributeUrl: (process.env.CONTRIBUTE_URL || null),
+    contributeUrl: (process.env.CONTRIBUTE_URL || 'https://docs.google.com/document/d/1tDlWfX2TtczI5IHLmffY4LPya1J1Z9ZWHW4pYlD8toM/edit?usp=sharing'),
 };
