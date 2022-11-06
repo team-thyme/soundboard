@@ -1,5 +1,5 @@
 export default {
-    versionNumber: '3.4.0',
+    versionNumber: '3.4.1',
     versionName: 'oh, it\'s you',
     versionSampleId: '301453bd',
     repositoryUrl: 'https://github.com/team-thyme/soundboard',
