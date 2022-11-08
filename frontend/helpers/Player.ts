@@ -54,7 +54,7 @@ export default class Player {
         this.audioContext = new AudioContext();
 
         // Configure OGV fallback.
-        if (true || new Audio().canPlayType('audio/ogg;codecs=opus') === '') {
+        if (new Audio().canPlayType('audio/ogg;codecs=opus') === '') {
             console.info('OGG/Opus not supported. Initializing OGV...');
 
             if (OGVCompat.supported('OGVPlayer')) {
