@@ -29,7 +29,7 @@ class SampleRepository
         // Filter sound files.
         $iterator = new RegexIterator(
             $iterator,
-            '/\.(wav|mp3|ogg)$/'
+            '/\.(wav|mp3|ogg|webm)$/'
         );
 
         // Map to sample objects.
