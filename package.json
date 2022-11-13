@@ -2,8 +2,8 @@
     "private": true,
     "scripts": {
         "start": "parcel serve frontend/index.html --dist-dir=public --port=80",
-        "build": "npm run clean && parcel build frontend/index.html --dist-dir=public --no-source-maps",
-        "build-production": "[ \"$BASE_URL\" != '$BASE_URL' ] && npm run build -- --public-url=$BASE_URL",
+        "build": "yarn run clean && parcel build frontend/index.html --dist-dir=public --no-source-maps",
+        "build-production": "[ \"$BASE_URL\" != '$BASE_URL' ] && yarn run build -- --public-url=$BASE_URL",
         "clean": "rimraf 'public/*' 'public/.*'",
         "test:types": "tsc",
         "test": "jest"
