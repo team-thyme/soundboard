@@ -131,6 +131,9 @@ function findClosest(
 }
 
 export default function SampleItem({ sample }: SampleItemProps) {
+    // TODO: Show loading indicator if it takes a long time for the sample to
+    //  start playing (e.g. because the sample file or even the OGV.js library
+    //  needs to be loaded).
     const { togglePlay, isPlaying, analyserNode } = usePlayer(sample);
 
     const contextMenuItems = useMemo(
