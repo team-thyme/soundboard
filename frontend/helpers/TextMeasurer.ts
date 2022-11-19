@@ -36,11 +36,9 @@ export default class TextMeasurer {
 
 export function useFontReady(font: string): boolean {
     const [fontReady, setFontReady] = useState(() =>
-        // @ts-ignore
         document.fonts.check(font),
     );
     useEffect(() => {
-        // @ts-ignore
         document.fonts.load(font).then(() => {
             setFontReady(true);
         });
