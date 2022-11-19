@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 
 export default class TextMeasurer {
-    private canvas: HTMLCanvasElement;
-    private ctx: CanvasRenderingContext2D;
+    private readonly canvas: HTMLCanvasElement;
+    private readonly ctx: CanvasRenderingContext2D;
 
-    private widthCache: Map<string, number> = new Map();
+    private readonly widthCache: Map<string, number> = new Map();
 
     constructor(font: string) {
         this.canvas = document.createElement('canvas');
@@ -13,7 +13,7 @@ export default class TextMeasurer {
     }
 
     private setFont(font: string) {
-        this.widthCache = new Map();
+        this.widthCache.clear();
         this.ctx.font = font;
     }
 
