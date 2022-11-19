@@ -5,8 +5,9 @@
         "build": "yarn run clean && parcel build frontend/index.html --dist-dir=public --no-source-maps",
         "build-production": "[ \"$BASE_URL\" != '$BASE_URL' ] && yarn run build -- --public-url=$BASE_URL",
         "clean": "rimraf 'public/*' 'public/.*'",
+        "test": "jest",
         "test:types": "tsc",
-        "test": "jest"
+        "test:prettier": "prettier --check 'frontend/**/*.{ts,tsx}'"
     },
     "devDependencies": {
         "@parcel/transformer-sass": "2.7.0",
