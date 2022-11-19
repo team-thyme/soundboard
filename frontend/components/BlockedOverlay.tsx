@@ -13,7 +13,7 @@ export default function BlockedOverlay(): JSX.Element | null {
         player.on('blocked', '*', handleBlocked);
         return () => {
             player.off('blocked', '*', handleBlocked);
-        }
+        };
     }, []);
 
     useEffect(() => {
@@ -31,14 +31,12 @@ export default function BlockedOverlay(): JSX.Element | null {
         return () => {
             window.removeEventListener('click', handleInteraction);
             window.removeEventListener('keypress', handleInteraction);
-        }
+        };
     }, [isBlocked]);
 
     if (!isBlocked) {
         return null;
     }
 
-    return (
-        <div className="BlockedOverlay">AUDIO BLOCKED</div>
-    )
+    return <div className="BlockedOverlay">AUDIO BLOCKED</div>;
 }
