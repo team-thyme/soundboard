@@ -103,6 +103,9 @@ export default class Player {
                     return 0;
                 }
 
+                // Ensure time is in range [0, duration]
+                currentTime = Math.max(0, Math.min(currentTime, duration));
+
                 // If currentTime is the same as it was last frame(s), try to
                 // extrapolate by considering the time that has passed since
                 // the last update.
