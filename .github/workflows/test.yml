@@ -1,5 +1,9 @@
 name: CI
-on: push
+on:
+  push:
+    branches:
+      # TODO: Enable for all branches once frontend rewrite is merged
+      - frontend-rewrite
 jobs:
   build:
     runs-on: ubuntu-latest
