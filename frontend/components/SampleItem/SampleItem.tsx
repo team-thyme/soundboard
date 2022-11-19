@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Sample } from '../../api';
 import config from '../../config';
 import download from '../../helpers/download';
-import { player, TogglePlayOptions } from '../../helpers/Player';
+import { player, type TogglePlayOptions } from '../../helpers/Player';
 import ContextMenu, { ContextMenuItem } from '../ContextMenu';
 import SampleItemProgress from './SampleItemProgress';
 import VisualizeAnalyserNode from './VisualizeAnalyserNode';
@@ -47,7 +47,7 @@ function usePlayer(sample: Sample): {
     }, [sample]);
 
     const togglePlay = useCallback(
-        (options) => {
+        (options: TogglePlayOptions) => {
             player.togglePlay(sample, options);
         },
         [sample],
