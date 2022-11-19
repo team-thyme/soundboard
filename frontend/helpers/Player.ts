@@ -1,5 +1,7 @@
+import type { OGVPlayer } from 'ogv';
+import { OGVCompat } from 'ogv/dist/ogv-support';
+
 import { Sample } from '../api';
-import { OGVPlayer, OGVCompat, OGVLoader } from 'ogv';
 import config from '../config';
 
 interface PlayingData {
@@ -61,7 +63,7 @@ export default class Player {
             if (OGVCompat.supported('OGVPlayer')) {
                 this.useOgvFallback = true;
                 this.silencePlease = true;
-                OGVLoader.base = `${config.baseUrl}ogv`;
+                // TODO: Start preloading OGV bundle already?
             } else {
                 console.warn(
                     'No support for Opus audio or OGV. Falling back to native playback.',
@@ -198,6 +200,8 @@ export default class Player {
 
         let audio: HTMLAudioElement | OGVPlayer;
         if (this.useOgvFallback && url.match(/\.(ogg|webm)$/)) {
+            const { OGVLoader, OGVPlayer } = await import('ogv');
+            OGVLoader.base = `${config.baseUrl}ogv`;
             audio = new OGVPlayer({
                 audioContext: this.audioContext,
                 audioDestination: analyserNode,
