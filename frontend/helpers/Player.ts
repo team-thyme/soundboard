@@ -1,5 +1,5 @@
 import type { OGVPlayer } from 'ogv';
-import { OGVCompat } from 'ogv/dist/ogv-support';
+import 'ogv/dist/ogv-support';
 
 import { Sample } from '../api';
 import config from '../config';
