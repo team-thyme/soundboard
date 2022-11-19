@@ -17,7 +17,7 @@ See https://viller.men/soundboard for _the_ example. Samples not included!
 - <kbd>Right click</kbd> on a sample for all options, like copying the direct link.
 
 ## Requirements
-- [Node.js](https://nodejs.org/) for building the frontend.
+- [Node.js](https://nodejs.org/) with [NPM](https://www.npmjs.com/) for building the frontend.
 - [PHP](https://www.php.net/) with [Composer](https://getcomposer.org/) for the backend.
 - [Apache HTTP Server](https://www.apache.org/) is recommended for hosting the files as `.htaccess` files are provided.
 
@@ -28,32 +28,28 @@ fully supported. Other browsers give mixed results, but who uses those anyway?
 ## How to _deal with it?_
 1. Download the [latest release](https://github.com/team-thyme/soundboard/releases) or clone the current sources.
 2. Build the application using `./build.sh production`.
-3. Make the `public/` directory publicly accessible (E.g., by symlinking it from your web root).
-4. Add some wav/mp3/ogg samples to the `public/samples/` directory.
-5. If hosting the frontend from a subdirectory, change the href of the `<base>` tag in `public/index.html` to point to
-   your subdirectory. This allows the page to load its resources and arguments no matter where it is called from
+3. Make the `public/` and `public-api/` directories publicly accessible (E.g., by symlinking them from your web root).
+4. Add some webm/ogg/mp3/wav samples to the `samples/` directory.
+
+You can adjust behavior of the soundboard by adjusting the environment variables. Copy `.env.dist` to `.env` and modify
+as desired. Point to the right API base URL by adjusting `API_BASE_URL`. When hosting the frontend from a subdirectory
+you will have to change the `BASE_URL` variable.
 
 Optional steps:
 
 - Sample files can be served more efficiently using the Apache2 mod X-Sendfile. Install it using something like
   `sudo apt install libapache2-mod-xsendfile` and allow it to serve the samples by adding something similar to
   `XSendFilePath /path/to/soundboard/samples` to your Apache website configuration.
-- If you want the frontend to point to a different backend or contribution URL, change the values in
-  `public/config.json`.
-- Convert added samples to an efficient format by running `./convert-to-ogg.sh` (requires FFmpeg).
-
-> Building the frontend requires [Node.js](https://nodejs.org/). [Apache HTTP Server](https://www.apache.org/) is recommended for hosting the front-end, as it will work without having to set up redirecting to index.html manually.
-
-- Add wav/mp3/ogg files to `samples/` to instantly add them to the API
-- Have multiple samples with the same name by suffixing them with digits
+- Convert added samples to an efficient format by running `./convert-samples.sh` (requires FFmpeg).
+- Add webm/ogg/mp3/wav files to `samples/` to instantly add them to the API.
+- Have multiple samples with the same name by suffixing them with digits (they are stripped from the names).
 
 ## Development
 We've got you covered fam! Running `./build.sh` will install the project and set you up with a local PHP and JS server
-that will automatically rebuild the frontend. To live reload updated scripts and styles in your browser you need to have
-[one of these browser extensions](http://livereload.com/extensions/) installed.
+that will automatically rebuild the frontend.
 
 ### API methods
-The API is hosted on `/api` by default. All calls should be prefixed with this base URL.
+The API is hosted on `http://localhost:32658` by default. All calls listed here should be prefixed with this base URL.
 
 <details>
   <summary>/samples - Obtain an array with the info of all the available samples.</summary>

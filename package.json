@@ -1,8 +1,10 @@
 {
     "private": true,
     "scripts": {
-        "build": "parcel build frontend/index.html --dist-dir public/build",
-        "start": "parcel serve frontend/index.html --dist-dir public/build --port=80 --no-cache",
+        "start": "parcel serve frontend/index.html --dist-dir=public --port=80",
+        "build": "yarn run clean && parcel build frontend/index.html --dist-dir=public --no-source-maps",
+        "build-production": "[ \"$BASE_URL\" != '$BASE_URL' ] && yarn run build -- --public-url=$BASE_URL",
+        "clean": "rimraf 'public/*' 'public/.*'",
         "test:types": "tsc",
         "test": "jest"
     },
@@ -12,11 +14,12 @@
         "@types/jest": "^29.2.0",
         "@types/react": "^18.0.21",
         "@types/react-dom": "^18.0.6",
-        "cross-env": "^7.0.3",
         "jest": "^29.2.1",
         "parcel": "^2.7.0",
+        "parcel-reporter-static-files-copy": "elwin013/parcel-reporter-static-files-copy#9a2079079e03942656856ac450a2723c7b2b6547",
         "prettier": "^2.7.1",
         "process": "^0.11.10",
+        "rimraf": "^3.0.2",
         "sass": "^1.55.0",
         "ts-jest": "^29.0.3",
         "ts-node": "^10.9.1",
@@ -29,9 +32,22 @@
         "@popperjs/core": "^2.4.4",
         "@tanstack/react-virtual": "^3.0.0-alpha.0",
         "classnames": "^2.3.2",
+        "ogv": "^1.8.9",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-popper": "^2.2.3"
     },
-    "packageManager": "yarn@3.2.4"
+    "packageManager": "yarn@3.2.4",
+    "staticFiles": [
+        {
+            "staticPath": "frontend/static"
+        },
+        {
+            "staticPath": "node_modules/ogv/dist",
+            "staticOutPath": "ogv"
+        }
+    ],
+    "browserslist": [
+        "last 1 version"
+    ]
 }

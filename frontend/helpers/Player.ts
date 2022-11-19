@@ -1,4 +1,6 @@
 import { Sample } from '../api';
+import { OGVPlayer, OGVCompat, OGVLoader } from 'ogv';
+import config from '../config';
 
 interface PlayingData {
     instances: PlayingInstance[];
@@ -6,7 +8,7 @@ interface PlayingData {
 }
 
 interface PlayingInstance {
-    audioElement: HTMLAudioElement;
+    audioElement: HTMLAudioElement|OGVPlayer;
 
     // Used for extrapolating progress in browsers with low resolution player times
     lastPlayerTime: number;
@@ -34,8 +36,37 @@ export default class Player {
     private playing: Map<string, PlayingData> = new Map();
     private blockedSamples: { sample: Sample, options: TogglePlayOptions }[] = [];
 
+    /**
+     * Whether to use overcomplicated ogv.js backup audio source for expensive bricks without support for open formats
+     * (Apple devices).
+     */
+    private useOgvFallback = false;
+
+    /**
+     * Whether to play a silent regular audio element before any real audio to have expensive bricks (again, iPhones) to
+     * play them on the correct (media) channel instead of the ringer channel. Copy of
+     * https://github.com/brion/ogv.js/blob/e0adc6189741ebf99ef19300bb52fa5f567eff77/src/js/OGVPlayer.js#L922-L927
+     * but without creating an additional context which we want available _before_ the first play. TODO: Could use a PR.
+     */
+    private silencePlease = false;
+
     constructor() {
         this.audioContext = new AudioContext();
+
+        // Configure OGV fallback.
+        if (new Audio().canPlayType('audio/ogg;codecs=opus') === '') {
+            console.info('OGG/Opus not supported. Initializing OGV...');
+
+            if (OGVCompat.supported('OGVPlayer')) {
+                this.useOgvFallback = true;
+                this.silencePlease = true;
+                OGVLoader.base = `${config.baseUrl}ogv`;
+            } else {
+                console.warn('No support for Opus audio or OGV. Falling back to native playback.');
+            }
+        } else {
+            console.info('Using native audio playback for OGG/Opus. Thanks for using a real browser!');
+        }
 
         // Create gain node
         this.gainNode = this.audioContext.createGain();
@@ -59,7 +90,11 @@ export default class Player {
         const playingData = this.playing.get(key);
         if (playingData) {
             return playingData.instances.map((instance) => {
-                let currentTime = instance.audioElement.currentTime;
+                let currentTime = Number(instance.audioElement.currentTime);
+                const duration = Number(instance.audioElement.duration);
+                if (!duration || !isFinite(duration)) {
+                    return 0;
+                }
 
                 // If currentTime is the same as it was last frame(s), try to
                 // extrapolate by considering the time that has passed since
@@ -77,7 +112,7 @@ export default class Player {
                     instance.lastActualTime = Date.now();
                 }
 
-                return currentTime / instance.audioElement.duration;
+                return currentTime / duration;
             });
         }
         return [];
@@ -159,11 +194,22 @@ export default class Player {
             analyserNode.connect(this.gainNode);
         }
 
-        const audio = new Audio(url);
-        audio.crossOrigin = 'anonymous';
-        audio.loop = loop;
-        const source = this.audioContext.createMediaElementSource(audio);
-        source.connect(analyserNode);
+        let audio: HTMLAudioElement|OGVPlayer;
+        if (this.useOgvFallback && url.match(/\.(ogg|webm)$/)) {
+            audio = new OGVPlayer({
+                audioContext: this.audioContext,
+                audioDestination: analyserNode,
+            });
+            audio.src = url;
+        } else {
+            // Create an audio element source and link it to the context
+            audio = new Audio(url);
+            audio.crossOrigin = 'anonymous';
+            const source = this.audioContext.createMediaElementSource(audio);
+            source.connect(analyserNode);
+        }
+
+        audio.loop = loop; // Note: Does not work with OGVPlayer.
 
         let audioStopped = false;
         const handleStop = () => {
@@ -199,6 +245,15 @@ export default class Player {
         audio.addEventListener('ended', handleStop);
 
         try {
+            // First try playing the most silent audio you've ever heard. Should trigger same not allowed error
+            // handling upon failure to deal with playing from URL.
+            if (this.silencePlease) {
+                const silence = new Audio('data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU5LjE2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAACAAAEEwCZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZ//////////////////////////////////////////////////////////////////8AAAAATGF2YzU5LjE4AAAAAAAAAAAAAAAAJAZAAAAAAAAABBMIw3vfAAAAAAAAAAAAAAAAAAAAAP/7kGQAD/AAAGkAAAAIAAANIAAAAQAAAaQAAAAgAAA0gAAABExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7kmRAj/AAAGkAAAAIAAANIAAAAQAAAaQAAAAgAAA0gAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=');
+                await silence.play();
+                this.silencePlease = false;
+                console.info('Did you hear that? I thought I heard something.'); // "Must have been my imagination."
+            }
+
             await audio.play();
         } catch (error) {
             handleStop();

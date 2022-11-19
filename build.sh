@@ -12,23 +12,23 @@ esac
 echo "Building soundboard in \"$BUILD_MODE\" mode..."
 
 if [ "$BUILD_MODE" == 'production' ]; then
+    test -f .env && source .env
     composer install --no-dev --optimize-autoloader
-    npm install
-    npm run build
+    yarn install
+    BASE_URL=${BASE_URL:=/} yarn run build-production
     exit 0
 fi
 
 composer install
-npm install
+yarn install
 
 if [ "$BUILD_MODE" == 'development' ]; then
-    npm run build
+    yarn run build
     exit 0
 fi
 
 if [ "$BUILD_MODE" == 'serve' ]; then
-    php -S 0.0.0.0:32658 public/api/index.php & \
-    npm run dev-server & \
-    npm run dev-build
+    composer run dev-server & \
+    yarn run dev-server
     exit 0
 fi

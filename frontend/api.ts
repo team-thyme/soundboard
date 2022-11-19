@@ -1,4 +1,4 @@
-import { apiBaseUrl } from './config';
+import config from './config';
 
 export interface Sample {
     // from server
@@ -14,7 +14,7 @@ export interface Sample {
 }
 
 export async function fetchSamples(): Promise<Sample[]> {
-    const url = `${apiBaseUrl}/samples`;
+    const url = `${config.apiBaseUrl}/samples`;
 
     // TODO: Remove 'force-cache'
     const res = await fetch(url, { cache: 'force-cache' });

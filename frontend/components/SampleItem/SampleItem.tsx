@@ -2,10 +2,10 @@ import cx from 'classnames';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Sample } from '../../api';
-import { baseUrl } from '../../config';
+import config from '../../config';
 import download from '../../helpers/download';
 import { player, TogglePlayOptions } from '../../helpers/Player';
-import ContextMenu, { ContextMenuItem } from "../ContextMenu";
+import ContextMenu, { ContextMenuItem } from '../ContextMenu';
 import SampleItemProgress from './SampleItemProgress';
 import VisualizeAnalyserNode from './VisualizeAnalyserNode';
 
@@ -163,8 +163,10 @@ export default function SampleItem({ sample }: SampleItemProps) {
                 icon: 'link',
                 title: 'Copy URL',
                 onClick: async () => {
-                    const url = baseUrl + sample.id;
-                    await navigator.clipboard.writeText(url);
+                    // Get URL to sample by letting the browser resolve it relative to current hostname.
+                    const anchor = document.createElement('a');
+                    anchor.href = `${config.baseUrl}${sample.id}`;
+                    await navigator.clipboard.writeText(anchor.href);
                 },
             },
             {
