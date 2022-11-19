@@ -4,7 +4,7 @@ export default class TextMeasurer {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
 
-    private widthCache: Record<string, number> = {};
+    private widthCache: Map<string, number> = new Map();
 
     constructor(font: string) {
         this.canvas = document.createElement('canvas');
@@ -12,18 +12,18 @@ export default class TextMeasurer {
         this.setFont(font);
     }
 
-    setFont(font: string) {
-        this.widthCache = {};
+    private setFont(font: string) {
+        this.widthCache = new Map();
         this.ctx.font = font;
     }
 
     measureWidth(text: string): number {
-        if (text in this.widthCache) {
-            return this.widthCache[text];
+        if (this.widthCache.has(text)) {
+            return this.widthCache.get(text)!;
         }
 
         const { width } = this.ctx.measureText(text);
-        this.widthCache[text] = width;
+        this.widthCache.set(text, width);
         return width;
     }
 }
