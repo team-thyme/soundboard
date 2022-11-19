@@ -1,7 +1,7 @@
 import computeLayout from './computeLayout';
 
 test('no items', () => {
-    expect(computeLayout([], 3)).toStrictEqual([2]);
+    expect(computeLayout([], 3)).toStrictEqual([]);
 });
 
 test('two items on a single row', () => {
