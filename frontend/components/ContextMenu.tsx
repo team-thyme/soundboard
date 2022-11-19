@@ -38,7 +38,7 @@ const transformOriginModifier: Modifier<'transformOrigin'> = {
         const offsetX = refX - popperX;
         const offsetY = refY - popperY;
 
-        // @ts-ignore
+        // @ts-expect-error `inner` is not defined, because we're defining it here
         state.elements.inner = state.elements.popper.firstElementChild;
         state.styles.inner = {
             transformOrigin: `${offsetX}px ${offsetY}px`,
