@@ -63,7 +63,7 @@ export default class Player {
             if (OGVCompat.supported('OGVPlayer')) {
                 this.useOgvFallback = true;
                 this.silencePlease = true;
-                // TODO: Start preloading OGV bundle already?
+                this.preloadOGVPlayer();
             } else {
                 console.warn(
                     'No support for Opus audio or OGV. Falling back to native playback.',
@@ -80,6 +80,12 @@ export default class Player {
         this.gainNode.connect(this.audioContext.destination);
         // TODO: add user setting for volume
         this.gainNode.gain.value = 0.1;
+    }
+
+    private async preloadOGVPlayer(): Promise<void> {
+        const { OGVLoader } = await import('ogv');
+        OGVLoader.base = `${config.baseUrl}ogv`;
+        // TODO: Preload demuxer/decoder classes using OGVLoader.loadClass?
     }
 
     /**
@@ -203,8 +209,7 @@ export default class Player {
 
         let audio: HTMLAudioElement | OGVPlayer;
         if (this.useOgvFallback && url.match(/\.(ogg|webm)$/)) {
-            const { OGVLoader, OGVPlayer } = await import('ogv');
-            OGVLoader.base = `${config.baseUrl}ogv`;
+            const { OGVPlayer } = await import('ogv');
             audio = new OGVPlayer({
                 audioContext: this.audioContext,
                 audioDestination: analyserNode,
