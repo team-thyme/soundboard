@@ -1,7 +1,7 @@
 import type { OGVPlayer } from 'ogv';
 import 'ogv/dist/ogv-support';
 
-import { Sample } from '../api';
+import type { Sample, SampleKey } from '../api';
 import config from '../config';
 
 interface PlayingData {
@@ -35,7 +35,11 @@ export default class Player {
     private audioContext: AudioContext;
     private gainNode: GainNode;
 
-    private playing: Map<string, PlayingData> = new Map();
+    /**
+     * Map from keys of currently playing samples to an object containing
+     * additional information (see {@link PlayingData}).
+     */
+    private playing: Map<SampleKey, PlayingData> = new Map();
     private blockedSamples: { sample: Sample; options: TogglePlayOptions }[] =
         [];
 

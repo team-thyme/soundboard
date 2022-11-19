@@ -1,5 +1,7 @@
 import config from './config';
 
+export type SampleKey = string;
+
 export interface Sample {
     // from server
     path: string;
@@ -9,7 +11,7 @@ export interface Sample {
     categories: string[];
 
     // added on client
-    key: string;
+    key: SampleKey;
     url: string;
 }
 
