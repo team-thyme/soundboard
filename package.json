@@ -10,14 +10,13 @@
         "test:prettier": "prettier --check 'frontend/**/*.{ts,tsx}'"
     },
     "devDependencies": {
-        "@parcel/config-default": "^2.8.0",
-        "@parcel/transformer-sass": "^2.8.0",
+        "@parcel/transformer-sass": "2.7.0",
         "@tsconfig/recommended": "^1.0.1",
         "@types/jest": "^29.2.0",
         "@types/react": "^18.0.21",
         "@types/react-dom": "^18.0.6",
         "jest": "^29.2.1",
-        "parcel": "^2.8.0",
+        "parcel": "^2.7.0",
         "parcel-reporter-static-files-copy": "elwin013/parcel-reporter-static-files-copy#9a2079079e03942656856ac450a2723c7b2b6547",
         "prettier": "^2.7.1",
         "process": "^0.11.10",
@@ -45,16 +44,11 @@
             "staticPath": "frontend/static"
         },
         {
-            "staticPath": ".yarn/unplugged/ogv-npm-1.8.9-d8e85aee48/node_modules/ogv/dist",
+            "staticPath": "node_modules/ogv/dist",
             "staticOutPath": "ogv"
         }
     ],
     "browserslist": [
         "last 1 version"
-    ],
-    "dependenciesMeta": {
-        "ogv@1.8.9": {
-            "unplugged": true
-        }
-    }
+    ]
 }
