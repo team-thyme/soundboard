@@ -1,15 +1,9 @@
 @use '../variables' as *;
 
-.ContextMenuLayer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: $z-index-context-menu;
-}
-
 .ContextMenu {
+    // positioned using floating ui
+    z-index: $z-index-context-menu;
+
     width: 240px;
     padding: 5px;
 

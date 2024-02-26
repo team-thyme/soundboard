@@ -1,17 +1,18 @@
+import {
+    flip,
+    useClientPoint,
+    useDismiss,
+    useFloating,
+    useInteractions,
+    type ElementProps,
+    type FloatingContext,
+    type Placement,
+    FloatingPortal,
+} from '@floating-ui/react';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, {
-    MouseEvent,
-    MouseEventHandler,
-    ReactNode,
-    useCallback,
-    useMemo,
-    useState,
-} from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Modifier, usePopper } from 'react-popper';
-
-import useKeydown from '../hooks/useKeydown';
 
 export interface ContextMenuItem {
     icon: IconProp;
@@ -21,89 +22,105 @@ export interface ContextMenuItem {
 }
 
 interface ContextMenuProps {
-    children(props: { onContextMenu: MouseEventHandler<any> }): ReactNode;
+    children(props: Record<string, unknown>): ReactNode;
 
     items: ContextMenuItem[];
 }
 
-const transformOriginModifier: Modifier<'transformOrigin'> = {
-    name: 'transformOrigin',
-    enabled: true,
-    phase: 'beforeWrite',
-    requires: ['popperOffsets'],
-    fn: ({ state, options }) => {
-        const { x: refX, y: refY } = state.rects.reference;
-        const { x: popperX, y: popperY } = state.modifiersData.popperOffsets!;
+function useContextMenu(context: FloatingContext): ElementProps {
+    const { onOpenChange } = context;
+    return useMemo(
+        () => ({
+            reference: {
+                onContextMenu: (event) => {
+                    event.preventDefault();
+                    onOpenChange(true, event.nativeEvent);
+                },
+            },
+        }),
+        [onOpenChange],
+    );
+}
 
-        const offsetX = refX - popperX;
-        const offsetY = refY - popperY;
-
-        // @ts-expect-error `inner` is not defined, because we're defining it here
-        state.elements.inner = state.elements.popper.firstElementChild;
-        state.styles.inner = {
-            transformOrigin: `${offsetX}px ${offsetY}px`,
-        };
-    },
-};
+function getTransformOrigin(placement: Placement): string | undefined {
+    switch (placement) {
+        case 'top-start':
+            return 'bottom left';
+        case 'top-end':
+            return 'bottom right';
+        case 'bottom-start':
+            return 'top left';
+        case 'bottom-end':
+            return 'top right';
+        default:
+            return undefined;
+    }
+}
 
 export default function ContextMenu(props: ContextMenuProps) {
     const [open, setOpen] = useState(false);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const onContextMenu = useCallback(
-        (e: MouseEvent<any>) => {
-            e.preventDefault();
-            setOpen((open) => !open);
-            setPosition({ x: e.clientX, y: e.clientY });
+    const [position, setPosition] = useState<{
+        x: number;
+        y: number;
+    } | null>(null);
+
+    const { refs, floatingStyles, context, placement } = useFloating({
+        open,
+        onOpenChange: (open, event) => {
+            setOpen(open);
+            if (event instanceof MouseEvent) {
+                setPosition({
+                    x: event.clientX,
+                    y: event.clientY,
+                });
+            } else {
+                setPosition(null);
+            }
         },
-        [setOpen],
-    );
-
-    // Close the context menu when the user presses the Escape key
-    useKeydown('Escape', () => setOpen(false), open);
-
-    // Popper
-    const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
-        null,
-    );
-    const virtualReference = useMemo(
-        () => ({
-            getBoundingClientRect() {
-                return new DOMRect(position.x, position.y, 0, 0);
-            },
-        }),
-        [position],
-    );
-    const { styles, attributes } = usePopper(virtualReference, popperElement, {
         placement: 'bottom-start',
         strategy: 'fixed',
-        modifiers: [transformOriginModifier],
+        middleware: [flip()],
     });
+
+    const { getReferenceProps, getFloatingProps } = useInteractions([
+        useContextMenu(context),
+        useDismiss(context, {
+            escapeKey: true,
+            referencePress: true,
+            outsidePress: true,
+            ancestorScroll: true,
+        }),
+        useClientPoint(context, {
+            enabled: position !== null,
+            ...position,
+        }),
+    ]);
+
+    const transformOrigin = getTransformOrigin(placement);
 
     return (
         <>
-            {props.children({ onContextMenu })}
-            {open &&
-                ReactDOM.createPortal(
+            {props.children({
+                ref: refs.setReference,
+                ...getReferenceProps(),
+            })}
+            {open && (
+                <FloatingPortal id="root">
                     <div
-                        className="ContextMenuLayer"
-                        onClick={() => setOpen(false)}
+                        ref={refs.setFloating}
+                        style={floatingStyles}
+                        {...getFloatingProps()}
                     >
-                        <div
-                            ref={setPopperElement}
-                            style={styles.popper}
-                            {...attributes.popper}
-                        >
-                            <Menu
-                                style={styles.inner}
-                                items={props.items}
-                                closeMenu={() => {
-                                    setOpen(false);
-                                }}
-                            />
-                        </div>
-                    </div>,
-                    document.getElementById('root') as HTMLDivElement,
-                )}
+                        <Menu
+                            style={{ transformOrigin }}
+                            items={props.items}
+                            closeMenu={() => {
+                                setOpen(false);
+                            }}
+                        />
+                    </div>
+                </FloatingPortal>
+            )}
         </>
     );
 }
