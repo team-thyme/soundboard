@@ -1,7 +1,12 @@
 {
-    "extends": "@tsconfig/recommended/tsconfig.json",
     "compilerOptions": {
-        "lib": ["es2017", "dom"],
+        "target": "ESNext",
+        "module": "CommonJS",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["ESNext", "DOM"],
         "jsx": "react-jsx",
         "noEmit": true
     },
