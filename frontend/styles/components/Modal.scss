@@ -45,16 +45,16 @@
         }
     }
 
-    &[data-popper-placement^='top'] > &__arrow {
+    &[data-floating-ui-placement^='top'] > &__arrow {
         bottom: -$arrowSize;
     }
-    &[data-popper-placement^='left'] > &__arrow {
+    &[data-floating-ui-placement^='left'] > &__arrow {
         right: -$arrowSize;
     }
-    &[data-popper-placement^='right'] > &__arrow {
+    &[data-floating-ui-placement^='right'] > &__arrow {
         left: -$arrowSize;
     }
-    &[data-popper-placement^='bottom'] > &__arrow {
+    &[data-floating-ui-placement^='bottom'] > &__arrow {
         top: -$arrowSize;
     }
 }

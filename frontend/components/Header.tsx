@@ -1,7 +1,13 @@
-import React, { useContext, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { usePopper } from 'react-popper';
-import useKeydown from '../hooks/useKeydown';
+import {
+    arrow,
+    FloatingPortal,
+    shift,
+    useClick,
+    useDismiss,
+    useFloating,
+    useInteractions,
+} from '@floating-ui/react';
+import React, { useContext, useRef, useState } from 'react';
 
 import { SearchContext } from './App';
 import IconButton, { IconButtonProps } from './IconButton';
@@ -43,61 +49,56 @@ function ModalIconButton({
     children,
     ...iconButtonProps
 }: ModalIconButtonProps) {
-    const [isOpen, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
+    const arrowRef = useRef(null);
 
-    // Close the modal when the user presses the Escape key
-    useKeydown('Escape', () => setOpen(false), isOpen);
+    const { refs, floatingStyles, context, placement, middlewareData } =
+        useFloating({
+            open,
+            onOpenChange: setOpen,
+            middleware: [
+                shift({
+                    padding: 10,
+                }),
+                arrow({
+                    element: arrowRef,
+                }),
+            ],
+        });
 
-    const [referenceElement, setReferenceElement] =
-        useState<HTMLButtonElement | null>(null);
-    const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
-        null,
-    );
-    const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(
-        null,
-    );
-
-    const { styles, attributes } = usePopper(referenceElement, popperElement, {
-        placement: 'bottom',
-        modifiers: [
-            { name: 'arrow', options: { element: arrowElement } },
-            { name: 'preventOverflow', options: { padding: 10 } },
-        ],
-    });
+    const { getReferenceProps, getFloatingProps } = useInteractions([
+        useClick(context),
+        useDismiss(context),
+    ]);
 
     return (
         <>
             <IconButton
                 {...iconButtonProps}
-                innerRef={setReferenceElement}
-                onClick={() => {
-                    setOpen(!isOpen);
-                }}
+                innerRef={refs.setReference}
+                {...getReferenceProps()}
             />
-            {isOpen &&
-                ReactDOM.createPortal(
-                    <ModalLayer
-                        onMouseDown={(e) => {
-                            // Close when ModalLayer is pressed
-                            if (e.target === e.currentTarget) {
-                                setOpen(false);
-                            }
-                        }}
-                    >
+            {open && (
+                <FloatingPortal id="root">
+                    <ModalLayer>
                         <Modal
-                            innerRef={setPopperElement}
+                            innerRef={refs.setFloating}
+                            style={floatingStyles}
                             arrowProps={{
-                                ref: setArrowElement,
-                                style: styles.arrow,
+                                ref: arrowRef,
+                                style: {
+                                    left: middlewareData.arrow?.x,
+                                    top: middlewareData.arrow?.y,
+                                },
                             }}
-                            style={styles.popper}
-                            {...attributes.popper}
+                            data-floating-ui-placement={placement}
+                            {...getFloatingProps()}
                         >
                             {children}
                         </Modal>
-                    </ModalLayer>,
-                    document.querySelector('#root') as HTMLDivElement,
-                )}
+                    </ModalLayer>
+                </FloatingPortal>
+            )}
         </>
     );
 }

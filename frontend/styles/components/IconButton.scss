@@ -21,7 +21,7 @@
         color: var(--icon-button-search-color);
 
         &:hover,
-        &:focus {
+        &:focus-visible {
             background-color: var(--icon-button-search-bg-hover);
         }
         &:active {
@@ -37,7 +37,7 @@
         color: var(--icon-button-header-color);
 
         &:hover,
-        &:focus {
+        &:focus-visible {
             background-color: var(--icon-button-header-bg-hover);
             color: var(--icon-button-header-color-hover);
         }
