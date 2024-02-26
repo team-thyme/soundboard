@@ -2392,13 +2392,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.4.4":
-  version: 2.10.2
-  resolution: "@popperjs/core@npm:2.10.2"
-  checksum: 10/c893c150a7473cba0792845e10015b63fbe2c52c738d13988e2ff0d19b9f4b8a7a86a3c863846f90a2249b7031f1f787b7457b4adf28189304a2fad30d41068d
-  languageName: node
-  linkType: hard
-
 "@sinclair/typebox@npm:^0.24.1":
   version: 0.24.47
   resolution: "@sinclair/typebox@npm:0.24.47"
@@ -5178,7 +5171,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -6082,13 +6075,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-fast-compare@npm:^3.0.1":
-  version: 3.2.0
-  resolution: "react-fast-compare@npm:3.2.0"
-  checksum: 10/26ed35d425f197f04c85d572eac943d901a2713335b79483d4f3f94ee5caf97f20678f89bedd385ace9b1637890c88fc5442d732bad0871135643d9703312cd7
-  languageName: node
-  linkType: hard
-
 "react-is@npm:^16.8.1":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -6100,19 +6086,6 @@ __metadata:
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: 10/200cd65bf2e0be7ba6055f647091b725a45dd2a6abef03bf2380ce701fd5edccee40b49b9d15edab7ac08a762bf83cb4081e31ec2673a5bfb549a36ba21570df
-  languageName: node
-  linkType: hard
-
-"react-popper@npm:^2.2.3":
-  version: 2.2.5
-  resolution: "react-popper@npm:2.2.5"
-  dependencies:
-    react-fast-compare: "npm:^3.0.1"
-    warning: "npm:^4.0.2"
-  peerDependencies:
-    "@popperjs/core": ^2.0.0
-    react: ^16.8.0 || ^17
-  checksum: 10/775c4d352cff89458d044ff2b42898ef09ac5fac791c645dabdc37f6a0cd11eab3df4979e032c914dc42c6286f4db3de3bb9561e1208f5dfe3b21ac296240b47
   languageName: node
   linkType: hard
 
@@ -6254,7 +6227,6 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": "npm:^6.0.0-beta2"
     "@fortawesome/react-fontawesome": "npm:^0.1.16"
     "@parcel/transformer-sass": "npm:^2.11.0"
-    "@popperjs/core": "npm:^2.4.4"
     "@tanstack/react-virtual": "npm:^3.0.0-alpha.0"
     "@types/jest": "npm:^29.5.12"
     "@types/node": "npm:^20.11.20"
@@ -6268,7 +6240,6 @@ __metadata:
     prettier: "npm:^3.2.5"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
-    react-popper: "npm:^2.2.3"
     rimraf: "npm:^5.0.5"
     sass: "npm:^1.71.1"
     ts-jest: "npm:^29.1.2"
@@ -6927,15 +6898,6 @@ __metadata:
   dependencies:
     makeerror: "npm:1.0.12"
   checksum: 10/ad7a257ea1e662e57ef2e018f97b3c02a7240ad5093c392186ce0bcf1f1a60bbadd520d073b9beb921ed99f64f065efb63dfc8eec689a80e569f93c1c5d5e16c
-  languageName: node
-  linkType: hard
-
-"warning@npm:^4.0.2":
-  version: 4.0.3
-  resolution: "warning@npm:4.0.3"
-  dependencies:
-    loose-envify: "npm:^1.0.0"
-  checksum: 10/e7842aff036e2e07ce7a6cc3225e707775b969fe3d0577ad64bd24660e3a9ce3017f0b8c22a136566dcd3a151f37b8ed1ccee103b3bd82bd8a571bf80b247bc4
   languageName: node
   linkType: hard
 
