@@ -1984,21 +1984,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-virtual@npm:^3.0.0-alpha.0":
-  version: 3.0.0-beta.18
-  resolution: "@tanstack/react-virtual@npm:3.0.0-beta.18"
+"@tanstack/react-virtual@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "@tanstack/react-virtual@npm:3.1.3"
   dependencies:
-    "@tanstack/virtual-core": "npm:3.0.0-beta.18"
+    "@tanstack/virtual-core": "npm:3.1.3"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10/d1021762b739f02c8c67c73ce65507ec406be708ee9dbbef47231a526a99acd650256f84b97f740d801eb6b781af08903ecc9fcd76e7ac03a85630adadadeaeb
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10/f241baf92b4709c6c7dcf491fb6d22597fe87d8915c6f6bafb453337b754febaa5797163e106999e3b1a4aa8df33bb4ee677fe9e39cdda983deaaf4d93352427
   languageName: node
   linkType: hard
 
-"@tanstack/virtual-core@npm:3.0.0-beta.18":
-  version: 3.0.0-beta.18
-  resolution: "@tanstack/virtual-core@npm:3.0.0-beta.18"
-  checksum: 10/5de74f01b9ce53d3a050d1583005accd7e4f08179a1fee2c85b648d0c45f71c33a379c66849231547b2a288b461664f68ae8cb01a7a4f52357c999f63cb268b0
+"@tanstack/virtual-core@npm:3.1.3":
+  version: 3.1.3
+  resolution: "@tanstack/virtual-core@npm:3.1.3"
+  checksum: 10/fdaee168954ba96908476105d61ad3ed45973afcb9cec2c33707d4b48abaa705b7cbf7dd8e4264a7848d57366cc1422a378c8f34c5da124f18d3f7ae7bc8bd23
   languageName: node
   linkType: hard
 
@@ -5351,7 +5352,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": "npm:^6.0.0-beta2"
     "@fortawesome/react-fontawesome": "npm:^0.1.16"
     "@parcel/transformer-sass": "npm:^2.11.0"
-    "@tanstack/react-virtual": "npm:^3.0.0-alpha.0"
+    "@tanstack/react-virtual": "npm:^3.1.3"
     "@types/jest": "npm:^29.5.12"
     "@types/node": "npm:^20.11.20"
     "@types/react": "npm:^18.2.59"

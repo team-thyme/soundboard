@@ -8,13 +8,17 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { useWindowVirtualizer } from '@tanstack/react-virtual';
+import {
+    useWindowVirtualizer,
+    observeWindowRect,
+} from '@tanstack/react-virtual';
 
 import { fetchSamples, Sample } from '../../api';
 import { player } from '../../helpers/Player';
 import { useTextMeasurer } from '../../helpers/TextMeasurer';
 import {
     detailFont,
+    headerHeight,
     nameFont,
     sampleHeight,
     sampleListPadding,
@@ -188,20 +192,24 @@ export default function SampleList() {
         [widths, containerWidth],
     );
 
-    // TODO: Account for offset caused by header & padding; as it stands the rows
-    //  end up a bit lower on the page than the virtualizer expects. This is very
-    //  noticeable when you use a negative `overscan`.
     const rowVirtualizer = useWindowVirtualizer({
         count: layout.length,
         estimateSize: () => rowHeight,
-        paddingEnd: sampleListPadding,
-    });
 
-    // Force range recalculation, since the range is not calculated correctly on
-    // the first render.
-    // TODO: Find another way to fix this.
-    // @ts-expect-error TS2341: calculateRange() is a private method
-    rowVirtualizer.calculateRange();
+        paddingStart: sampleListPadding,
+        paddingEnd: sampleListPadding,
+
+        // Account for offset caused by header & padding; otherwise the rows
+        // would end up a bit lower on the page than the virtualizer expects.
+        // This is very noticeable when you use a negative `overscan`.
+        observeElementRect: (instance, cb) =>
+            observeWindowRect(instance, ({ width, height }) =>
+                cb({
+                    width,
+                    height: height - headerHeight,
+                }),
+            ),
+    });
 
     if (layout.length === 0) {
         return (

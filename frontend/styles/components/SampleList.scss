@@ -6,8 +6,8 @@
     position: relative;
     z-index: $z-index-sample-list;
 
-    // Bottom margin is added via the virtualization
-    margin: $sampleListPadding $sampleListPadding 0;
+    // margin-block: <added by virtualizer>
+    margin-inline: $sampleListPadding;
 
     &__row {
         position: absolute;
