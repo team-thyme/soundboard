@@ -1,6 +1,6 @@
 <?php
 
-use TeamThyme\Soundboard\app;
+use TeamThyme\Soundboard\App;
 
 require(__DIR__ . '/../vendor/autoload.php');
 
