@@ -21,8 +21,7 @@
         "php-di/slim-bridge": "^3.4",
         "slim/psr7": "^1.6",
         "slim/slim": "^4.12.0",
-        "symfony/dotenv": "^7.0",
-        "symfony/yaml": "^3.1"
+        "symfony/dotenv": "^7.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^7.0"

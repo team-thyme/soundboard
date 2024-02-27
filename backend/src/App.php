@@ -4,17 +4,16 @@ namespace TeamThyme\Soundboard;
 
 use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
-use http\Url;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Interfaces\RouteParserInterface;
-use Slim\Psr7\Uri;
 use Symfony\Component\Dotenv\Dotenv;
 use TeamThyme\Soundboard\Controller\ApiController;
 use TeamThyme\Soundboard\Controller\SamplesController;
 use TeamThyme\Soundboard\Controller\TelegramController;
+use TeamThyme\Soundboard\Middleware\ApiMiddleware;
 
 class App
 {
@@ -49,25 +48,14 @@ class App
         $basePath = rtrim(parse_url($baseUrl, PHP_URL_PATH) ?: '', '/');
         $app->setBasePath($basePath);
 
-        // This is a public API, always add a permissive resource sharing header
-        $app->addMiddleware(new class implements MiddlewareInterface {
-            public function process(
-                ServerRequestInterface $request,
-                RequestHandlerInterface $handler
-            ): ResponseInterface {
-                $response = $handler->handle($request);
-                return $response->withHeader('Access-Control-Allow-Origin', '*');
-            }
-        });
-
         $app->addRoutingMiddleware();
+        $app->addMiddleware($container->get(ApiMiddleware::class));
         $app->addErrorMiddleware(
             displayErrorDetails: $_ENV['APP_DEBUG'] ?? false,
             logErrors: false,
             logErrorDetails: false,
         );
 
-        // TODO: Do something fancy to autoconfigure (how powerful are PHP-DI's attributes?)
         $app->get('/', [ApiController::class, 'indexAction'])->setName('api/index');
         $app->get('/samples', [SamplesController::class, 'listAction'])->setName('samples/list');
         $app->get('/samples/{file:.+}', [SamplesController::class, 'getAction'])->setName('samples/get');

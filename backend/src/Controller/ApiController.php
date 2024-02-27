@@ -2,15 +2,12 @@
 
 namespace TeamThyme\Soundboard\Controller;
 
-use DI\Attribute\Inject;
 use Psr\Http\Message\ResponseInterface;
 
 class ApiController
 {
-    public function __construct(
-        #[Inject('config.soundboard')]
-        private readonly array $soundboardConfig,
-    ) {
+    public function __construct()
+    {
     }
 
     public function indexAction(ResponseInterface $response): ResponseInterface
@@ -18,7 +15,7 @@ class ApiController
         $body = $response->getBody();
         $body->write(json_encode([
             'isThereASoundboardApihere' => 'yesDefinitely',
-            'whatIsItsVersionNumber' => $this->soundboardConfig['versionNumber'],
+            'whatIsItsVersionNumber' => 'iDontKnowIDontWantToCreateASharedConfigForThat',
         ]));
 
         return $response

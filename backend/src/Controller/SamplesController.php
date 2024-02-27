@@ -5,7 +5,6 @@ namespace TeamThyme\Soundboard\Controller;
 use DI\Attribute\Inject;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Exception\HttpNotFoundException;
-use Slim\Interfaces\RouteParserInterface;
 use Slim\Psr7\Request;
 use Slim\Psr7\Stream;
 use TeamThyme\Soundboard\Repository\SampleRepository;
