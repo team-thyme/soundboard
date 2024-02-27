@@ -118,7 +118,10 @@ function useBodyWidth(): number {
     return width;
 }
 
-function usePlaySamplesFromURI(allSamples: Sample[]): void {
+function usePlaySamplesFromURI(
+    allSamples: Sample[],
+    scrollToSample: (sample: Sample) => void,
+): void {
     const playedFromURI = useRef(false);
     useEffect(() => {
         if (playedFromURI.current || allSamples.length === 0) {
@@ -146,22 +149,25 @@ function usePlaySamplesFromURI(allSamples: Sample[]): void {
             selectedSamples.push(matchingSamples[index]);
         });
 
+        // Don't play from URI again
+        playedFromURI.current = true;
+
+        if (selectedSamples.length === 0) {
+            return;
+        }
+
         // Play the selected samples
         selectedSamples.forEach((sample) => {
             void player.togglePlay(sample);
         });
 
-        // Don't play from URI again
-        playedFromURI.current = true;
+        // Scroll to the first selected sample
+        scrollToSample(selectedSamples[0]);
     }, [allSamples]);
 }
 
 export default function SampleList() {
     const allSamples = useSamples();
-
-    // TODO: This is not the right place to be playing a sample from URI, but it
-    //  is currently the only place we have access to all fetched samples.
-    usePlaySamplesFromURI(allSamples);
 
     const { query } = useContext(SearchContext);
     const deferredQuery = useDeferredValue(query);
@@ -194,6 +200,25 @@ export default function SampleList() {
                 }),
             ),
     });
+
+    const scrollToSample = useCallback(
+        (sample: Sample) => {
+            const index = samples.indexOf(sample);
+            if (index === -1) {
+                return;
+            }
+            const rowIndex = layout.findIndex((row) => row.includes(index));
+            if (rowIndex === -1) {
+                return;
+            }
+            rowVirtualizer.scrollToIndex(rowIndex, { align: 'center' });
+        },
+        [samples, layout],
+    );
+
+    // TODO: This is not the right place to be playing a sample from URI, but it
+    //  is currently the only place we have access to all fetched samples.
+    usePlaySamplesFromURI(allSamples, scrollToSample);
 
     if (layout.length === 0) {
         return (
