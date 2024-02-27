@@ -3,6 +3,10 @@ import { type Sample } from '../api';
 // Only word- and whitespace-chars are allowed in the indices and query
 const ALLOWED_CHARS_REGEX = /[^\w\s]/g;
 
+function normalize(string: string): string {
+    return string.replace(ALLOWED_CHARS_REGEX, '').toLowerCase().trim();
+}
+
 export class Search {
     private readonly samples: Sample[];
     private readonly normalizedSamples: string[];
@@ -15,21 +19,14 @@ export class Search {
         //
         // Example:
         // { name: 'tof', categories: ['voice', 'skik'] } => 'tof voice skik'
-        this.normalizedSamples = samples.map((sample) => {
-            let string = sample.name.replace(ALLOWED_CHARS_REGEX, '');
-            sample.categories.forEach((category) => {
-                string += ' ' + category.replace(ALLOWED_CHARS_REGEX, '');
-            });
-            return string.toLowerCase();
-        });
+        this.normalizedSamples = samples.map((sample) =>
+            [sample.name, ...sample.categories].map(normalize).join(' '),
+        );
     }
 
     public filter(query: string): Sample[] {
         // Normalize the query to match against the normalized samples
-        const normalizedQuery = query
-            .replace(ALLOWED_CHARS_REGEX, '')
-            .toLowerCase()
-            .trim();
+        const normalizedQuery = normalize(query);
 
         // Early return for empty queries
         if (normalizedQuery === '') {
