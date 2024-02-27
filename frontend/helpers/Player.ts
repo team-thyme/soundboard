@@ -99,6 +99,10 @@ export default class Player {
         return this.playing.has(key);
     }
 
+    getPlayingData(key: string): PlayingData | undefined {
+        return this.playing.get(key);
+    }
+
     /**
      * Returns the current progresses of each playing instance of the sample with
      * the given key, or [] if the sample is not currently playing.

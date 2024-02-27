@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useSyncExternalStore } from 'react';
 
 import { Sample } from '../../api';
 import config from '../../config';
@@ -18,33 +18,20 @@ function usePlayer(sample: Sample): {
     isPlaying: boolean;
     analyserNode: AnalyserNode | null;
 } {
-    const [isPlaying, setPlaying] = useState<boolean>(() =>
-        player.isPlaying(sample.key),
+    const playingData = useSyncExternalStore(
+        (callback) => {
+            player.on('play', sample.key, callback);
+            player.on('ended', sample.key, callback);
+            return () => {
+                player.off('play', sample.key, callback);
+                player.off('ended', sample.key, callback);
+            };
+        },
+        () => player.getPlayingData(sample.key),
     );
-    const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(() =>
-        player.getAnalyserNode(sample.key),
-    );
 
-    useEffect(() => {
-        function handlePlay() {
-            setPlaying(true);
-            setAnalyserNode(player.getAnalyserNode(key));
-        }
-
-        function handleEnded() {
-            setPlaying(false);
-            setAnalyserNode(null);
-        }
-
-        const { key } = sample;
-        player.on('play', key, handlePlay);
-        player.on('ended', key, handleEnded);
-
-        return () => {
-            player.off('play', key, handlePlay);
-            player.off('ended', key, handleEnded);
-        };
-    }, [sample]);
+    const isPlaying = playingData !== undefined;
+    const analyserNode = playingData?.analyserNode ?? null;
 
     const togglePlay = useCallback(
         (options: TogglePlayOptions) => {
