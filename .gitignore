@@ -14,6 +14,7 @@
 
 # Backend
 /vendor/
+/.slim-cache/
 
 # Environment variables
 /.env

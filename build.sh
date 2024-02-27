@@ -1,34 +1,31 @@
 #!/usr/bin/env bash
 
-case "$1" in
-    prod*) BUILD_MODE='production' ;;
-    dev*) BUILD_MODE='development' ;;
-    watch) ;&
-    '') ;&
-    serve) BUILD_MODE='serve' ;;
-    *) echo "Unknown build mode \"$1\"." && exit 1 ;;
-esac
+test -f .env && source .env
+APP_ENV=${APP_ENV:=dev}
 
-echo "Building soundboard in \"$BUILD_MODE\" mode..."
+if [ "$APP_ENV" == 'dev' ]; then
+    if [ "$1" == '--serve' ]; then
+        echo "Building soundboard in development mode with dev servers..."
+    else
+        echo "Building soundboard in development mode..."
+    fi
 
-if [ "$BUILD_MODE" == 'production' ]; then
-    test -f .env && source .env
-    composer install --no-dev --optimize-autoloader
+    composer install
     npm install
-    BASE_URL=${BASE_URL:=/} npm run build-production
-    exit 0
-fi
 
-composer install
-npm install
+    if [ "$1" == '--serve' ]; then
+        composer run dev-server & \
+        npm run dev-server
+        exit 0
+    fi
 
-if [ "$BUILD_MODE" == 'development' ]; then
     npm run build
     exit 0
 fi
 
-if [ "$BUILD_MODE" == 'serve' ]; then
-    composer run dev-server & \
-    npm run dev-server
-    exit 0
-fi
+echo "Building soundboard in production mode..."
+rm -rf .slim-cache
+composer install --no-dev --optimize-autoloader
+npm install
+BASE_URL=${BASE_URL:=/} npm run build-production
+exit 0

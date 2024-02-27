@@ -31,6 +31,9 @@ class App
         $containerBuilder->useAutowiring(true);
         $containerBuilder->useAttributes(true);
         $containerBuilder->addDefinitions(self::CONFIG_FILE);
+        if ($_ENV['APP_ENV'] === 'prod') {
+            $containerBuilder->enableCompilation('.slim-cache');
+        }
         $container = $containerBuilder->build();
 
         // Add injectable aliases for all config subkeys. After container build so we don't have to import the config
