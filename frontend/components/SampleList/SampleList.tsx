@@ -15,6 +15,7 @@ import {
 
 import { fetchSamples, Sample } from '../../api';
 import { player } from '../../helpers/Player';
+import { Search } from '../../helpers/Search';
 import { useTextMeasurer } from '../../helpers/TextMeasurer';
 import {
     detailFont,
@@ -58,44 +59,8 @@ function useSamples(): Sample[] {
  * React hook. Filters a list of samples using the given query.
  */
 function useFilteredSamples(samples: Sample[], query: string): Sample[] {
-    // Only word- and whitespace-chars are allowed in the indices and query
-    const ALLOWED_CHARS_REGEX = /[^\w\s]/g;
-
-    // Prepare the normalized sample index. The sample don't generally change,
-    // so most of the time we only have to do this once.
-    //
-    // Example:
-    // { name: 'tof', categories: ['voice', 'skik'] } => 'tof voice skik'
-    const indexedSamples = useMemo(() => {
-        return samples.map((sample) => {
-            let string = sample.name.replace(ALLOWED_CHARS_REGEX, '');
-            sample.categories.forEach((category) => {
-                string += ' ' + category.replace(ALLOWED_CHARS_REGEX, '');
-            });
-            return string.toLowerCase();
-        });
-    }, [samples]);
-
-    return useMemo(() => {
-        // Normalize the query to match the prepared sample indices
-        const normalizedQuery = query
-            .replace(ALLOWED_CHARS_REGEX, '')
-            .toLowerCase()
-            .trim();
-
-        // Early return for empty queries
-        if (normalizedQuery === '') {
-            return samples;
-        }
-
-        // Split the query into an array of terms
-        const terms = normalizedQuery.split(/[\s+&]+/g);
-
-        return samples.filter((sample, index) => {
-            // Every term must be included in the sample text
-            return terms.every((term) => indexedSamples[index].includes(term));
-        });
-    }, [samples, indexedSamples, query]);
+    const search = useMemo(() => new Search(samples), [samples]);
+    return useMemo(() => search.filter(query), [search, query]);
 }
 
 /**
