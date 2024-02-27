@@ -18,42 +18,42 @@ class TelegramController
 
     public function webhookAction(Request $request, Response $response) : Response
     {
-        $requestData = $request->getParsedBody();
+        $requestData = $request->getParsedBody() ?? [];
 
-        if (isset($this->requestData['inline_query'])) {
-            return $this->handleInlineQuery($requestData, $response);
+        if (array_key_exists('inline_query', $requestData)) {
+            return $this->handleInlineQuery($request, $response);
         }
 
-        if (isset($this->requestData['message'])) {
-            return $this->handleMessage($requestData, $response);
+        if (array_key_exists('message', $requestData)) {
+            return $this->handleMessage($request, $response);
         }
 
         throw new HttpBadRequestException($request);
     }
 
-    public function handleInlineQuery(array $requestData, Response $response) : Response
+    public function handleInlineQuery(Request $request, Response $response) : Response
     {
-        $query = $requestData['inline_query']['query'];
+        $inlineQuery = $request->getParsedBody()['inline_query'];
 
         $responseData = [
             'method' => 'answerInlineQuery',
-            'inline_query_id' => $requestData['inline_query']['id'],
+            'inline_query_id' => $inlineQuery['id'],
             'results' => []
         ];
 
-        $samples = $this->sampleRepository->findByQuery($query);
-
-        $apiBaseUrl = // TODO: $this->routeParser->urlFor('')
+        $samples = $this->sampleRepository->findByQuery($inlineQuery['query']);
 
         $count = 0;
         foreach($samples as $sample) {
-            $sampleUrl =  $apiBaseUrl . '/samples/' . $sample->getPath();
+            $sampleUrl = $this->routeParser->fullUrlFor($request->getUri(), 'samples/get', [
+                'file' => $sample->path,
+            ]);
 
             $responseData['results'][] = [
                 'type' => 'voice',
-                'id' => substr($sampleUrl, -64),
+                'id' => substr($sampleUrl, -64), // Not sample ID because it needs to be unique.
                 'voice_url' => $sampleUrl,
-                'title' => $sample->getName(),
+                'title' => $sample->name,
                 // 'caption' => implode(' / ', $sample->getCategories()),
             ];
 
@@ -67,16 +67,18 @@ class TelegramController
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function handleMessage(array $requestData, Response $response) : Response
+    public function handleMessage(Request $request, Response $response) : Response
     {
+        $chat = $request->getParsedBody()['message']['chat'];
+
         // Only respond to private messages
-        if ($requestData['message']['chat']['type'] !== 'private') {
+        if ($chat['type'] !== 'private') {
             return $response;
         }
 
         $response->getBody()->write(json_encode([
             'method' => 'sendMessage',
-            'chat_id' => $requestData['message']['chat']['id'],
+            'chat_id' => $chat['id'],
             'text' => 'I\'m too shy to talk with you.',
         ]));
         return $response->withHeader('Content-Type', 'application/json');

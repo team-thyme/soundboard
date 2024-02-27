@@ -4,12 +4,13 @@ namespace TeamThyme\Soundboard;
 
 use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
+use http\Url;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Slim\Interfaces\RouteCollectorInterface;
 use Slim\Interfaces\RouteParserInterface;
+use Slim\Psr7\Uri;
 use Symfony\Component\Dotenv\Dotenv;
 use TeamThyme\Soundboard\Controller\ApiController;
 use TeamThyme\Soundboard\Controller\SamplesController;
@@ -25,7 +26,7 @@ class App
         chdir(__DIR__ . '/../..');
 
         $dotenv = new Dotenv();
-        $dotenv->bootEnv('.env', 'prod');
+        $dotenv->bootEnv('.env');
 
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->useAutowiring(true);
@@ -40,8 +41,13 @@ class App
         }
 
         $app = Bridge::create($container);
-        $app->setBasePath('/public-api'); // TODO: Obtain from env.
         $container->set(RouteParserInterface::class, $app->getRouteCollector()->getRouteParser());
+
+        // Obtain base path from used API URL. If it points to a _different_ backend then this logic won't be needed
+        // anyway.
+        $baseUrl = $_ENV['API_BASE_URL'] ?? '/';
+        $basePath = rtrim(parse_url($baseUrl, PHP_URL_PATH) ?: '', '/');
+        $app->setBasePath($basePath);
 
         // This is a public API, always add a permissive resource sharing header
         $app->addMiddleware(new class implements MiddlewareInterface {
@@ -55,7 +61,11 @@ class App
         });
 
         $app->addRoutingMiddleware();
-        $app->addErrorMiddleware(displayErrorDetails: $_ENV['APP_DEBUG'], logErrors: false, logErrorDetails: false);
+        $app->addErrorMiddleware(
+            displayErrorDetails: $_ENV['APP_DEBUG'] ?? false,
+            logErrors: false,
+            logErrorDetails: false,
+        );
 
         // TODO: Do something fancy to autoconfigure (how powerful are PHP-DI's attributes?)
         $app->get('/', [ApiController::class, 'indexAction'])->setName('api/index');

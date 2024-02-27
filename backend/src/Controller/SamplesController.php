@@ -16,14 +16,11 @@ class SamplesController
         #[Inject('config.soundboard')]
         private readonly array $soundboardConfig,
         private readonly SampleRepository $sampleRepository,
-        private readonly RouteParserInterface $routeParser,
     ) {
     }
 
     public function listAction(Request $request, ResponseInterface $response): ResponseInterface
     {
-        dd($this->routeParser->urlFor('telegram/webhook'));
-
         $query = ($request->getQueryParams()['query'] ?? null);
 
         $samples = $query ? $this->sampleRepository->findByQuery($query) : $this->sampleRepository->findAll();
@@ -53,7 +50,7 @@ class SamplesController
             throw new HttpNotFoundException($request);
         }
 
-        // Determine content type (Fileinfo is unreliable here, use a good ol' switch to determine content type)
+        // Determine content type (Fileinfo is unreliable here, use a good ol' match to determine content type)
         $extension = pathinfo($samplePath, PATHINFO_EXTENSION);
 
         $contentType = match ($extension) {

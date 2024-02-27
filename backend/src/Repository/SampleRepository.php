@@ -16,7 +16,10 @@ class SampleRepository
     ) {
     }
 
-    public function findAll() : array
+    /**
+     * @return Sample[]
+     */
+    public function findAll(): array
     {
         // Get files.
         $iterator = new RecursiveIteratorIterator(
@@ -50,7 +53,10 @@ class SampleRepository
         }, iterator_to_array($iterator, false));
     }
 
-    public function findByQuery(string $query) : array
+    /**
+     * @return Sample[]
+     */
+    public function findByQuery(string $query): array
     {
         $samples = $this->findAll();
 
