@@ -10,14 +10,12 @@ function usePlayerProgress(sample: Sample): number[] {
 
     useEffect(() => {
         function handleProgress() {
-            setProgresses(player.getProgresses(key));
+            setProgresses(player.getProgresses(sample.key));
         }
 
-        const { key } = sample;
-        player.on('progress', key, handleProgress);
-
+        player.on('progress', sample.key, handleProgress);
         return () => {
-            player.off('progress', key, handleProgress);
+            player.off('progress', sample.key, handleProgress);
         };
     }, [sample]);
 
