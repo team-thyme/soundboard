@@ -1,13 +1,8 @@
 <?php
 
-use TeamThyme\Soundboard\App;
+use TeamThyme\Soundboard\app;
 
-require(__DIR__ . "/../vendor/autoload.php");
-
-// Fix for builtin PHP server doing something weird when there is a dot (.) in the path
-if (PHP_SAPI == "cli-server") {
-    $_SERVER["SCRIPT_NAME"] = "/index.php";
-}
+require(__DIR__ . '/../vendor/autoload.php');
 
 $app = new App();
 $app->run();

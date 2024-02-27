@@ -1,28 +1,31 @@
 <?php
 
-namespace TeamThyme\Soundboard\Repositories;
+namespace TeamThyme\Soundboard\Repository;
 
-use TeamThyme\Soundboard\Models\Sample;
+use DI\Attribute\Inject;
+use TeamThyme\Soundboard\Model\Sample;
 use RecursiveIteratorIterator;
 use RegexIterator;
 use RecursiveDirectoryIterator;
 
 class SampleRepository
 {
-    protected $sampleBaseDirectory;
-
-    public function __construct(string $sampleBaseDirectory)
-    {
-        $this->sampleBaseDirectory = $sampleBaseDirectory;
+    public function __construct(
+        #[Inject('config.soundboard')]
+        private readonly array $soundboardConfig,
+    ) {
     }
 
-    public function findAll() : array
+    /**
+     * @return Sample[]
+     */
+    public function findAll(): array
     {
         // Get files.
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                $this->sampleBaseDirectory,
-                RecursiveDirectoryIterator::FOLLOW_SYMLINKS
+                $this->soundboardConfig['sampleBaseDirectory'],
+                \FilesystemIterator::FOLLOW_SYMLINKS
             )
         );
 
@@ -33,7 +36,7 @@ class SampleRepository
         );
 
         // Map to sample objects.
-        $samples = array_map(function($file) {
+        return array_map(function($file) {
             // Windows compatibility.
             $path = str_replace('\\', '/', $file->getPathname());
 
@@ -48,11 +51,12 @@ class SampleRepository
 
             return new Sample($path, $url, $file->getMTime());
         }, iterator_to_array($iterator, false));
-
-        return $samples;
     }
 
-    public function findByQuery(string $query) : array
+    /**
+     * @return Sample[]
+     */
+    public function findByQuery(string $query): array
     {
         $samples = $this->findAll();
 
@@ -65,15 +69,13 @@ class SampleRepository
 
         $regex = '/.*(?=.*' . implode(')(?=.*', $terms) . ').*/i';
 
-        $filteredSamples = array_values(array_filter($samples, function($sample) use ($regex) {
+        return array_values(array_filter($samples, function($sample) use ($regex) {
             $searchString =
-                preg_replace('/[^\w\s\|]/', '', $sample->getName()) .
+                preg_replace('/[^\w\s\|]/', '', $sample->name) .
                 ' ' .
-                preg_replace('/[^\w\s\|]/', '', implode(' ', $sample->getCategories()));
+                preg_replace('/[^\w\s\|]/', '', implode(' ', $sample->categories));
 
             return preg_match($regex, $searchString);
         }));
-
-        return $filteredSamples;
     }
 }
