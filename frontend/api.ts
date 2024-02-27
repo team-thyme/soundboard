@@ -15,11 +15,11 @@ export interface Sample {
     url: string;
 }
 
-export async function fetchSamples(): Promise<Sample[]> {
+export async function fetchSamples(signal?: AbortSignal): Promise<Sample[]> {
     const url = `${config.apiBaseUrl}/samples`;
 
     // TODO: Remove 'force-cache'
-    const res = await fetch(url, { cache: 'force-cache' });
+    const res = await fetch(url, { cache: 'force-cache', signal });
     if (res.status !== 200) {
         throw new Error(`Server replied with ${res.status} ${res.statusText}`);
     }

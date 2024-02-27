@@ -1,4 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    observeWindowRect,
+    useWindowVirtualizer,
+} from '@tanstack/react-virtual';
 import React, {
     useCallback,
     useContext,
@@ -8,10 +12,6 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import {
-    useWindowVirtualizer,
-    observeWindowRect,
-} from '@tanstack/react-virtual';
 
 import { fetchSamples, Sample } from '../../api';
 import { player } from '../../helpers/Player';
@@ -30,6 +30,8 @@ import { SearchContext } from '../App';
 import SampleItem from '../SampleItem/SampleItem';
 import computeLayout from './computeLayout';
 
+const sortLimit = new Date().getTime() - 14 * 24 * 60 * 60 * 1000;
+
 /**
  * React hook. Fetches samples from API, if needed.
  */
@@ -37,22 +39,36 @@ function useSamples(): Sample[] {
     const [samples, setSamples] = useState<Sample[]>([]);
 
     useEffect(() => {
-        fetchSamples().then((samples) => {
-            // Sort samples
-            const sortLimit = new Date().getTime() - 14 * 24 * 60 * 60 * 1000;
-            samples = samples.sort((sample1, sample2) => {
-                if (sample1.mtime > sortLimit || sample2.mtime > sortLimit) {
-                    return sample2.mtime - sample1.mtime;
+        async function handleFetchSamples(signal: AbortSignal) {
+            try {
+                const samples = await fetchSamples(signal);
+                setSamples(samples);
+            } catch (error) {
+                if (
+                    error instanceof DOMException &&
+                    error.name === 'AbortError'
+                ) {
+                    // Fetch was aborted
+                    return;
                 }
+                throw error;
+            }
+        }
 
-                return 2 * Math.floor(2 * Math.random()) - 1;
-            });
-
-            setSamples(samples);
-        });
+        const controller = new AbortController();
+        void handleFetchSamples(controller.signal);
+        return () => controller.abort();
     }, []);
 
-    return samples;
+    return useMemo(() => {
+        // Sort samples
+        return samples.toSorted((sample1, sample2) => {
+            if (sample1.mtime > sortLimit || sample2.mtime > sortLimit) {
+                return sample2.mtime - sample1.mtime;
+            }
+            return 2 * Math.floor(2 * Math.random()) - 1;
+        });
+    }, [samples]);
 }
 
 /**
