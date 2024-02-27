@@ -39,7 +39,12 @@ export default class Player {
      *
      * @type {AudioContext}
      */
-    audioContext = new AudioContext();
+    audioContext = new AudioContext({
+        latencyHint: 'interactive',
+        // Samples are generally 48kHz but any resampling (setting this to a value other than 48000) somehow fixes crazy
+        // stuttering on my device on Firefox mobile. ¯\_(ツ)_/¯
+        sampleRate: 48_001,
+    });
 
     // The audio node to connect the created audio to
     audioDestinationNode;
