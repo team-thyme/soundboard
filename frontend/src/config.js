@@ -1,5 +1,5 @@
 export default {
-    versionNumber: '3.5.0',
+    versionNumber: '3.4.2',
     versionName: 'je moet niet kijken, je moet zien',
     versionSampleId: '1098b172',
     repositoryUrl: 'https://github.com/team-thyme/soundboard',
