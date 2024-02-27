@@ -26,6 +26,39 @@ function stop(playingData: PlayingData) {
     });
 }
 
+/**
+ * Returns the current progress of the given playing instance. The progress is a
+ * number in the range [0, 1].
+ *
+ * The progress may be extrapolated if the player time is not updated frequently
+ * enough.
+ */
+function getProgress(instance: PlayingInstance): number {
+    let currentTime = Number(instance.audioElement.currentTime);
+    const duration = Number(instance.audioElement.duration);
+    if (!duration || !isFinite(duration)) {
+        return 0;
+    }
+
+    // Ensure time is in range [0, duration]
+    currentTime = Math.max(0, Math.min(currentTime, duration));
+
+    // If currentTime is the same as it was last frame(s), try to
+    // extrapolate by considering the time that has passed since
+    // the last update.
+    if (currentTime > 0 && currentTime === instance.lastPlayerTime) {
+        currentTime =
+            instance.lastPlayerTime +
+            (Date.now() - instance.lastActualTime) / 1000;
+    } else {
+        // New currentTime -> synchronize the instance
+        instance.lastPlayerTime = currentTime;
+        instance.lastActualTime = Date.now();
+    }
+
+    return currentTime / duration;
+}
+
 export interface TogglePlayOptions {
     spam?: boolean;
     loop?: boolean;
@@ -110,34 +143,7 @@ export default class Player {
     getProgresses(key: string): number[] {
         const playingData = this.playing.get(key);
         if (playingData) {
-            return playingData.instances.map((instance) => {
-                let currentTime = Number(instance.audioElement.currentTime);
-                const duration = Number(instance.audioElement.duration);
-                if (!duration || !isFinite(duration)) {
-                    return 0;
-                }
-
-                // Ensure time is in range [0, duration]
-                currentTime = Math.max(0, Math.min(currentTime, duration));
-
-                // If currentTime is the same as it was last frame(s), try to
-                // extrapolate by considering the time that has passed since
-                // the last update.
-                if (
-                    currentTime > 0 &&
-                    currentTime === instance.lastPlayerTime
-                ) {
-                    currentTime =
-                        instance.lastPlayerTime +
-                        (Date.now() - instance.lastActualTime) / 1000;
-                } else {
-                    // New currentTime -> synchronize the instance
-                    instance.lastPlayerTime = currentTime;
-                    instance.lastActualTime = Date.now();
-                }
-
-                return currentTime / duration;
-            });
+            return playingData.instances.map(getProgress);
         }
         return [];
     }
