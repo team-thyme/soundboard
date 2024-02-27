@@ -139,13 +139,16 @@ function usePlaySamplesFromURI(allSamples: Sample[]): void {
                 (sample) =>
                     sample.id === part && !selectedSamples.includes(sample),
             );
+            if (matchingSamples.length === 0) {
+                return;
+            }
             const index = Math.floor(Math.random() * matchingSamples.length);
             selectedSamples.push(matchingSamples[index]);
         });
 
         // Play the selected samples
         selectedSamples.forEach((sample) => {
-            player.togglePlay(sample);
+            void player.togglePlay(sample);
         });
 
         // Don't play from URI again
