@@ -11,6 +11,8 @@ html {
     overflow-x: hidden;
     overflow-y: scroll;
 
+    scroll-padding-block-start: $headerHeight;
+
     font: 16px $font-stack;
 }
 
