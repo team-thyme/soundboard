@@ -2,12 +2,14 @@ import {
     type ElementProps,
     flip,
     type FloatingContext,
+    FloatingFocusManager,
     FloatingPortal,
     type Placement,
     useClientPoint,
     useDismiss,
     useFloating,
     useInteractions,
+    useRole,
 } from '@floating-ui/react';
 import React, {
     createContext,
@@ -58,7 +60,7 @@ type ContextMenuContextValue = {
     transformOrigin: string | undefined;
 } & Pick<
     ReturnType<typeof useFloating>,
-    'floatingStyles' | 'placement' | 'refs'
+    'context' | 'floatingStyles' | 'placement' | 'refs'
 > &
     Pick<
         ReturnType<typeof useInteractions>,
@@ -96,6 +98,9 @@ export function ContextMenu(props: ContextMenuProps) {
     });
 
     const { getReferenceProps, getFloatingProps } = useInteractions([
+        useRole(context, {
+            role: 'menu',
+        }),
         useContextMenu(context),
         useDismiss(context, {
             escapeKey: true,
@@ -115,6 +120,7 @@ export function ContextMenu(props: ContextMenuProps) {
         () => ({
             open,
             setOpen,
+            context,
             floatingStyles,
             placement,
             refs,
@@ -125,6 +131,7 @@ export function ContextMenu(props: ContextMenuProps) {
         [
             open,
             setOpen,
+            context,
             floatingStyles,
             placement,
             refs,
@@ -182,15 +189,17 @@ export function ContextMenuContent(props: ContextMenuContentProps) {
 
     return (
         <FloatingPortal id="root">
-            <div
-                ref={context.refs.setFloating}
-                style={context.floatingStyles}
-                {...context.getFloatingProps()}
-            >
-                <Menu style={{ transformOrigin: context.transformOrigin }}>
-                    {props.children}
-                </Menu>
-            </div>
+            <FloatingFocusManager context={context.context}>
+                <div
+                    ref={context.refs.setFloating}
+                    style={context.floatingStyles}
+                    {...context.getFloatingProps()}
+                >
+                    <Menu style={{ transformOrigin: context.transformOrigin }}>
+                        {props.children}
+                    </Menu>
+                </div>
+            </FloatingFocusManager>
         </FloatingPortal>
     );
 }
