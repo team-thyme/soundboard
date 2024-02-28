@@ -1,11 +1,16 @@
 import cx from 'classnames';
-import React, { useCallback, useMemo, useSyncExternalStore } from 'react';
+import React, { useCallback, useSyncExternalStore } from 'react';
 
 import { Sample } from '../../api';
 import config from '../../config';
 import download from '../../helpers/download';
 import { player, type TogglePlayOptions } from '../../helpers/Player';
-import ContextMenu, { ContextMenuItem } from '../ContextMenu';
+import {
+    ContextMenu,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuTrigger,
+} from '../ContextMenu';
 import SampleItemProgress from './SampleItemProgress';
 import VisualizeAnalyserNode from './VisualizeAnalyserNode';
 
@@ -123,61 +128,9 @@ export default function SampleItem({ sample }: SampleItemProps) {
     //  needs to be loaded).
     const { togglePlay, isPlaying, analyserNode } = usePlayer(sample);
 
-    const contextMenuItems = useMemo(
-        (): ContextMenuItem[] => [
-            {
-                icon: isPlaying ? 'stop' : 'play',
-                title: isPlaying ? 'Stop' : 'Play',
-                shortcut: 'Click',
-                onClick: () => {
-                    togglePlay();
-                },
-            },
-            {
-                icon: 'repeat',
-                title: 'Loop',
-                shortcut: 'Ctrl + Click',
-                onClick: () => {
-                    togglePlay({ loop: true });
-                },
-            },
-            {
-                icon: 'fire',
-                title: 'Spam',
-                shortcut: 'Shift + Click',
-                onClick: () => {
-                    togglePlay({ spam: true });
-                },
-            },
-            {
-                icon: 'link',
-                title: 'Copy URL',
-                onClick: async () => {
-                    // Get URL to sample by letting the browser resolve it relative to current hostname.
-                    const anchor = document.createElement('a');
-                    anchor.href = `${config.baseUrl}${sample.id}`;
-                    await navigator.clipboard.writeText(anchor.href);
-                },
-            },
-            {
-                icon: 'download',
-                title: 'Download',
-                onClick: () => {
-                    const fileName = decodeURIComponent(sample.path).replace(
-                        /\//g,
-                        '_',
-                    );
-                    download(sample.url, fileName);
-                },
-            },
-        ],
-        [togglePlay, isPlaying, sample],
-    );
-
     return (
-        // TODO: Add a ContextMenuWrapper / -Manager or something. Because currently popper is initialized for every item!
-        <ContextMenu items={contextMenuItems}>
-            {(props) => (
+        <ContextMenu>
+            <ContextMenuTrigger>
                 <button
                     className={cx('SampleItem', {
                         'SampleItem--isPlaying': isPlaying,
@@ -203,7 +156,6 @@ export default function SampleItem({ sample }: SampleItemProps) {
                             );
                         }
                     }}
-                    {...props}
                 >
                     <span className="SampleItem__name">{sample.name}</span>
                     <span className="SampleItem__detail">
@@ -218,7 +170,53 @@ export default function SampleItem({ sample }: SampleItemProps) {
                         </>
                     )}
                 </button>
-            )}
+            </ContextMenuTrigger>
+            <ContextMenuContent>
+                <ContextMenuItem
+                    icon={isPlaying ? 'stop' : 'play'}
+                    title={isPlaying ? 'Stop' : 'Play'}
+                    shortcut="Click"
+                    onClick={() => {
+                        togglePlay();
+                    }}
+                />
+                <ContextMenuItem
+                    icon="repeat"
+                    title="Loop"
+                    shortcut="Ctrl + Click"
+                    onClick={() => {
+                        togglePlay({ loop: true });
+                    }}
+                />
+                <ContextMenuItem
+                    icon="fire"
+                    title="Spam"
+                    shortcut="Shift + Click"
+                    onClick={() => {
+                        togglePlay({ spam: true });
+                    }}
+                />
+                <ContextMenuItem
+                    icon="link"
+                    title="Copy URL"
+                    onClick={async () => {
+                        // Get URL to sample by letting the browser resolve it relative to current hostname.
+                        const anchor = document.createElement('a');
+                        anchor.href = `${config.baseUrl}${sample.id}`;
+                        await navigator.clipboard.writeText(anchor.href);
+                    }}
+                />
+                <ContextMenuItem
+                    icon="download"
+                    title="Download"
+                    onClick={() => {
+                        const fileName = decodeURIComponent(
+                            sample.path,
+                        ).replace(/\//g, '_');
+                        void download(sample.url, fileName);
+                    }}
+                />
+            </ContextMenuContent>
         </ContextMenu>
     );
 }

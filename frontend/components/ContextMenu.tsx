@@ -1,31 +1,26 @@
 import {
+    type ElementProps,
     flip,
+    type FloatingContext,
+    FloatingPortal,
+    type Placement,
     useClientPoint,
     useDismiss,
     useFloating,
     useInteractions,
-    type ElementProps,
-    type FloatingContext,
-    type Placement,
-    FloatingPortal,
 } from '@floating-ui/react';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { ReactNode, useMemo, useState } from 'react';
-import ReactDOM from 'react-dom';
-
-export interface ContextMenuItem {
-    icon: IconProp;
-    title: string;
-    shortcut?: string;
-    onClick?: () => void;
-}
-
-interface ContextMenuProps {
-    children(props: Record<string, unknown>): ReactNode;
-
-    items: ContextMenuItem[];
-}
+import React, {
+    createContext,
+    Dispatch,
+    isValidElement,
+    type ReactNode,
+    SetStateAction,
+    useContext,
+    useMemo,
+    useState,
+} from 'react';
+import { Menu } from './menu/Menu';
+import { MenuItem, MenuItemProps } from './menu/MenuItem';
 
 function useContextMenu(context: FloatingContext): ElementProps {
     const { onOpenChange } = context;
@@ -57,7 +52,25 @@ function getTransformOrigin(placement: Placement): string | undefined {
     }
 }
 
-export default function ContextMenu(props: ContextMenuProps) {
+type ContextMenuContextValue = {
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+    transformOrigin: string | undefined;
+} & Pick<
+    ReturnType<typeof useFloating>,
+    'floatingStyles' | 'placement' | 'refs'
+> &
+    Pick<
+        ReturnType<typeof useInteractions>,
+        'getReferenceProps' | 'getFloatingProps'
+    >;
+const ContextMenuContext = createContext<ContextMenuContextValue | null>(null);
+
+interface ContextMenuProps {
+    children: ReactNode;
+}
+
+export function ContextMenu(props: ContextMenuProps) {
     const [open, setOpen] = useState(false);
     const [position, setPosition] = useState<{
         x: number;
@@ -98,83 +111,105 @@ export default function ContextMenu(props: ContextMenuProps) {
 
     const transformOrigin = getTransformOrigin(placement);
 
+    const contextValue = useMemo(
+        () => ({
+            open,
+            setOpen,
+            floatingStyles,
+            placement,
+            refs,
+            getReferenceProps,
+            getFloatingProps,
+            transformOrigin,
+        }),
+        [
+            open,
+            setOpen,
+            floatingStyles,
+            placement,
+            refs,
+            getReferenceProps,
+            getFloatingProps,
+            transformOrigin,
+        ],
+    );
+
     return (
-        <>
-            {props.children({
-                ref: refs.setReference,
-                ...getReferenceProps(),
-            })}
-            {open && (
-                <FloatingPortal id="root">
-                    <div
-                        ref={refs.setFloating}
-                        style={floatingStyles}
-                        {...getFloatingProps()}
-                    >
-                        <Menu
-                            style={{ transformOrigin }}
-                            items={props.items}
-                            closeMenu={() => {
-                                setOpen(false);
-                            }}
-                        />
-                    </div>
-                </FloatingPortal>
-            )}
-        </>
+        <ContextMenuContext.Provider value={contextValue}>
+            {props.children}
+        </ContextMenuContext.Provider>
     );
 }
 
-interface MenuOwnProps {
-    items: ContextMenuItem[];
-    closeMenu: () => void;
+interface ContextMenuTriggerProps {
+    children: ReactNode;
 }
 
-type MenuProps = MenuOwnProps &
-    Omit<
-        React.ComponentPropsWithoutRef<'div'>,
-        keyof MenuOwnProps | 'onClick' | 'role' | 'className'
-    >;
+export function ContextMenuTrigger(props: ContextMenuTriggerProps) {
+    const context = useContext(ContextMenuContext);
+    if (context === null) {
+        throw new Error(
+            'ContextMenuTrigger must be a descendant of ContextMenu',
+        );
+    }
+    if (!isValidElement(props.children)) {
+        throw new Error('ContextMenuTrigger must have exactly one child');
+    }
+    return React.cloneElement(
+        props.children,
+        context.getReferenceProps({
+            ref: context.refs.setReference,
+            ...props.children.props,
+        }),
+    );
+}
 
-function Menu({ items, closeMenu, ...otherProps }: MenuProps) {
+interface ContextMenuContentProps {
+    children: ReactNode;
+}
+
+export function ContextMenuContent(props: ContextMenuContentProps) {
+    const context = useContext(ContextMenuContext);
+    if (context === null) {
+        throw new Error(
+            'ContextMenuContent must be a descendant of ContextMenu',
+        );
+    }
+
+    if (!context.open) {
+        return null;
+    }
+
     return (
-        <div
-            role="menu"
-            className="ContextMenu"
-            onClick={(e) => {
-                e.stopPropagation();
-            }}
+        <FloatingPortal id="root">
+            <div
+                ref={context.refs.setFloating}
+                style={context.floatingStyles}
+                {...context.getFloatingProps()}
+            >
+                <Menu style={{ transformOrigin: context.transformOrigin }}>
+                    {props.children}
+                </Menu>
+            </div>
+        </FloatingPortal>
+    );
+}
+
+export function ContextMenuItem(props: MenuItemProps) {
+    const { onClick, ...otherProps } = props;
+
+    const context = useContext(ContextMenuContext);
+    if (context === null) {
+        throw new Error('ContextMenuItem must be a descendant of ContextMenu');
+    }
+
+    return (
+        <MenuItem
             {...otherProps}
-        >
-            <ul className="ContextMenu__items">
-                {items.map((item, index) => (
-                    <li key={index} className="ContextMenu__item">
-                        <Item
-                            {...item}
-                            autoFocus={index === 0}
-                            onClick={() => {
-                                item.onClick?.();
-                                closeMenu();
-                            }}
-                        />
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-}
-
-type ItemProps = ContextMenuItem &
-    Omit<React.ComponentPropsWithoutRef<'button'>, keyof ContextMenuItem>;
-
-function Item({ icon, title, shortcut, ...otherProps }: ItemProps) {
-    return (
-        <button role="menuitem" className="ContextMenuItem" {...otherProps}>
-            <span className="ContextMenuItem__icon">
-                {<FontAwesomeIcon icon={icon} />}
-            </span>
-            <span className="ContextMenuItem__title">{title}</span>
-            <span className="ContextMenuItem__shortcut">{shortcut}</span>
-        </button>
+            onClick={(e) => {
+                onClick?.(e);
+                context.setOpen(false);
+            }}
+        />
     );
 }
