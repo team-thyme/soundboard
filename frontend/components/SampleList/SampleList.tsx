@@ -29,6 +29,7 @@ import {
 import { SearchContext } from '../App';
 import SampleItem from '../SampleItem/SampleItem';
 import computeLayout from './computeLayout';
+import { useSampleListNavigation } from './useSampleListNavigation';
 
 const sortLimit = new Date().getTime() - 14 * 24 * 60 * 60 * 1000;
 
@@ -220,6 +221,8 @@ export default function SampleList() {
     //  is currently the only place we have access to all fetched samples.
     usePlaySamplesFromURI(allSamples, scrollToSample);
 
+    const itemProps = useSampleListNavigation();
+
     if (layout.length === 0) {
         return (
             <div className="SampleList">
@@ -244,9 +247,9 @@ export default function SampleList() {
         >
             {rowVirtualizer
                 .getVirtualItems()
-                .map(({ index: rowIndex, start }) => (
+                .map(({ key, index: rowIndex, start }) => (
                     <div
-                        key={rowIndex}
+                        key={key}
                         className="SampleList__row"
                         style={{ top: start }}
                         role="row"
@@ -256,7 +259,11 @@ export default function SampleList() {
                         {layout[rowIndex].map((index) => {
                             const sample = samples[index];
                             return (
-                                <SampleItem key={sample.key} sample={sample} />
+                                <SampleItem
+                                    key={sample.key}
+                                    sample={sample}
+                                    {...itemProps}
+                                />
                             );
                         })}
                         {rowIndex === layout.length - 1 && (
