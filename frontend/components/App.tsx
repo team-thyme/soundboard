@@ -3,31 +3,20 @@ import React, {
     createContext,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 import { fetchSamples, Sample } from '../api';
+import { player } from '../helpers/Player';
+import { Search } from '../helpers/Search';
 import { sortSamples } from '../helpers/sortSamples';
 import BlockedOverlay from './BlockedOverlay';
 
 import Header from './Header';
-import SampleList from './SampleList/SampleList';
-
-type SearchContextValue = {
-    query: string;
-    setQuery(query: string): void;
-};
-
-export const SearchContext: Context<SearchContextValue> = React.createContext(
-    // This will cause errors if no SearchContext.Provider is used, but that
-    // should never happen. And I would prefer a hard error over it silently not
-    // working any day.
-    undefined as any,
-);
-
-function useSearchContextValue(): SearchContextValue {
-    const [query, setQuery] = useState('');
-    return useMemo(() => ({ query, setQuery }), [query, setQuery]);
-}
+import {
+    SampleList,
+    SampleListImperativeHandle,
+} from './SampleList/SampleList';
 
 export enum Theme {
     Default = 'default',
@@ -40,7 +29,7 @@ type ThemeContextValue = {
     setTheme(theme: Theme): void;
 };
 
-export const ThemeContext: Context<ThemeContextValue> = React.createContext(
+export const ThemeContext: Context<ThemeContextValue> = createContext(
     undefined as any,
 );
 
@@ -54,15 +43,7 @@ function useThemeContextValue(): ThemeContextValue {
     return useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 }
 
-interface SamplesContextValue {
-    samples: Sample[];
-}
-
-export const SamplesContext = createContext<SamplesContextValue>({
-    samples: [],
-});
-
-function useSamplesContextValue(): SamplesContextValue {
+function useSamples(): Sample[] {
     const [samples, setSamples] = useState<Sample[]>([]);
 
     useEffect(() => {
@@ -88,23 +69,80 @@ function useSamplesContextValue(): SamplesContextValue {
         return () => controller.abort();
     }, []);
 
-    return useMemo(() => ({ samples }), [samples]);
+    return samples;
+}
+
+function usePlaySamplesFromURI(
+    allSamples: Sample[],
+    scrollToSample: (sample: Sample) => void,
+): void {
+    const playedFromURI = useRef(false);
+    useEffect(() => {
+        if (playedFromURI.current || allSamples.length === 0) {
+            return;
+        }
+
+        // Get path relative to base URI
+        const path = window.location.href.substring(document.baseURI.length);
+        const pathParts = path
+            .split('/')
+            .map((part) => part.trim())
+            .filter((part) => part !== '');
+
+        // Select samples to play
+        const selectedSamples: Sample[] = [];
+        pathParts.forEach((part) => {
+            const matchingSamples = allSamples.filter(
+                (sample) =>
+                    sample.id === part && !selectedSamples.includes(sample),
+            );
+            if (matchingSamples.length === 0) {
+                return;
+            }
+            const index = Math.floor(Math.random() * matchingSamples.length);
+            selectedSamples.push(matchingSamples[index]);
+        });
+
+        // Don't play from URI again
+        playedFromURI.current = true;
+
+        if (selectedSamples.length === 0) {
+            return;
+        }
+
+        // Play the selected samples
+        selectedSamples.forEach((sample) => {
+            void player.togglePlay(sample);
+        });
+
+        // Scroll to the first selected sample
+        scrollToSample(selectedSamples[0]);
+    }, [allSamples]);
 }
 
 export default function App() {
-    const searchContext = useSearchContextValue();
     const themeContext = useThemeContextValue();
-    const samplesContext = useSamplesContextValue();
+
+    const [query, setQuery] = useState('');
+    const samples = useSamples();
+
+    const sampleListRef = React.createRef<SampleListImperativeHandle>();
+
+    const search = useMemo(() => new Search(samples), [samples]);
+    const filteredSamples = useMemo(
+        () => search.filter(query),
+        [search, query],
+    );
+
+    usePlaySamplesFromURI(samples, (sample) => {
+        sampleListRef.current?.scrollToSample(sample);
+    });
 
     return (
-        <SearchContext.Provider value={searchContext}>
-            <ThemeContext.Provider value={themeContext}>
-                <SamplesContext.Provider value={samplesContext}>
-                    <BlockedOverlay />
-                    <Header />
-                    <SampleList />
-                </SamplesContext.Provider>
-            </ThemeContext.Provider>
-        </SearchContext.Provider>
+        <ThemeContext.Provider value={themeContext}>
+            <BlockedOverlay />
+            <Header query={query} onQueryChange={setQuery} />
+            <SampleList ref={sampleListRef} samples={filteredSamples} />
+        </ThemeContext.Provider>
     );
 }

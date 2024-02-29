@@ -21,6 +21,7 @@ export default function IconButton({
     return (
         <button
             ref={innerRef}
+            type="button"
             className={cx('IconButton', `IconButton--${kind}`)}
             {...otherProps}
         >

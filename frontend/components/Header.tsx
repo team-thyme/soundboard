@@ -7,15 +7,19 @@ import {
     useFloating,
     useInteractions,
 } from '@floating-ui/react';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-import { SearchContext } from './App';
 import IconButton, { IconButtonProps } from './IconButton';
 import Modal, { ModalLayer } from './Modal';
 import ThemeSelect from './ThemeSelect';
 
-function SearchBar() {
-    const { query, setQuery } = useContext(SearchContext);
+interface SearchBarProps {
+    query: string;
+    onQueryChange(query: string): void;
+}
+
+function SearchBar(props: SearchBarProps) {
+    const { query, onQueryChange } = props;
 
     return (
         <div className="SearchBar">
@@ -25,12 +29,12 @@ function SearchBar() {
                 type="search"
                 value={query}
                 placeholder="Cook, Search, Delicious!"
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => onQueryChange(e.target.value)}
             />
             {query && (
                 <div className="SearchBar__clear">
                     <IconButton
-                        onClick={() => setQuery('')}
+                        onClick={() => onQueryChange('')}
                         kind="search"
                         icon="times"
                         title="Clear input"
@@ -103,13 +107,17 @@ function ModalIconButton({
     );
 }
 
-export default function Header() {
+interface HeaderProps extends SearchBarProps {}
+
+export default function Header(props: HeaderProps) {
+    const { query, onQueryChange } = props;
+
     return (
         <>
             <header className="Header">
                 <h1 className="Header__title">Soundboard</h1>
                 <div className="Header__search">
-                    <SearchBar />
+                    <SearchBar query={query} onQueryChange={onQueryChange} />
                 </div>
                 <div className="Header__buttons">
                     <ModalIconButton

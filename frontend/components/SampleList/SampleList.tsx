@@ -4,18 +4,16 @@ import {
     useWindowVirtualizer,
 } from '@tanstack/react-virtual';
 import React, {
+    ForwardedRef,
+    forwardRef,
     useCallback,
-    useContext,
-    useDeferredValue,
     useEffect,
+    useImperativeHandle,
     useMemo,
-    useRef,
     useState,
 } from 'react';
 
 import { type Sample } from '../../api';
-import { player } from '../../helpers/Player';
-import { Search } from '../../helpers/Search';
 import { useTextMeasurer } from '../../helpers/TextMeasurer';
 import {
     detailFont,
@@ -26,18 +24,9 @@ import {
     sampleMargin,
     samplePaddingX,
 } from '../../styles/sync-variables';
-import { SamplesContext, SearchContext } from '../App';
 import SampleItem from '../SampleItem/SampleItem';
 import computeLayout from './computeLayout';
 import { useSampleListNavigation } from './useSampleListNavigation';
-
-/**
- * React hook. Filters a list of samples using the given query.
- */
-function useFilteredSamples(samples: Sample[], query: string): Sample[] {
-    const search = useMemo(() => new Search(samples), [samples]);
-    return useMemo(() => search.filter(query), [search, query]);
-}
 
 /**
  * React hook. Measures the rendered width of each sample in the given list of samples.
@@ -78,65 +67,24 @@ function useBodyWidth(): number {
     return width;
 }
 
-function usePlaySamplesFromURI(
-    allSamples: Sample[],
-    scrollToSample: (sample: Sample) => void,
-): void {
-    const playedFromURI = useRef(false);
-    useEffect(() => {
-        if (playedFromURI.current || allSamples.length === 0) {
-            return;
-        }
-
-        // Get path relative to base URI
-        const path = window.location.href.substring(document.baseURI.length);
-        const pathParts = path
-            .split('/')
-            .map((part) => part.trim())
-            .filter((part) => part !== '');
-
-        // Select samples to play
-        const selectedSamples: Sample[] = [];
-        pathParts.forEach((part) => {
-            const matchingSamples = allSamples.filter(
-                (sample) =>
-                    sample.id === part && !selectedSamples.includes(sample),
-            );
-            if (matchingSamples.length === 0) {
-                return;
-            }
-            const index = Math.floor(Math.random() * matchingSamples.length);
-            selectedSamples.push(matchingSamples[index]);
-        });
-
-        // Don't play from URI again
-        playedFromURI.current = true;
-
-        if (selectedSamples.length === 0) {
-            return;
-        }
-
-        // Play the selected samples
-        selectedSamples.forEach((sample) => {
-            void player.togglePlay(sample);
-        });
-
-        // Scroll to the first selected sample
-        scrollToSample(selectedSamples[0]);
-    }, [allSamples]);
+interface SampleListProps {
+    samples: Sample[];
 }
 
-export default function SampleList() {
-    const { samples } = useContext(SamplesContext);
+export interface SampleListImperativeHandle {
+    scrollToSample(sample: Sample): void;
+}
 
-    const { query } = useContext(SearchContext);
-    const deferredQuery = useDeferredValue(query);
-    const filteredSamples = useFilteredSamples(samples, deferredQuery);
+export const SampleList = forwardRef(function (
+    props: SampleListProps,
+    ref: ForwardedRef<SampleListImperativeHandle>,
+): React.JSX.Element {
+    const { samples } = props;
 
     const containerWidth = useBodyWidth() - sampleListPadding * 2;
     const rowHeight = sampleHeight + sampleMargin * 2;
 
-    const widths = useSampleWidths(filteredSamples);
+    const widths = useSampleWidths(samples);
     const layout = useMemo(
         () => computeLayout(widths, containerWidth),
         [widths, containerWidth],
@@ -163,7 +111,7 @@ export default function SampleList() {
 
     const scrollToSample = useCallback(
         (sample: Sample) => {
-            const index = filteredSamples.indexOf(sample);
+            const index = samples.indexOf(sample);
             if (index === -1) {
                 return;
             }
@@ -173,12 +121,10 @@ export default function SampleList() {
             }
             rowVirtualizer.scrollToIndex(rowIndex, { align: 'center' });
         },
-        [filteredSamples, layout],
+        [samples, layout],
     );
 
-    // TODO: This is not the right place to be playing a sample from URI, but it
-    //  is currently the only place we have access to all fetched samples.
-    usePlaySamplesFromURI(samples, scrollToSample);
+    useImperativeHandle(ref, () => ({ scrollToSample }), [scrollToSample]);
 
     const itemProps = useSampleListNavigation();
 
@@ -216,7 +162,7 @@ export default function SampleList() {
                         data-index-mod3={rowIndex % 3}
                     >
                         {layout[rowIndex].map((index) => {
-                            const sample = filteredSamples[index];
+                            const sample = samples[index];
                             return (
                                 <SampleItem
                                     key={sample.key}
@@ -232,4 +178,4 @@ export default function SampleList() {
                 ))}
         </div>
     );
-}
+});
