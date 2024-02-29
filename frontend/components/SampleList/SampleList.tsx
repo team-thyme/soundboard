@@ -13,7 +13,7 @@ import React, {
     useState,
 } from 'react';
 
-import { fetchSamples, Sample } from '../../api';
+import { type Sample } from '../../api';
 import { player } from '../../helpers/Player';
 import { Search } from '../../helpers/Search';
 import { useTextMeasurer } from '../../helpers/TextMeasurer';
@@ -26,51 +26,10 @@ import {
     sampleMargin,
     samplePaddingX,
 } from '../../styles/sync-variables';
-import { SearchContext } from '../App';
+import { SamplesContext, SearchContext } from '../App';
 import SampleItem from '../SampleItem/SampleItem';
 import computeLayout from './computeLayout';
 import { useSampleListNavigation } from './useSampleListNavigation';
-
-const sortLimit = new Date().getTime() - 14 * 24 * 60 * 60 * 1000;
-
-/**
- * React hook. Fetches samples from API, if needed.
- */
-function useSamples(): Sample[] {
-    const [samples, setSamples] = useState<Sample[]>([]);
-
-    useEffect(() => {
-        async function handleFetchSamples(signal: AbortSignal) {
-            try {
-                const samples = await fetchSamples(signal);
-                setSamples(samples);
-            } catch (error) {
-                if (
-                    error instanceof DOMException &&
-                    error.name === 'AbortError'
-                ) {
-                    // Fetch was aborted
-                    return;
-                }
-                throw error;
-            }
-        }
-
-        const controller = new AbortController();
-        void handleFetchSamples(controller.signal);
-        return () => controller.abort();
-    }, []);
-
-    return useMemo(() => {
-        // Sort samples
-        return samples.toSorted((sample1, sample2) => {
-            if (sample1.mtime > sortLimit || sample2.mtime > sortLimit) {
-                return sample2.mtime - sample1.mtime;
-            }
-            return 2 * Math.floor(2 * Math.random()) - 1;
-        });
-    }, [samples]);
-}
 
 /**
  * React hook. Filters a list of samples using the given query.
@@ -168,16 +127,16 @@ function usePlaySamplesFromURI(
 }
 
 export default function SampleList() {
-    const allSamples = useSamples();
+    const { samples } = useContext(SamplesContext);
 
     const { query } = useContext(SearchContext);
     const deferredQuery = useDeferredValue(query);
-    const samples = useFilteredSamples(allSamples, deferredQuery);
+    const filteredSamples = useFilteredSamples(samples, deferredQuery);
 
     const containerWidth = useBodyWidth() - sampleListPadding * 2;
     const rowHeight = sampleHeight + sampleMargin * 2;
 
-    const widths = useSampleWidths(samples);
+    const widths = useSampleWidths(filteredSamples);
     const layout = useMemo(
         () => computeLayout(widths, containerWidth),
         [widths, containerWidth],
@@ -204,7 +163,7 @@ export default function SampleList() {
 
     const scrollToSample = useCallback(
         (sample: Sample) => {
-            const index = samples.indexOf(sample);
+            const index = filteredSamples.indexOf(sample);
             if (index === -1) {
                 return;
             }
@@ -214,12 +173,12 @@ export default function SampleList() {
             }
             rowVirtualizer.scrollToIndex(rowIndex, { align: 'center' });
         },
-        [samples, layout],
+        [filteredSamples, layout],
     );
 
     // TODO: This is not the right place to be playing a sample from URI, but it
     //  is currently the only place we have access to all fetched samples.
-    usePlaySamplesFromURI(allSamples, scrollToSample);
+    usePlaySamplesFromURI(samples, scrollToSample);
 
     const itemProps = useSampleListNavigation();
 
@@ -257,7 +216,7 @@ export default function SampleList() {
                         data-index-mod3={rowIndex % 3}
                     >
                         {layout[rowIndex].map((index) => {
-                            const sample = samples[index];
+                            const sample = filteredSamples[index];
                             return (
                                 <SampleItem
                                     key={sample.key}

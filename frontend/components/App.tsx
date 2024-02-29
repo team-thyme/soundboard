@@ -1,8 +1,16 @@
-import React, { Context, useEffect, useMemo, useState } from 'react';
+import React, {
+    Context,
+    createContext,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
+import { fetchSamples, Sample } from '../api';
+import { sortSamples } from '../helpers/sortSamples';
+import BlockedOverlay from './BlockedOverlay';
 
 import Header from './Header';
 import SampleList from './SampleList/SampleList';
-import BlockedOverlay from './BlockedOverlay';
 
 type SearchContextValue = {
     query: string;
@@ -46,16 +54,56 @@ function useThemeContextValue(): ThemeContextValue {
     return useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 }
 
+interface SamplesContextValue {
+    samples: Sample[];
+}
+
+export const SamplesContext = createContext<SamplesContextValue>({
+    samples: [],
+});
+
+function useSamplesContextValue(): SamplesContextValue {
+    const [samples, setSamples] = useState<Sample[]>([]);
+
+    useEffect(() => {
+        async function handleFetchSamples(signal: AbortSignal) {
+            try {
+                const samples = await fetchSamples(signal);
+                sortSamples(samples);
+                setSamples(samples);
+            } catch (error) {
+                if (
+                    error instanceof DOMException &&
+                    error.name === 'AbortError'
+                ) {
+                    // Fetch was aborted
+                    return;
+                }
+                throw error;
+            }
+        }
+
+        const controller = new AbortController();
+        void handleFetchSamples(controller.signal);
+        return () => controller.abort();
+    }, []);
+
+    return useMemo(() => ({ samples }), [samples]);
+}
+
 export default function App() {
     const searchContext = useSearchContextValue();
     const themeContext = useThemeContextValue();
+    const samplesContext = useSamplesContextValue();
 
     return (
         <SearchContext.Provider value={searchContext}>
             <ThemeContext.Provider value={themeContext}>
-                <Header />
-                <SampleList />
-                <BlockedOverlay />
+                <SamplesContext.Provider value={samplesContext}>
+                    <BlockedOverlay />
+                    <Header />
+                    <SampleList />
+                </SamplesContext.Provider>
             </ThemeContext.Provider>
         </SearchContext.Provider>
     );
