@@ -16,10 +16,11 @@ import ThemeSelect from './ThemeSelect';
 interface SearchBarProps {
     query: string;
     onQueryChange(query: string): void;
+    playRandomFilteredSample(): void;
 }
 
 function SearchBar(props: SearchBarProps) {
-    const { query, onQueryChange } = props;
+    const { query, onQueryChange, playRandomFilteredSample } = props;
 
     return (
         <div className="SearchBar">
@@ -30,6 +31,14 @@ function SearchBar(props: SearchBarProps) {
                 value={query}
                 placeholder="Cook, Search, Delicious!"
                 onChange={(e) => onQueryChange(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                        onQueryChange('');
+                    }
+                    if (e.key === 'Enter') {
+                        playRandomFilteredSample();
+                    }
+                }}
             />
             {query && (
                 <div className="SearchBar__clear">
@@ -110,14 +119,18 @@ function ModalIconButton({
 interface HeaderProps extends SearchBarProps {}
 
 export default function Header(props: HeaderProps) {
-    const { query, onQueryChange } = props;
+    const { query, onQueryChange, playRandomFilteredSample } = props;
 
     return (
         <>
             <header className="Header">
                 <h1 className="Header__title">Soundboard</h1>
                 <div className="Header__search">
-                    <SearchBar query={query} onQueryChange={onQueryChange} />
+                    <SearchBar
+                        query={query}
+                        onQueryChange={onQueryChange}
+                        playRandomFilteredSample={playRandomFilteredSample}
+                    />
                 </div>
                 <div className="Header__buttons">
                     <ModalIconButton

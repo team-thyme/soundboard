@@ -1,6 +1,7 @@
 import React, {
     Context,
     createContext,
+    useCallback,
     useEffect,
     useMemo,
     useRef,
@@ -134,6 +135,17 @@ export default function App() {
         [search, query],
     );
 
+    const playRandomFilteredSample = useCallback(() => {
+        if (filteredSamples.length === 0) {
+            return;
+        }
+
+        const index = Math.floor(Math.random() * filteredSamples.length);
+        const sample = filteredSamples[index];
+        void player.togglePlay(sample);
+        sampleListRef.current?.scrollToSample(sample);
+    }, [filteredSamples]);
+
     usePlaySamplesFromURI(samples, (sample) => {
         sampleListRef.current?.scrollToSample(sample);
     });
@@ -141,7 +153,11 @@ export default function App() {
     return (
         <ThemeContext.Provider value={themeContext}>
             <BlockedOverlay />
-            <Header query={query} onQueryChange={setQuery} />
+            <Header
+                query={query}
+                onQueryChange={setQuery}
+                playRandomFilteredSample={playRandomFilteredSample}
+            />
             <SampleList ref={sampleListRef} samples={filteredSamples} />
         </ThemeContext.Provider>
     );
