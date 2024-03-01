@@ -19,12 +19,19 @@ type Deserialize<R> = {
     [K in keyof R]: (value: string) => R[K] | null;
 };
 
-class ChangeEvent extends Event {
+class ChangeEvent<
+    K extends keyof PreferencesRecord = keyof PreferencesRecord,
+    V extends PreferencesRecord[K] = PreferencesRecord[K],
+> extends Event {
     constructor(
-        public readonly key: keyof PreferencesRecord,
-        public readonly value: PreferencesRecord[typeof key],
+        public readonly key: K,
+        public readonly value: V,
     ) {
         super('change');
+    }
+
+    is<K2 extends K>(key: K2): this is ChangeEvent<K2, PreferencesRecord[K2]> {
+        return this.key === key;
     }
 }
 
@@ -153,7 +160,7 @@ export function usePreference<K extends keyof PreferencesRecord>(
     const value = useSyncExternalStore(
         (onStoreChange) => {
             function handlePreferenceChange(event: ChangeEvent) {
-                if (event.key === key) {
+                if (event.is(key)) {
                     onStoreChange();
                 }
             }

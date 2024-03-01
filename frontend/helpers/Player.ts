@@ -3,6 +3,7 @@ import 'ogv/dist/ogv-support';
 
 import type { Sample, SampleKey } from '../api';
 import config from '../config';
+import { preferences } from './preferences';
 
 interface PlayingData {
     instances: PlayingInstance[];
@@ -59,12 +60,19 @@ function getProgress(instance: PlayingInstance): number {
     return currentTime / duration;
 }
 
+function volumeToGain(volume: number): number {
+    const gain = volume / 100;
+    // Ensure gain is in range [0, 1]. We never want to go too loud, so as not
+    // to damage anyone's ears.
+    return Math.min(1, Math.max(0, gain));
+}
+
 export interface TogglePlayOptions {
     spam?: boolean;
     loop?: boolean;
 }
 
-export default class Player {
+class Player {
     private audioContext: AudioContext;
     private gainNode: GainNode;
 
@@ -115,8 +123,20 @@ export default class Player {
         // Create gain node
         this.gainNode = this.audioContext.createGain();
         this.gainNode.connect(this.audioContext.destination);
-        // TODO: add user setting for volume
-        this.gainNode.gain.value = 0.1;
+        this.gainNode.gain.value = volumeToGain(
+            preferences.getPreference('volume'),
+        );
+
+        // Watch for volume changes
+        preferences.addEventListener('change', (event) => {
+            if (event.is('volume')) {
+                // TODO: Use exponentialRampToValueAtTime? We'd have to deal with zero volume separately.
+                this.gainNode.gain.linearRampToValueAtTime(
+                    volumeToGain(event.value),
+                    this.audioContext.currentTime + 0.1,
+                );
+            }
+        });
     }
 
     private async preloadOGVPlayer(): Promise<void> {
