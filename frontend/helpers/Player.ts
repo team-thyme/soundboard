@@ -64,7 +64,12 @@ function volumeToGain(volume: number): number {
     const gain = volume / 100;
     // Ensure gain is in range [0, 1]. We never want to go too loud, so as not
     // to damage anyone's ears.
-    return Math.min(1, Math.max(0, gain));
+    const clampedGain = Math.min(1, Math.max(0, gain));
+
+    // Quadratic scaling to make the volume slider more usable. Still not actual
+    // human perception, but better than linear.
+    // See https://www.dr-lex.be/info-stuff/volumecontrols.html
+    return Math.pow(clampedGain, 2);
 }
 
 export interface TogglePlayOptions {
