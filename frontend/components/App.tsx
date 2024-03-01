@@ -1,14 +1,14 @@
 import React, {
-    Context,
-    createContext,
     useCallback,
     useEffect,
     useMemo,
     useRef,
     useState,
 } from 'react';
+
 import { fetchSamples, Sample } from '../api';
 import { player } from '../helpers/Player';
+import { usePreference } from '../helpers/preferences';
 import { Search } from '../helpers/Search';
 import { sortSamples } from '../helpers/sortSamples';
 import BlockedOverlay from './BlockedOverlay';
@@ -18,31 +18,6 @@ import {
     SampleList,
     SampleListImperativeHandle,
 } from './SampleList/SampleList';
-
-export enum Theme {
-    Default = 'default',
-    Cirkeltrek = 'cirkeltrek',
-    DefaultClassic = 'default-classic',
-}
-
-type ThemeContextValue = {
-    theme: Theme;
-    setTheme(theme: Theme): void;
-};
-
-export const ThemeContext: Context<ThemeContextValue> = createContext(
-    undefined as any,
-);
-
-function useThemeContextValue(): ThemeContextValue {
-    const [theme, setTheme] = useState(Theme.Default);
-
-    useEffect(() => {
-        document.body.setAttribute('data-theme', theme);
-    }, [theme]);
-
-    return useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
-}
 
 function useSamples(): Sample[] {
     const [samples, setSamples] = useState<Sample[]>([]);
@@ -122,7 +97,10 @@ function usePlaySamplesFromURI(
 }
 
 export default function App() {
-    const themeContext = useThemeContextValue();
+    const [theme] = usePreference('theme');
+    useEffect(() => {
+        document.body.setAttribute('data-theme', theme);
+    }, [theme]);
 
     const [query, setQuery] = useState('');
     const samples = useSamples();
@@ -151,7 +129,7 @@ export default function App() {
     });
 
     return (
-        <ThemeContext.Provider value={themeContext}>
+        <>
             <BlockedOverlay />
             <Header
                 query={query}
@@ -159,6 +137,6 @@ export default function App() {
                 playRandomFilteredSample={playRandomFilteredSample}
             />
             <SampleList ref={sampleListRef} samples={filteredSamples} />
-        </ThemeContext.Provider>
+        </>
     );
 }

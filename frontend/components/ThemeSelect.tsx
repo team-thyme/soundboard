@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
-import { Theme, ThemeContext } from './App';
+import React from 'react';
+
+import { Theme, usePreference } from '../helpers/preferences';
 
 export default function ThemeSelect(): JSX.Element {
-    const { theme, setTheme } = useContext(ThemeContext);
+    const [theme, setTheme] = usePreference('theme');
 
     return (
         <div>

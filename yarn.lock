@@ -5370,6 +5370,7 @@ __metadata:
     ts-jest: "npm:^29.1.2"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.3.3"
+    typescript-event-target: "npm:^1.1.0"
   languageName: unknown
   linkType: soft
 
@@ -5867,6 +5868,13 @@ __metadata:
   version: 0.21.3
   resolution: "type-fest@npm:0.21.3"
   checksum: 10/f4254070d9c3d83a6e573bcb95173008d73474ceadbbf620dd32d273940ca18734dff39c2b2480282df9afe5d1675ebed5499a00d791758748ea81f61a38961f
+  languageName: node
+  linkType: hard
+
+"typescript-event-target@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "typescript-event-target@npm:1.1.0"
+  checksum: 10/0f2c91bd14d91bfe42c5402c749536268d0014b3d74192e5f95ce07b9cf44e2170626c1563d5ed623ccc5fd790431ae6bd1b9a23c97804a83dece1d1d917484a
   languageName: node
   linkType: hard
 
