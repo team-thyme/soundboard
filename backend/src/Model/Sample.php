@@ -1,27 +1,21 @@
 <?php
 
-namespace TeamThyme\Soundboard\Models;
+namespace TeamThyme\Soundboard\Model;
 
 class Sample implements \JsonSerializable
 {
-    protected $file;
+    public readonly string $name;
 
-    protected $path;
+    /** @var string[] */
+    public readonly array $categories;
 
-    protected $name;
+    public readonly string $id;
 
-    protected $mtime;
-
-    protected $categories;
-
-    protected $id;
-
-    public function __construct($file, $path, $mtime)
-    {
-        $this->file = $file;
-        $this->path = $path;
-        $this->mtime = $mtime;
-
+    public function __construct(
+        public readonly string $file,
+        public readonly string $path,
+        public readonly int $mtime,
+    ) {
         // Conjure a name out of the filename.
         $name = $this->file;
         $slashPosition = strrpos($name, '/');
@@ -45,44 +39,14 @@ class Sample implements \JsonSerializable
         $this->categories = array_slice(explode('/', $this->file), 0, -1);
     }
 
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getMtime()
-    {
-        return $this->mtime;
-    }
-
-    public function getCategories()
-    {
-        return $this->categories;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
-            'path' => $this->getPath(),
-            'name' => $this->getName(),
-            'id' => $this->getId(),
-            'mtime' => $this->getMtime(),
-            'categories' => $this->getCategories()
+            'path' => $this->path,
+            'name' => $this->name,
+            'id' => $this->id,
+            'mtime' => $this->mtime,
+            'categories' => $this->categories,
         ];
     }
 }

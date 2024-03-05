@@ -2,44 +2,70 @@
 
 namespace TeamThyme\Soundboard;
 
-use Slim\App as SlimApp;
-use Slim\Http\Request;
-use Slim\Http\Response;
-use Symfony\Component\Yaml\Yaml;
+use DI\Bridge\Slim\Bridge;
+use DI\ContainerBuilder;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Interfaces\RouteParserInterface;
+use Symfony\Component\Dotenv\Dotenv;
+use TeamThyme\Soundboard\Controller\ApiController;
+use TeamThyme\Soundboard\Controller\SamplesController;
+use TeamThyme\Soundboard\Controller\TelegramController;
+use TeamThyme\Soundboard\Middleware\ApiMiddleware;
 
-class App extends SlimApp
+class App
 {
-    const CONFIG_FILE = __DIR__ . '/../config.yml';
+    private const CONFIG_FILE = 'backend/src/config.php';
 
-    protected $config;
-
-    public function __construct()
+    public static function run(): void
     {
         // Set current directory to project root (required for sample discovery)
         chdir(__DIR__ . '/../..');
 
-        // Load configuration.
-        $config = Yaml::parse(file_get_contents(self::CONFIG_FILE));
-        $this->config = $config['config'];
+        $dotenv = new Dotenv();
+        $dotenv->bootEnv('.env');
 
-        // Actually create the app.
-        parent::__construct($this->config['slim']);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->useAutowiring(true);
+        $containerBuilder->useAttributes(true);
+        $containerBuilder->addDefinitions(self::CONFIG_FILE);
+        if ($_ENV['APP_ENV'] === 'prod') {
+            $containerBuilder->enableCompilation('.slim-cache');
+        }
+        $container = $containerBuilder->build();
 
-        // Add configuration and router to container.
-        $this->getContainer()['config'] = $this->config;
-        $this->getContainer()['router'] = new Router($this->getContainer());
+        // Add injectable aliases for all config subkeys. After container build so we don't have to import the config
+        // file directly
+        foreach ($container->get('config') as $subkey => $value) {
+            $container->set(sprintf('config.%s', $subkey), $value);
+        }
 
-        // Add middleware
-        $this->addMiddleware(function(Request $request, Response $response, $next) {
-            // This is a public API, always add a permissive resource sharing header
-            $response = $response->withHeader('Access-Control-Allow-Origin', '*');
+        $app = Bridge::create($container);
+        $container->set(RouteParserInterface::class, $app->getRouteCollector()->getRouteParser());
 
-            return $next($request, $response);
-        });
-    }
+        // Obtain base path from used API URL. If it points to a _different_ backend then this logic won't be needed
+        // anyway.
+        $baseUrl = $_ENV['API_BASE_URL'] ?? '/';
+        $basePath = rtrim(parse_url($baseUrl, PHP_URL_PATH) ?: '', '/');
+        $app->setBasePath($basePath);
 
-    public function run($silent = false)
-    {
-        parent::run($silent);
+        $app->addRoutingMiddleware();
+        $app->addMiddleware($container->get(ApiMiddleware::class));
+        $app->addErrorMiddleware(
+            displayErrorDetails: $_ENV['APP_DEBUG'] ?? false,
+            logErrors: false,
+            logErrorDetails: false,
+        );
+
+        $app->get('/', [ApiController::class, 'indexAction'])->setName('api/index');
+        $app->get('/samples', [SamplesController::class, 'listAction'])->setName('samples/list');
+        $app->get('/samples/{file:.+}', [SamplesController::class, 'getAction'])->setName('samples/get');
+        $app->post('/telegram', [TelegramController::class, 'webhookAction'])->setName('telegram/webhook');
+
+        $app->run();
     }
 }
+
+

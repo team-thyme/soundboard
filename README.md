@@ -27,13 +27,14 @@ fully supported. Other browsers give mixed results, but who uses those anyway?
 
 ## How to _deal with it?_
 1. Download the [latest release](https://github.com/team-thyme/soundboard/releases) or clone the current sources.
-2. Build the application using `./build.sh production`.
-3. Make the `public/` and `public-api/` directories publicly accessible (E.g., by symlinking them from your web root).
-4. Add some webm/ogg/mp3/wav samples to the `samples/` directory.
+2. Enable production mode by copying `.env.dist` to `.env` and changing `APP_ENV=prod`.
+3. Build the application using `./build.sh`.
+4. Make the `public/` and `public-api/` directories publicly accessible (E.g., by symlinking them from your web root).
+5. Add some webm/ogg/mp3/wav samples to the `samples/` directory.
 
-You can adjust behavior of the soundboard by adjusting the environment variables. Copy `.env.dist` to `.env` and modify
-as desired. Point to the right API base URL by adjusting `API_BASE_URL`. When hosting the frontend from a subdirectory
-you will have to change the `BASE_URL` variable.
+You can adjust behavior of the soundboard by adjusting the environment variables in `.env`. Point to the right API base
+URL by adjusting `API_BASE_URL`. When hosting the frontend from a subdirectory you will have to change the `BASE_URL`
+variable.
 
 Optional steps:
 
@@ -45,8 +46,8 @@ Optional steps:
 - Have multiple samples with the same name by suffixing them with digits (they are stripped from the names).
 
 ## Development
-We've got you covered fam! Running `./build.sh` will install the project and set you up with a local PHP and JS server
-that will automatically rebuild the frontend.
+We've got you covered fam! Running `./build.sh --serve` (with `APP_ENV=dev`) will install the project and set you up
+with a local PHP and JS server that will automatically rebuild the frontend.
 
 ### API methods
 The API is hosted on `http://localhost:32658` by default. All calls listed here should be prefixed with this base URL.

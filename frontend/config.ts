@@ -1,7 +1,7 @@
 export default {
-    versionNumber: '3.4.1',
-    versionName: "oh, it's you",
-    versionSampleId: '301453bd',
+    versionNumber: '3.4.2',
+    versionName: 'je moet niet kijken, je moet zien',
+    versionSampleId: '1098b172',
     repositoryUrl: 'https://github.com/team-thyme/soundboard',
     baseUrl: (process.env.BASE_URL || '/').replace(/\/$/, '') + '/',
     apiBaseUrl: (process.env.API_BASE_URL || 'http://localhost:32658').replace(
