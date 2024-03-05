@@ -1,5 +1,6 @@
 import type { OGVPlayer } from 'ogv';
 import 'ogv/dist/ogv-support';
+import { TypedEventTarget } from 'typescript-event-target';
 
 import type { Sample, SampleKey } from '../api';
 import config from '../config';
@@ -77,7 +78,14 @@ export interface TogglePlayOptions {
     loop?: boolean;
 }
 
-class Player {
+interface PlayerEvents {
+    [key: `play ${SampleKey}`]: Event;
+    [key: `progress ${SampleKey}`]: Event;
+    [key: `ended ${SampleKey}`]: Event;
+    blocked: Event;
+}
+
+class Player extends TypedEventTarget<PlayerEvents> {
     private audioContext: AudioContext;
     private gainNode: GainNode;
 
@@ -104,6 +112,8 @@ class Player {
     private silencePlease = false;
 
     constructor() {
+        super();
+
         this.audioContext = new AudioContext();
 
         // Configure OGV fallback.
@@ -290,7 +300,10 @@ class Player {
             // Sample only fully ends once there are no more playing instances
             if (playingData.instances.length === 0) {
                 this.playing.delete(key);
-                this.emit('ended', key);
+                this.dispatchTypedEvent(
+                    `ended ${key}`,
+                    new Event(`ended ${key}`),
+                );
             }
         };
 
@@ -319,7 +332,7 @@ class Player {
             ) {
                 // Audio requires user interaction
                 this.blockedSamples.push({ sample, options });
-                this.emit('blocked', '*');
+                this.dispatchTypedEvent('blocked', new Event('blocked'));
             }
 
             return;
@@ -337,7 +350,7 @@ class Player {
         });
         this.playing.set(key, playingData);
 
-        this.emit('play', key);
+        this.dispatchTypedEvent(`play ${key}`, new Event(`play ${key}`));
         this.watchProgressStart();
     }
 
@@ -358,30 +371,17 @@ class Player {
             return;
         }
 
-        this.playing.forEach((playingData, key) => {
-            // TODO: Add current progress as event argument
-            this.emit('progress', key);
+        this.playing.forEach((_playingData, key) => {
+            this.dispatchTypedEvent(
+                `progress ${key}`,
+                new Event(`progress ${key}`),
+            );
         });
 
         this.watchProgressRequestId = window.requestAnimationFrame(
             this.watchProgress,
         );
     };
-
-    // Event stuff
-    private eventTarget = new EventTarget();
-
-    on(eventName: string, key: string, listener: any) {
-        this.eventTarget.addEventListener(`${eventName} ${key}`, listener);
-    }
-
-    off(eventName: string, key: string, listener: any) {
-        this.eventTarget.removeEventListener(`${eventName} ${key}`, listener);
-    }
-
-    private emit(eventName: string, key: string) {
-        this.eventTarget.dispatchEvent(new Event(`${eventName} ${key}`));
-    }
 }
 
 export const player = new Player();

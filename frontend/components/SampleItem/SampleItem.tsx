@@ -29,11 +29,11 @@ function usePlayer(sample: Sample): {
 } {
     const playingData = useSyncExternalStore(
         (callback) => {
-            player.on('play', sample.key, callback);
-            player.on('ended', sample.key, callback);
+            player.addEventListener(`play ${sample.key}`, callback);
+            player.addEventListener(`ended ${sample.key}`, callback);
             return () => {
-                player.off('play', sample.key, callback);
-                player.off('ended', sample.key, callback);
+                player.removeEventListener(`play ${sample.key}`, callback);
+                player.removeEventListener(`ended ${sample.key}`, callback);
             };
         },
         () => player.getPlayingData(sample.key),

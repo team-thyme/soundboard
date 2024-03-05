@@ -13,9 +13,12 @@ function usePlayerProgress(sample: Sample): number[] {
             setProgresses(player.getProgresses(sample.key));
         }
 
-        player.on('progress', sample.key, handleProgress);
+        player.addEventListener(`progress ${sample.key}`, handleProgress);
         return () => {
-            player.off('progress', sample.key, handleProgress);
+            player.removeEventListener(
+                `progress ${sample.key}`,
+                handleProgress,
+            );
         };
     }, [sample]);
 

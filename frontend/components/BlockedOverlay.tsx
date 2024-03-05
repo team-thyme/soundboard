@@ -10,9 +10,9 @@ export default function BlockedOverlay(): JSX.Element | null {
             setBlocked(true);
         }
 
-        player.on('blocked', '*', handleBlocked);
+        player.addEventListener('blocked', handleBlocked);
         return () => {
-            player.off('blocked', '*', handleBlocked);
+            player.removeEventListener('blocked', handleBlocked);
         };
     }, []);
 
