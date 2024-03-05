@@ -11,7 +11,7 @@ html {
     overflow-x: hidden;
     overflow-y: scroll;
 
-    scroll-padding-block-start: $headerHeight;
+    scroll-padding-block-start: var(--fixed-header-height);
 
     font: 16px $font-stack;
 }
@@ -26,5 +26,5 @@ body {
 #root {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-height: 100%;
 }

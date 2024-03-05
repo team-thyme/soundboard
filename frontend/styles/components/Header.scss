@@ -1,28 +1,32 @@
 @use '../variables' as *;
 
 .Header {
-    position: fixed;
+    position: sticky;
     z-index: $z-index-header;
-    top: 0;
+    top: calc(var(--fixed-header-height) - var(--total-header-height));
     left: 0;
     right: 0;
-    padding: 0 30px;
+
+    flex: 0 0 auto;
+    height: var(--total-header-height);
+    padding: 10px;
 
     display: grid;
     grid-template-areas: "title search buttons";
     grid-template-columns: auto 50% auto;
+    row-gap: 10px;
     column-gap: 15px;
     align-items: center;
     align-content: center;
     justify-content: space-between;
-    height: $headerHeight;
 
     background: var(--header-bg);
     color: var(--header-color);
 
     &__title {
-        margin: 0;
         grid-area: title;
+        margin: 0;
+        padding-left: 20px;
 
         font-family: $title-font-family;
         font-weight: 600;
@@ -40,7 +44,12 @@
         justify-content: flex-end;
     }
 
-    &__pusher {
-        flex: 0 0 $headerHeight;
+    @media (width < 800px) {
+        grid-template-areas: "title buttons" "search search";
+        grid-template-columns: auto auto;
+
+        &__title {
+            padding-left: 10px;
+        }
     }
 }

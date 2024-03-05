@@ -123,39 +123,36 @@ export default function Header(props: HeaderProps) {
     const { query, onQueryChange, playRandomFilteredSample } = props;
 
     return (
-        <>
-            <header className="Header">
-                <h1 className="Header__title">Soundboard</h1>
-                <div className="Header__search">
-                    <SearchBar
-                        query={query}
-                        onQueryChange={onQueryChange}
-                        playRandomFilteredSample={playRandomFilteredSample}
-                    />
-                </div>
-                <div className="Header__buttons">
-                    <ModalIconButton
-                        icon="palette"
-                        kind="header"
-                        title="Change theme"
-                    >
-                        <ThemeSelect />
-                    </ModalIconButton>
-                    <ModalIconButton
-                        icon="volume-up"
-                        kind="header"
-                        title="Change volume"
-                    >
-                        <VolumeSlider />
-                    </ModalIconButton>
-                    <IconButton
-                        icon="plus-square"
-                        kind="header"
-                        title="Request a sample"
-                    />
-                </div>
-            </header>
-            <div className="Header__pusher" />
-        </>
+        <header className="Header">
+            <h1 className="Header__title">Soundboard</h1>
+            <div className="Header__search">
+                <SearchBar
+                    query={query}
+                    onQueryChange={onQueryChange}
+                    playRandomFilteredSample={playRandomFilteredSample}
+                />
+            </div>
+            <div className="Header__buttons">
+                <ModalIconButton
+                    icon="palette"
+                    kind="header"
+                    title="Change theme"
+                >
+                    <ThemeSelect />
+                </ModalIconButton>
+                <ModalIconButton
+                    icon="volume-up"
+                    kind="header"
+                    title="Change volume"
+                >
+                    <VolumeSlider />
+                </ModalIconButton>
+                <IconButton
+                    icon="plus-square"
+                    kind="header"
+                    title="Request a sample"
+                />
+            </div>
+        </header>
     );
 }

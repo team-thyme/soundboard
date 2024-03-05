@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+    observeWindowOffset,
     observeWindowRect,
     useWindowVirtualizer,
 } from '@tanstack/react-virtual';
@@ -17,7 +18,6 @@ import { type Sample } from '../../api';
 import { useTextMeasurer } from '../../helpers/TextMeasurer';
 import {
     detailFont,
-    headerHeight,
     nameFont,
     sampleHeight,
     sampleListPadding,
@@ -67,6 +67,20 @@ function useBodyWidth(): number {
     return width;
 }
 
+function getHeaderHeight(): {
+    fixedHeaderHeight: number;
+    totalHeaderHeight: number;
+} {
+    const computedStyle = window.getComputedStyle(document.documentElement);
+    const fixedHeaderHeight = parseFloat(
+        computedStyle.getPropertyValue('--fixed-header-height'),
+    );
+    const totalHeaderHeight = parseFloat(
+        computedStyle.getPropertyValue('--total-header-height'),
+    );
+    return { fixedHeaderHeight, totalHeaderHeight };
+}
+
 interface SampleListProps {
     samples: Sample[];
 }
@@ -90,6 +104,11 @@ export const SampleList = forwardRef(function SampleList(
         [widths, containerWidth],
     );
 
+    const { fixedHeaderHeight, totalHeaderHeight } = useMemo(
+        getHeaderHeight,
+        [],
+    );
+
     const rowVirtualizer = useWindowVirtualizer({
         count: layout.length,
         estimateSize: () => rowHeight,
@@ -97,16 +116,20 @@ export const SampleList = forwardRef(function SampleList(
         paddingStart: sampleListPadding,
         paddingEnd: sampleListPadding,
 
-        // Account for offset caused by header & padding; otherwise the rows
-        // would end up a bit lower on the page than the virtualizer expects.
+        // Account for offset caused by header; otherwise the rows would end up
+        // a bit lower on the page than the virtualizer expects.
         // This is very noticeable when you use a negative `overscan`.
         observeElementRect: (instance, cb) =>
-            observeWindowRect(instance, ({ width, height }) =>
+            observeWindowRect(instance, ({ width, height }) => {
                 cb({
                     width,
-                    height: height - headerHeight,
-                }),
-            ),
+                    height: height - fixedHeaderHeight,
+                });
+            }),
+        observeElementOffset: (instance, cb) =>
+            observeWindowOffset(instance, (offsetTop) => {
+                cb(offsetTop - totalHeaderHeight + fixedHeaderHeight);
+            }),
     });
 
     const scrollToSample = useCallback(
