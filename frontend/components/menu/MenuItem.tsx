@@ -14,24 +14,22 @@ export type MenuItemProps = MenuItemOwnProps &
         keyof MenuItemOwnProps | 'role' | 'className'
     >;
 
-export const MenuItem = forwardRef(
-    (
-        { icon, title, shortcut, ...otherProps }: MenuItemProps,
-        forwardedRef: ForwardedRef<HTMLButtonElement>,
-    ) => {
-        return (
-            <button
-                ref={forwardedRef}
-                role="menuitem"
-                className="ContextMenuItem"
-                {...otherProps}
-            >
-                <span className="ContextMenuItem__icon">
-                    {<FontAwesomeIcon icon={icon} />}
-                </span>
-                <span className="ContextMenuItem__title">{title}</span>
-                <span className="ContextMenuItem__shortcut">{shortcut}</span>
-            </button>
-        );
-    },
-);
+export const MenuItem = forwardRef(function MenuItem(
+    { icon, title, shortcut, ...otherProps }: MenuItemProps,
+    forwardedRef: ForwardedRef<HTMLButtonElement>,
+) {
+    return (
+        <button
+            ref={forwardedRef}
+            role="menuitem"
+            className="ContextMenuItem"
+            {...otherProps}
+        >
+            <span className="ContextMenuItem__icon">
+                {<FontAwesomeIcon icon={icon} />}
+            </span>
+            <span className="ContextMenuItem__title">{title}</span>
+            <span className="ContextMenuItem__shortcut">{shortcut}</span>
+        </button>
+    );
+});

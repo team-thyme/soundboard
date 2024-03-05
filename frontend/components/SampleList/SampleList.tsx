@@ -75,7 +75,7 @@ export interface SampleListImperativeHandle {
     scrollToSample(sample: Sample): void;
 }
 
-export const SampleList = forwardRef(function (
+export const SampleList = forwardRef(function SampleList(
     props: SampleListProps,
     ref: ForwardedRef<SampleListImperativeHandle>,
 ): React.JSX.Element {

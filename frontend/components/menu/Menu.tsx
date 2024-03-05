@@ -5,23 +5,21 @@ export type MenuProps = Omit<
     'onClick' | 'role' | 'className'
 >;
 
-export const Menu = forwardRef(
-    (
-        { children, ...otherProps }: MenuProps,
-        forwardedRef: ForwardedRef<HTMLDivElement>,
-    ) => {
-        return (
-            <div
-                ref={forwardedRef}
-                role="menu"
-                className="ContextMenu"
-                onClick={(e) => {
-                    e.stopPropagation();
-                }}
-                {...otherProps}
-            >
-                <ul className="ContextMenu__items">{children}</ul>
-            </div>
-        );
-    },
-);
+export const Menu = forwardRef(function Menu(
+    { children, ...otherProps }: MenuProps,
+    forwardedRef: ForwardedRef<HTMLDivElement>,
+) {
+    return (
+        <div
+            ref={forwardedRef}
+            role="menu"
+            className="ContextMenu"
+            onClick={(e) => {
+                e.stopPropagation();
+            }}
+            {...otherProps}
+        >
+            <ul className="ContextMenu__items">{children}</ul>
+        </div>
+    );
+});
