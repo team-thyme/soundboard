@@ -120,10 +120,11 @@ export function SampleItem(props: SampleItemProps) {
                     icon="link"
                     title="Copy URL"
                     onClick={async () => {
-                        // Get URL to sample by letting the browser resolve it relative to current hostname.
-                        const anchor = document.createElement('a');
-                        anchor.href = `${config.baseUrl}${sample.id}`;
-                        await navigator.clipboard.writeText(anchor.href);
+                        const url = new URL(
+                            sample.id,
+                            new URL(config.baseUrl, document.baseURI),
+                        );
+                        await navigator.clipboard.writeText(url.href);
                     }}
                     // Clipboard API might not be available in some environments
                     // (e.g. when not using HTTPS).
