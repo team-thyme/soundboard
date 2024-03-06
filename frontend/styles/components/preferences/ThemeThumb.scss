@@ -35,7 +35,7 @@
             fill: var(--sample-bg-hover);
         }
 
-        &--playing {
+        &.ThemeThumb__sampleItem--playing {
             fill: var(--sample-playing-bg);
         }
     }
