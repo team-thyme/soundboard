@@ -14,13 +14,13 @@ $z-index-modal: 50;
 
 :root {
     --fixed-header-height: 80px;
-    --total-header-height: var(--fixed-header-height);
+    --total-header-height: 80px;
 }
 
 // TODO: Improve breakpoint
 @media (max-width: 800px) {
     :root {
         --fixed-header-height: 80px;
-        --total-header-height: calc(var(--fixed-header-height) + 60px);
+        --total-header-height: #{80px + 60px};
     }
 }
