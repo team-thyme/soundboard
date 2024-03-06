@@ -5,12 +5,19 @@ import {
     FloatingFocusManager,
     FloatingPortal,
     type Placement,
+    shift,
     useClientPoint,
     useDismiss,
     useFloating,
     useInteractions,
     useRole,
 } from '@floating-ui/react';
+import {
+    getSide,
+    getSideAxis,
+    getAlignment,
+    getAlignmentAxis,
+} from '@floating-ui/utils';
 import {
     cloneElement,
     createContext,
@@ -41,33 +48,41 @@ function useContextMenu(context: FloatingContext): ElementProps {
     );
 }
 
-function getTransformOrigin(placement: Placement): string | undefined {
-    switch (placement) {
-        case 'top-start':
-            return 'bottom left';
-        case 'top-end':
-            return 'bottom right';
-        case 'bottom-start':
-            return 'top left';
-        case 'bottom-end':
-            return 'top right';
-        default:
-            return undefined;
-    }
+/**
+ * Compute transform origin based on placement.
+ */
+function getTransformOrigin(placement: Placement): { x: string; y: string } {
+    const side = getSide(placement);
+    const axis = getSideAxis(placement);
+    const alignment = getAlignment(placement);
+    const alignmentAxis = getAlignmentAxis(placement);
+    return {
+        [axis]: side === 'top' || side === 'left' ? '100%' : '0%',
+        [alignmentAxis]:
+            alignment === 'start' ? '0%' : alignment === 'end' ? '100%' : '50%',
+    } as { x: string; y: string };
+}
+
+/**
+ * Compute transform origin based on placement and result of shift middleware.
+ */
+function getShiftTransformOrigin(
+    placement: Placement,
+    shift?: { x: number; y: number },
+): { x: string; y: string } {
+    const transformOrigin = getTransformOrigin(placement);
+    return {
+        x: `calc(${transformOrigin.x} - ${shift?.x ?? 0}px)`,
+        y: `calc(${transformOrigin.y} - ${shift?.y ?? 0}px)`,
+    };
 }
 
 type ContextMenuContextValue = {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
-    transformOrigin: string | undefined;
-} & Pick<
-    ReturnType<typeof useFloating>,
-    'context' | 'floatingStyles' | 'placement' | 'refs'
-> &
-    Pick<
-        ReturnType<typeof useInteractions>,
-        'getReferenceProps' | 'getFloatingProps'
-    >;
+} & ReturnType<typeof useFloating> &
+    ReturnType<typeof useInteractions>;
+
 const ContextMenuContext = createContext<ContextMenuContextValue | null>(null);
 
 interface ContextMenuProps {
@@ -81,7 +96,7 @@ export function ContextMenu(props: ContextMenuProps) {
         y: number;
     } | null>(null);
 
-    const { refs, floatingStyles, context, placement } = useFloating({
+    const useFloatingResult = useFloating({
         open,
         onOpenChange: (open, event) => {
             setOpen(open);
@@ -96,55 +111,35 @@ export function ContextMenu(props: ContextMenuProps) {
         },
         placement: 'bottom-start',
         strategy: 'fixed',
-        middleware: [flip()],
+        middleware: [flip({ padding: 10 }), shift({ padding: 10 })],
     });
 
-    const { getReferenceProps, getFloatingProps } = useInteractions([
-        useRole(context, {
+    const useInteractionsResult = useInteractions([
+        useRole(useFloatingResult.context, {
             role: 'menu',
         }),
-        useContextMenu(context),
-        useDismiss(context, {
+        useContextMenu(useFloatingResult.context),
+        useDismiss(useFloatingResult.context, {
             escapeKey: true,
             referencePress: true,
             outsidePress: true,
             ancestorScroll: true,
         }),
-        useClientPoint(context, {
+        useClientPoint(useFloatingResult.context, {
             enabled: position !== null,
             ...position,
         }),
     ]);
 
-    const transformOrigin = getTransformOrigin(placement);
-
-    const contextValue = useMemo(
-        () => ({
-            open,
-            setOpen,
-            context,
-            floatingStyles,
-            placement,
-            refs,
-            getReferenceProps,
-            getFloatingProps,
-            transformOrigin,
-        }),
-        [
-            open,
-            setOpen,
-            context,
-            floatingStyles,
-            placement,
-            refs,
-            getReferenceProps,
-            getFloatingProps,
-            transformOrigin,
-        ],
-    );
-
     return (
-        <ContextMenuContext.Provider value={contextValue}>
+        <ContextMenuContext.Provider
+            value={{
+                open,
+                setOpen,
+                ...useFloatingResult,
+                ...useInteractionsResult,
+            }}
+        >
             {props.children}
         </ContextMenuContext.Provider>
     );
@@ -189,6 +184,11 @@ export function ContextMenuContent(props: ContextMenuContentProps) {
         return null;
     }
 
+    const transformOrigin = getShiftTransformOrigin(
+        context.placement,
+        context.middlewareData.shift,
+    );
+
     return (
         <FloatingPortal id="root">
             <FloatingFocusManager context={context.context}>
@@ -197,7 +197,11 @@ export function ContextMenuContent(props: ContextMenuContentProps) {
                     style={context.floatingStyles}
                     {...context.getFloatingProps()}
                 >
-                    <Menu style={{ transformOrigin: context.transformOrigin }}>
+                    <Menu
+                        style={{
+                            transformOrigin: `${transformOrigin.x} ${transformOrigin.y}`,
+                        }}
+                    >
                         {props.children}
                     </Menu>
                 </div>
