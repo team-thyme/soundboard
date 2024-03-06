@@ -125,6 +125,9 @@ export function SampleItem(props: SampleItemProps) {
                         anchor.href = `${config.baseUrl}${sample.id}`;
                         await navigator.clipboard.writeText(anchor.href);
                     }}
+                    // Clipboard API might not be available in some environments
+                    // (e.g. when not using HTTPS).
+                    disabled={!navigator.clipboard}
                 />
                 <ContextMenuItem
                     icon="download"
