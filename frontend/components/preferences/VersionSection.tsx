@@ -2,7 +2,15 @@ import { type JSX } from 'react';
 
 import config from '../../config';
 
-export function VersionInfo(): JSX.Element {
+export function VersionSection(): JSX.Element {
+    return (
+        <div className="Preferences__section">
+            <VersionInfo />
+        </div>
+    );
+}
+
+function VersionInfo(): JSX.Element {
     return (
         <div className="VersionInfo">
             <a

@@ -1,33 +1,15 @@
-import { JSX } from 'react';
+import { type JSX } from 'react';
 
-import ThemeSelect from './ThemeSelect';
-import { VersionInfo } from './VersionInfo';
-import { VolumeSlider } from './VolumeSlider';
+import { ThemeSection } from './ThemeSection';
+import { VersionSection } from './VersionSection';
+import { VolumeSection } from './VolumeSection';
 
 export function Preferences(): JSX.Element {
     return (
         <div className="Preferences">
-            <div className="Preferences__section">
-                <label
-                    className="Preferences__label"
-                    htmlFor="preference-volume"
-                >
-                    Volume
-                </label>
-                <VolumeSlider />
-            </div>
-            <div className="Preferences__section">
-                <label
-                    className="Preferences__label"
-                    htmlFor="preference-theme"
-                >
-                    Theme
-                </label>
-                <ThemeSelect />
-            </div>
-            <div className="Preferences__section">
-                <VersionInfo />
-            </div>
+            <VolumeSection />
+            <ThemeSection />
+            <VersionSection />
         </div>
     );
 }

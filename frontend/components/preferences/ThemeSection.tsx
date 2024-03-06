@@ -1,9 +1,27 @@
-import { type JSX } from 'react';
+import { type JSX, useId } from 'react';
 
 import { Theme, usePreference } from '../../helpers/preferences';
 import { ThemeThumb } from './ThemeThumb';
 
-export default function ThemeSelect(): JSX.Element {
+export function ThemeSection() {
+    const id = useId();
+
+    return (
+        <div className="Preferences__section">
+            <label className="Preferences__label" htmlFor={id}>
+                Theme
+            </label>
+            <ThemeSelect id={id} />
+        </div>
+    );
+}
+
+interface ThemeSelectProps {
+    id: string;
+}
+
+function ThemeSelect(props: ThemeSelectProps): JSX.Element {
+    const { id } = props;
     const [theme, setTheme] = usePreference('theme');
 
     return (
@@ -15,9 +33,7 @@ export default function ThemeSelect(): JSX.Element {
                     </span>
                     <span className="ThemeSelect__label">
                         <input
-                            id={
-                                theme === value ? 'preference-theme' : undefined
-                            }
+                            id={theme === value ? id : undefined}
                             className="ThemeSelect__input"
                             name="theme"
                             type="radio"
