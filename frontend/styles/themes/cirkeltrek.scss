@@ -32,34 +32,18 @@
     --sample-visualize-color: white;
 
     // SampleItem (not playing)
-    [data-index-mod3="0"] {
-        $sample-bg: $cirkeltrek-rood;
-        $sample-color: white;
+    $sample-item-colors:
+        0 $cirkeltrek-rood white,
+        1 $cirkeltrek-wit #222,
+        2 $cirkeltrek-blauw white;
 
-        --sample-bg: #{$sample-bg};
-        --sample-bg-hover: #{darken($sample-bg, 4%)};
-        --sample-bg-active: #{darken($sample-bg, 8%)};
+    @each $index, $bg, $color in $sample-item-colors {
+        [data-index-mod3='#{$index}']:not([data-theme='cirkeltrek'] [data-theme]:not([data-theme='cirkeltrek']) *) {
+            --sample-bg: #{$bg};
+            --sample-bg-hover: #{darken($bg, 4%)};
+            --sample-bg-active: #{darken($bg, 8%)};
 
-        --sample-color: #{$sample-color};
-    }
-    [data-index-mod3="1"] {
-        $sample-bg: $cirkeltrek-wit;
-        $sample-color: #222;
-
-        --sample-bg: #{$sample-bg};
-        --sample-bg-hover: #{darken($sample-bg, 4%)};
-        --sample-bg-active: #{darken($sample-bg, 8%)};
-
-        --sample-color: #{$sample-color};
-    }
-    [data-index-mod3="2"] {
-        $sample-bg: $cirkeltrek-blauw;
-        $sample-color: white;
-
-        --sample-bg: #{$sample-bg};
-        --sample-bg-hover: #{darken($sample-bg, 4%)};
-        --sample-bg-active: #{darken($sample-bg, 8%)};
-
-        --sample-color: #{$sample-color};
+            --sample-color: #{$color};
+        }
     }
 }
