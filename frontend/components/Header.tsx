@@ -1,17 +1,19 @@
-import { config } from '../config';
+import { useContext } from 'react';
 
+import { config } from '../config';
 import { IconButton } from './IconButton';
 import { Modal, ModalContent, ModalTrigger } from './floating/Modal';
+import { PlayerContext } from './PlayerContext';
 import { Preferences } from './preferences/Preferences';
 
 interface SearchBarProps {
     query: string;
     onQueryChange(query: string): void;
-    playRandomFilteredSample(): void;
 }
 
 function SearchBar(props: SearchBarProps) {
-    const { query, onQueryChange, playRandomFilteredSample } = props;
+    const { query, onQueryChange } = props;
+    const { playRandomFilteredSample } = useContext(PlayerContext)!;
 
     return (
         <div className="SearchBar">
@@ -48,17 +50,13 @@ function SearchBar(props: SearchBarProps) {
 interface HeaderProps extends SearchBarProps {}
 
 export function Header(props: HeaderProps) {
-    const { query, onQueryChange, playRandomFilteredSample } = props;
+    const { query, onQueryChange } = props;
 
     return (
         <header className="Header">
             <h1 className="Header__title">Soundboard</h1>
             <div className="Header__search">
-                <SearchBar
-                    query={query}
-                    onQueryChange={onQueryChange}
-                    playRandomFilteredSample={playRandomFilteredSample}
-                />
+                <SearchBar query={query} onQueryChange={onQueryChange} />
             </div>
             <div className="Header__buttons">
                 <Modal>

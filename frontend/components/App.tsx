@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { fetchSamples, type Sample } from '../api';
 import { player } from '../helpers/Player';
@@ -8,6 +8,7 @@ import { sortSamples } from '../helpers/sortSamples';
 import { BlockedOverlay } from './BlockedOverlay';
 
 import { Header } from './Header';
+import { PlayerContextProvider } from './PlayerContext';
 import {
     SampleList,
     type SampleListImperativeHandle,
@@ -107,30 +108,19 @@ export default function App() {
         [search, query],
     );
 
-    const playRandomFilteredSample = useCallback(() => {
-        if (filteredSamples.length === 0) {
-            return;
-        }
-
-        const index = Math.floor(Math.random() * filteredSamples.length);
-        const sample = filteredSamples[index];
-        void player.togglePlay(sample);
-        sampleListRef.current?.scrollToSample(sample);
-    }, [filteredSamples]);
-
     usePlaySamplesFromURI(samples, (sample) => {
         sampleListRef.current?.scrollToSample(sample);
     });
 
     return (
-        <>
+        <PlayerContextProvider
+            samples={samples}
+            filteredSamples={filteredSamples}
+            sampleListRef={sampleListRef}
+        >
             <BlockedOverlay />
-            <Header
-                query={query}
-                onQueryChange={setQuery}
-                playRandomFilteredSample={playRandomFilteredSample}
-            />
+            <Header query={query} onQueryChange={setQuery} />
             <SampleList ref={sampleListRef} samples={filteredSamples} />
-        </>
+        </PlayerContextProvider>
     );
 }

@@ -1,6 +1,7 @@
-import { type JSX } from 'react';
+import { type JSX, useContext } from 'react';
 
 import { config } from '../../config';
+import { PlayerContext } from '../PlayerContext';
 
 export function VersionSection(): JSX.Element {
     return (
@@ -11,6 +12,8 @@ export function VersionSection(): JSX.Element {
 }
 
 function VersionInfo(): JSX.Element {
+    const { playSampleById } = useContext(PlayerContext)!;
+
     return (
         <div className="VersionInfo">
             <a
@@ -23,7 +26,7 @@ function VersionInfo(): JSX.Element {
                 href={`${config.baseUrl}${config.versionSampleId}`}
                 onClick={(e) => {
                     e.preventDefault();
-                    // TODO: Play sample
+                    playSampleById(config.versionSampleId);
                 }}
             >
                 {config.versionName}
