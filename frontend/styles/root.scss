@@ -21,6 +21,8 @@ body {
     height: 100%;
 
     background: var(--sample-list-bg);
+    accent-color: var(--accent-color);
+    color-scheme: var(--color-scheme);
 }
 
 #root {

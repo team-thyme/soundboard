@@ -3,6 +3,9 @@
     $accent-color: #25b192;
     $gray: #ddd;
 
+    --accent-color: #{$accent-color};
+    --color-scheme: dark;
+
     // Header
     $header-bg: $accent-color;
     --header-bg: #{$header-bg};
