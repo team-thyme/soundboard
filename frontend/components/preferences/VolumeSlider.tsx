@@ -1,4 +1,4 @@
-import { usePreference } from '../helpers/preferences';
+import { usePreference } from '../../helpers/preferences';
 
 export function VolumeSlider() {
     // Volume is a number in the range 0-100
@@ -6,6 +6,7 @@ export function VolumeSlider() {
 
     return (
         <input
+            id="preference-volume"
             type="range"
             min={0}
             max={100}

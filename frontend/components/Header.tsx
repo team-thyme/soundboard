@@ -12,8 +12,7 @@ import config from '../config';
 
 import IconButton, { IconButtonProps } from './IconButton';
 import Modal, { ModalLayer } from './Modal';
-import ThemeSelect from './theme/ThemeSelect';
-import { VolumeSlider } from './VolumeSlider';
+import { Preferences } from './preferences/Preferences';
 
 interface SearchBarProps {
     query: string;
@@ -134,19 +133,8 @@ export default function Header(props: HeaderProps) {
                 />
             </div>
             <div className="Header__buttons">
-                <ModalIconButton
-                    icon="palette"
-                    kind="header"
-                    title="Change theme"
-                >
-                    <ThemeSelect />
-                </ModalIconButton>
-                <ModalIconButton
-                    icon="volume-up"
-                    kind="header"
-                    title="Change volume"
-                >
-                    <VolumeSlider />
+                <ModalIconButton icon="cog" kind="header" title="Preferences">
+                    <Preferences />
                 </ModalIconButton>
                 <IconButton
                     icon="plus-square"

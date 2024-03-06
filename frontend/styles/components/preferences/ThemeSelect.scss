@@ -1,20 +1,15 @@
-@use '../variables' as *;
+@use '../../variables' as *;
 
 .ThemeSelect {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 10px;
-    row-gap: 20px;
+    gap: 10px;
 }
 
 .ThemeSelect__item {
     display: flex;
     flex-direction: column;
     gap: 5px;
-}
-
-.ThemeSelect__input {
-
 }
 
 .ThemeSelect__label {

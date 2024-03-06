@@ -15,6 +15,9 @@ export default function ThemeSelect(): JSX.Element {
                     </span>
                     <span className="ThemeSelect__label">
                         <input
+                            id={
+                                theme === value ? 'preference-theme' : undefined
+                            }
                             className="ThemeSelect__input"
                             name="theme"
                             type="radio"

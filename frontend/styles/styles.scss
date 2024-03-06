@@ -13,6 +13,8 @@
 @use 'components/SampleItem';
 @use 'components/ContextMenu';
 @use 'components/Modal';
-@use 'components/ThemeThumb';
-@use 'components/ThemeSelect';
+@use 'components/preferences/ThemeThumb';
+@use 'components/preferences/ThemeSelect';
+@use 'components/preferences/Preferences';
+@use 'components/preferences/VersionInfo';
 @use 'components/BlockedOverlay';
