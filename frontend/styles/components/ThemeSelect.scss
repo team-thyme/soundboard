@@ -24,4 +24,19 @@
     &__sampleList {
         fill: var(--sample-list-bg);
     }
+
+    &__sampleItem {
+        fill: var(--sample-bg);
+        filter: drop-shadow(0 1px rgba(black, 0.08));
+
+        rx: 1.5px;
+
+        &:hover {
+            fill: var(--sample-bg-hover);
+        }
+
+        &--playing {
+            fill: var(--sample-playing-bg);
+        }
+    }
 }

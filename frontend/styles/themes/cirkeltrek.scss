@@ -32,7 +32,7 @@
     --sample-visualize-color: white;
 
     // SampleItem (not playing)
-    .SampleList__row[data-index-mod3="0"] {
+    [data-index-mod3="0"] {
         $sample-bg: $cirkeltrek-rood;
         $sample-color: white;
 
@@ -42,7 +42,7 @@
 
         --sample-color: #{$sample-color};
     }
-    .SampleList__row[data-index-mod3="1"] {
+    [data-index-mod3="1"] {
         $sample-bg: $cirkeltrek-wit;
         $sample-color: #222;
 
@@ -52,7 +52,7 @@
 
         --sample-color: #{$sample-color};
     }
-    .SampleList__row[data-index-mod3="2"] {
+    [data-index-mod3="2"] {
         $sample-bg: $cirkeltrek-blauw;
         $sample-color: white;
 

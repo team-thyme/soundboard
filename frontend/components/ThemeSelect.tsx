@@ -73,7 +73,110 @@ function ThemeThumb({ theme }: ThemeThumbProps): JSX.Element {
                 height={68}
             />
 
-            {/* TODO: Add samples */}
+            <g transform="translate(0, 27)" data-index-mod3={0}>
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={5}
+                    width={30}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem ThemeThumb__sampleItem--playing"
+                    x={38}
+                    width={20}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={61}
+                    width={31}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={95}
+                    width={20}
+                    height={10}
+                />
+            </g>
+            <g transform="translate(0, 40)" data-index-mod3={1}>
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={5}
+                    width={18}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={26}
+                    width={14}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={43}
+                    width={24}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={70}
+                    width={17}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={90}
+                    width={25}
+                    height={10}
+                />
+            </g>
+            <g transform="translate(0, 53)" data-index-mod3={2}>
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={5}
+                    width={30}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={38}
+                    width={20}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={61}
+                    width={31}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={95}
+                    width={20}
+                    height={10}
+                />
+            </g>
+            <g transform="translate(0, 66)" data-index-mod3={0}>
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={5}
+                    width={18}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={26}
+                    width={14}
+                    height={10}
+                />
+                <rect
+                    className="ThemeThumb__sampleItem"
+                    x={43}
+                    width={24}
+                    height={10}
+                />
+            </g>
         </svg>
     );
 }
