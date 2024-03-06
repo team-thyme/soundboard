@@ -22,8 +22,9 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { Menu } from './menu/Menu';
-import { MenuItem, type MenuItemProps } from './menu/MenuItem';
+
+import { Menu } from './Menu';
+import { MenuItem, type MenuItemProps } from './MenuItem';
 
 function useContextMenu(context: FloatingContext): ElementProps {
     const { onOpenChange } = context;

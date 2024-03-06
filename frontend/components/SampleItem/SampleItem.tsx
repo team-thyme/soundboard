@@ -14,7 +14,7 @@ import {
     ContextMenuContent,
     ContextMenuItem,
     ContextMenuTrigger,
-} from '../ContextMenu';
+} from '../floating/ContextMenu';
 import { SampleItemProgress } from './SampleItemProgress';
 import { VisualizeAnalyserNode } from './VisualizeAnalyserNode';
 
