@@ -54,13 +54,6 @@ $z-index-box-shadow: 4;
             box-shadow: var(--sample-box-shadow-active);
         }
     }
-    &:focus {
-        outline: none;
-    }
-    &:focus-visible {
-        outline: 2px solid black;
-        outline-offset: 2px;
-    }
 
     &--isPlaying {
         background: var(--sample-playing-bg);
