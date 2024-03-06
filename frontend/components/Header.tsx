@@ -8,6 +8,7 @@ import {
     useInteractions,
 } from '@floating-ui/react';
 import React, { useRef, useState } from 'react';
+import config from '../config';
 
 import IconButton, { IconButtonProps } from './IconButton';
 import Modal, { ModalLayer } from './Modal';
@@ -151,6 +152,9 @@ export default function Header(props: HeaderProps) {
                     icon="plus-square"
                     kind="header"
                     title="Request a sample"
+                    onClick={() => {
+                        window.open(config.contributeUrl, '_blank');
+                    }}
                 />
             </div>
         </header>
