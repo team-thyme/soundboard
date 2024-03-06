@@ -151,7 +151,6 @@ class Player extends TypedEventTarget<PlayerEvents> {
         // Watch for volume changes
         preferences.addEventListener('change', (event) => {
             if (event.is('volume')) {
-                // TODO: Use exponentialRampToValueAtTime? We'd have to deal with zero volume separately.
                 this.gainNode.gain.linearRampToValueAtTime(
                     volumeToGain(event.value),
                     this.audioContext.currentTime + 0.1,
