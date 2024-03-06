@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-export default class TextMeasurer {
+export class TextMeasurer {
     private readonly canvas: HTMLCanvasElement;
     private readonly ctx: CanvasRenderingContext2D;
 

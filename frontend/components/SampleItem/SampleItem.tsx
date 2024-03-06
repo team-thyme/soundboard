@@ -1,13 +1,13 @@
 import cx from 'classnames';
-import React, {
+import {
     type ComponentPropsWithoutRef,
     useCallback,
     useSyncExternalStore,
 } from 'react';
 
-import { Sample } from '../../api';
-import config from '../../config';
-import download from '../../helpers/download';
+import { type Sample } from '../../api';
+import { config } from '../../config';
+import { download } from '../../helpers/download';
 import { player, type TogglePlayOptions } from '../../helpers/Player';
 import {
     ContextMenu,
@@ -15,8 +15,8 @@ import {
     ContextMenuItem,
     ContextMenuTrigger,
 } from '../ContextMenu';
-import SampleItemProgress from './SampleItemProgress';
-import VisualizeAnalyserNode from './VisualizeAnalyserNode';
+import { SampleItemProgress } from './SampleItemProgress';
+import { VisualizeAnalyserNode } from './VisualizeAnalyserNode';
 
 export interface SampleItemProps extends ComponentPropsWithoutRef<'button'> {
     sample: Sample;
@@ -52,7 +52,7 @@ function usePlayer(sample: Sample): {
     return { togglePlay, isPlaying, analyserNode };
 }
 
-export default function SampleItem(props: SampleItemProps) {
+export function SampleItem(props: SampleItemProps) {
     const { sample, ...otherProps } = props;
 
     // TODO: Show loading indicator if it takes a long time for the sample to

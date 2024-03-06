@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { type JSX, useEffect, useRef } from 'react';
 
 interface Props {
     analyserNode: AnalyserNode | null;
@@ -31,9 +31,7 @@ function getVisualizeStyle(
     };
 }
 
-export default function VisualizeAnalyserNode({
-    analyserNode,
-}: Props): JSX.Element {
+export function VisualizeAnalyserNode({ analyserNode }: Props): JSX.Element {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 

@@ -1,9 +1,9 @@
-import type { OGVPlayer } from 'ogv';
+import { type OGVPlayer } from 'ogv';
 import 'ogv/dist/ogv-support';
 import { TypedEventTarget } from 'typescript-event-target';
 
-import type { Sample, SampleKey } from '../api';
-import config from '../config';
+import { type Sample, type SampleKey } from '../api';
+import { config } from '../config';
 import { preferences } from './preferences';
 
 interface PlayingData {

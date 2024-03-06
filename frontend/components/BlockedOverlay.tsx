@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { player } from '../helpers/Player';
 
-export default function BlockedOverlay(): JSX.Element | null {
+export function BlockedOverlay(): JSX.Element | null {
     const [isBlocked, setBlocked] = useState(false);
 
     useEffect(() => {

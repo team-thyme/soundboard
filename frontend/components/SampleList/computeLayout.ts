@@ -1,4 +1,4 @@
-export default function computeLayout(
+export function computeLayout(
     itemWidths: number[],
     maxRowWidth: number,
 ): number[][] {

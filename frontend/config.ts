@@ -1,4 +1,4 @@
-export default {
+export const config = {
     versionNumber: '3.4.2',
     versionName: 'je moet niet kijken, je moet zien',
     versionSampleId: '1098b172',

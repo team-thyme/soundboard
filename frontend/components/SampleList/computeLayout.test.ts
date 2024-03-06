@@ -1,4 +1,4 @@
-import computeLayout from './computeLayout';
+import { computeLayout } from './computeLayout';
 
 test('no items', () => {
     expect(computeLayout([], 3)).toStrictEqual([]);

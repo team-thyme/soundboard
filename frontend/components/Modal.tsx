@@ -1,13 +1,18 @@
-import React from 'react';
+import {
+    type JSX,
+    type ForwardedRef,
+    type ComponentPropsWithoutRef,
+    type ComponentPropsWithRef,
+} from 'react';
 
 interface ModalOwnProps {
-    innerRef?: React.ForwardedRef<HTMLDivElement>;
-    arrowProps?: React.ComponentPropsWithRef<'div'>;
+    innerRef?: ForwardedRef<HTMLDivElement>;
+    arrowProps?: ComponentPropsWithRef<'div'>;
 }
 
-type ModalProps = ModalOwnProps & React.ComponentPropsWithoutRef<'div'>;
+type ModalProps = ModalOwnProps & ComponentPropsWithoutRef<'div'>;
 
-export default function Modal({
+export function Modal({
     children,
     innerRef,
     arrowProps,

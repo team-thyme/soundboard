@@ -1,6 +1,6 @@
 import { type JSX } from 'react';
 
-import config from '../../config';
+import { config } from '../../config';
 
 export function VersionSection(): JSX.Element {
     return (

@@ -1,7 +1,7 @@
 /**
  * Triggers a download of the given fileUrl with default name fileName.
  */
-export default async function download(
+export async function download(
     fileUrl: string,
     fileName: string,
 ): Promise<void> {

@@ -4,8 +4,8 @@ import {
     observeWindowRect,
     useWindowVirtualizer,
 } from '@tanstack/react-virtual';
-import React, {
-    ForwardedRef,
+import {
+    type ForwardedRef,
     forwardRef,
     useCallback,
     useEffect,
@@ -24,8 +24,8 @@ import {
     sampleMargin,
     samplePaddingX,
 } from '../../styles/sync-variables';
-import SampleItem from '../SampleItem/SampleItem';
-import computeLayout from './computeLayout';
+import { SampleItem } from '../SampleItem/SampleItem';
+import { computeLayout } from './computeLayout';
 import { useSampleListNavigation } from './useSampleListNavigation';
 
 /**

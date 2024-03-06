@@ -1,22 +1,16 @@
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { fetchSamples, Sample } from '../api';
+import { fetchSamples, type Sample } from '../api';
 import { player } from '../helpers/Player';
 import { usePreference } from '../helpers/preferences';
 import { Search } from '../helpers/Search';
 import { sortSamples } from '../helpers/sortSamples';
-import BlockedOverlay from './BlockedOverlay';
+import { BlockedOverlay } from './BlockedOverlay';
 
-import Header from './Header';
+import { Header } from './Header';
 import {
     SampleList,
-    SampleListImperativeHandle,
+    type SampleListImperativeHandle,
 } from './SampleList/SampleList';
 
 function useSamples(): Sample[] {
@@ -105,7 +99,7 @@ export default function App() {
     const [query, setQuery] = useState('');
     const samples = useSamples();
 
-    const sampleListRef = React.createRef<SampleListImperativeHandle>();
+    const sampleListRef = useRef<SampleListImperativeHandle>(null);
 
     const search = useMemo(() => new Search(samples), [samples]);
     const filteredSamples = useMemo(

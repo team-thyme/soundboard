@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { type JSX, useEffect, useState } from 'react';
 
-import { Sample } from '../../api';
+import { type Sample } from '../../api';
 import { player } from '../../helpers/Player';
 
 function usePlayerProgress(sample: Sample): number[] {
@@ -25,9 +25,7 @@ function usePlayerProgress(sample: Sample): number[] {
     return progresses;
 }
 
-export default function SampleItemProgress(props: {
-    sample: Sample;
-}): JSX.Element {
+export function SampleItemProgress(props: { sample: Sample }): JSX.Element {
     const { sample } = props;
     const progresses = usePlayerProgress(sample);
 

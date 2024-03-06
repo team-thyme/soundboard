@@ -11,18 +11,19 @@ import {
     useInteractions,
     useRole,
 } from '@floating-ui/react';
-import React, {
+import {
+    cloneElement,
     createContext,
-    Dispatch,
+    type Dispatch,
     isValidElement,
     type ReactNode,
-    SetStateAction,
+    type SetStateAction,
     useContext,
     useMemo,
     useState,
 } from 'react';
 import { Menu } from './menu/Menu';
-import { MenuItem, MenuItemProps } from './menu/MenuItem';
+import { MenuItem, type MenuItemProps } from './menu/MenuItem';
 
 function useContextMenu(context: FloatingContext): ElementProps {
     const { onOpenChange } = context;
@@ -162,7 +163,7 @@ export function ContextMenuTrigger(props: ContextMenuTriggerProps) {
     if (!isValidElement(props.children)) {
         throw new Error('ContextMenuTrigger must have exactly one child');
     }
-    return React.cloneElement(
+    return cloneElement(
         props.children,
         context.getReferenceProps({
             ref: context.refs.setReference,

@@ -7,11 +7,11 @@ import {
     useFloating,
     useInteractions,
 } from '@floating-ui/react';
-import React, { useRef, useState } from 'react';
-import config from '../config';
+import { useRef, useState } from 'react';
+import { config } from '../config';
 
-import IconButton, { IconButtonProps } from './IconButton';
-import Modal, { ModalLayer } from './Modal';
+import { IconButton, type IconButtonProps } from './IconButton';
+import { Modal, ModalLayer } from './Modal';
 import { Preferences } from './preferences/Preferences';
 
 interface SearchBarProps {
@@ -119,7 +119,7 @@ function ModalIconButton({
 
 interface HeaderProps extends SearchBarProps {}
 
-export default function Header(props: HeaderProps) {
+export function Header(props: HeaderProps) {
     const { query, onQueryChange, playRandomFilteredSample } = props;
 
     return (
