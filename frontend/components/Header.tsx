@@ -11,7 +11,7 @@ import React, { useRef, useState } from 'react';
 
 import IconButton, { IconButtonProps } from './IconButton';
 import Modal, { ModalLayer } from './Modal';
-import ThemeSelect from './ThemeSelect';
+import ThemeSelect from './theme/ThemeSelect';
 import { VolumeSlider } from './VolumeSlider';
 
 interface SearchBarProps {
