@@ -1,17 +1,8 @@
 @use '../variables' as *;
 
-.ModalLayer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+.Modal {
     z-index: $z-index-modal;
 
-    background: rgba(black, 0.1);
-}
-
-.Modal {
     background: white;
     border-radius: $border-radius-large;
     box-shadow:

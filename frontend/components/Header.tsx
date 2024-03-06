@@ -1,17 +1,7 @@
-import {
-    arrow,
-    FloatingPortal,
-    shift,
-    useClick,
-    useDismiss,
-    useFloating,
-    useInteractions,
-} from '@floating-ui/react';
-import { useRef, useState } from 'react';
 import { config } from '../config';
 
-import { IconButton, type IconButtonProps } from './IconButton';
-import { Modal, ModalLayer } from './Modal';
+import { IconButton } from './IconButton';
+import { Modal, ModalContent, ModalTrigger } from './floating/Modal';
 import { Preferences } from './preferences/Preferences';
 
 interface SearchBarProps {
@@ -55,68 +45,6 @@ function SearchBar(props: SearchBarProps) {
     );
 }
 
-interface ModalIconButtonProps extends Omit<IconButtonProps, 'innerRef'> {
-    children: React.ReactNode;
-}
-
-function ModalIconButton({
-    children,
-    ...iconButtonProps
-}: ModalIconButtonProps) {
-    const [open, setOpen] = useState(false);
-    const arrowRef = useRef(null);
-
-    const { refs, floatingStyles, context, placement, middlewareData } =
-        useFloating({
-            open,
-            onOpenChange: setOpen,
-            middleware: [
-                shift({
-                    padding: 10,
-                }),
-                arrow({
-                    element: arrowRef,
-                }),
-            ],
-        });
-
-    const { getReferenceProps, getFloatingProps } = useInteractions([
-        useClick(context),
-        useDismiss(context),
-    ]);
-
-    return (
-        <>
-            <IconButton
-                {...iconButtonProps}
-                innerRef={refs.setReference}
-                {...getReferenceProps()}
-            />
-            {open && (
-                <FloatingPortal id="root">
-                    <ModalLayer>
-                        <Modal
-                            innerRef={refs.setFloating}
-                            style={floatingStyles}
-                            arrowProps={{
-                                ref: arrowRef,
-                                style: {
-                                    left: middlewareData.arrow?.x,
-                                    top: middlewareData.arrow?.y,
-                                },
-                            }}
-                            data-floating-ui-placement={placement}
-                            {...getFloatingProps()}
-                        >
-                            {children}
-                        </Modal>
-                    </ModalLayer>
-                </FloatingPortal>
-            )}
-        </>
-    );
-}
-
 interface HeaderProps extends SearchBarProps {}
 
 export function Header(props: HeaderProps) {
@@ -133,9 +61,18 @@ export function Header(props: HeaderProps) {
                 />
             </div>
             <div className="Header__buttons">
-                <ModalIconButton icon="cog" kind="header" title="Preferences">
-                    <Preferences />
-                </ModalIconButton>
+                <Modal>
+                    <ModalTrigger>
+                        <IconButton
+                            icon="cog"
+                            kind="header"
+                            title="Preferences"
+                        />
+                    </ModalTrigger>
+                    <ModalContent>
+                        <Preferences />
+                    </ModalContent>
+                </Modal>
                 <IconButton
                     icon="plus-square"
                     kind="header"
