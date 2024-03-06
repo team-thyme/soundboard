@@ -38,5 +38,12 @@ export function BlockedOverlay(): JSX.Element | null {
         return null;
     }
 
-    return <div className="BlockedOverlay">AUDIO BLOCKED</div>;
+    return (
+        <div className="BlockedOverlay">
+            <div className="BlockedOverlay__content">
+                <h1>Autoplay Blocked</h1>
+                <p>Click or press any key to continue</p>
+            </div>
+        </div>
+    );
 }

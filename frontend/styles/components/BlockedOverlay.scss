@@ -12,7 +12,10 @@
     align-items: center;
     justify-content: center;
 
-    // TODO: Style this...
-    background: green;
+    background: hsl(0 0% 20% / 95%);
     color: white;
+}
+
+.BlockedOverlay__content {
+    text-align: center;
 }
