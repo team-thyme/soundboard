@@ -4,7 +4,6 @@ import {
     type FloatingContext,
     FloatingFocusManager,
     FloatingPortal,
-    type Placement,
     shift,
     useClientPoint,
     useDismiss,
@@ -12,12 +11,6 @@ import {
     useInteractions,
     useRole,
 } from '@floating-ui/react';
-import {
-    getSide,
-    getSideAxis,
-    getAlignment,
-    getAlignmentAxis,
-} from '@floating-ui/utils';
 import { type IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -34,6 +27,8 @@ import {
     useState,
 } from 'react';
 
+import { getShiftTransformOrigin } from '../../helpers/floating-ui/getTransformOrigin';
+
 function useContextMenu(context: FloatingContext): ElementProps {
     const { onOpenChange } = context;
     return useMemo(
@@ -47,35 +42,6 @@ function useContextMenu(context: FloatingContext): ElementProps {
         }),
         [onOpenChange],
     );
-}
-
-/**
- * Compute transform origin based on placement.
- */
-function getTransformOrigin(placement: Placement): { x: string; y: string } {
-    const side = getSide(placement);
-    const axis = getSideAxis(placement);
-    const alignment = getAlignment(placement);
-    const alignmentAxis = getAlignmentAxis(placement);
-    return {
-        [axis]: side === 'top' || side === 'left' ? '100%' : '0%',
-        [alignmentAxis]:
-            alignment === 'start' ? '0%' : alignment === 'end' ? '100%' : '50%',
-    } as { x: string; y: string };
-}
-
-/**
- * Compute transform origin based on placement and result of shift middleware.
- */
-function getShiftTransformOrigin(
-    placement: Placement,
-    shift?: { x: number; y: number },
-): { x: string; y: string } {
-    const transformOrigin = getTransformOrigin(placement);
-    return {
-        x: `calc(${transformOrigin.x} - ${shift?.x ?? 0}px)`,
-        y: `calc(${transformOrigin.y} - ${shift?.y ?? 0}px)`,
-    };
 }
 
 type ContextMenuContextValue = {
