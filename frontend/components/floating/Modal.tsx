@@ -23,6 +23,7 @@ import {
     useRef,
     useState,
 } from 'react';
+import { getArrowTransformOrigin } from '../../helpers/floating-ui/getTransformOrigin';
 
 type ModalContextValue = {
     open: boolean;
@@ -109,26 +110,39 @@ export function ModalContent(props: ModalContentProps): JSX.Element | null {
     if (!context.open) {
         return null;
     }
+
+    const transformOrigin = getArrowTransformOrigin(
+        context.placement,
+        context.middlewareData.arrow,
+    );
+
     return (
         <FloatingPortal id="root">
             <FloatingFocusManager context={context.context}>
                 <div
-                    className="Modal"
-                    data-floating-ui-placement={context.placement}
+                    className="Modal__floating-wrapper"
                     {...context.getFloatingProps({
                         ref: context.refs.setFloating,
                         style: context.floatingStyles,
                     })}
                 >
                     <div
-                        ref={context.arrowRef}
-                        className="Modal__arrow"
+                        className="Modal"
+                        data-floating-ui-placement={context.placement}
                         style={{
-                            left: context.middlewareData.arrow?.x,
-                            top: context.middlewareData.arrow?.y,
+                            transformOrigin: `${transformOrigin.x} ${transformOrigin.y}`,
                         }}
-                    />
-                    <div className="Modal__content">{props.children}</div>
+                    >
+                        <div
+                            ref={context.arrowRef}
+                            className="Modal__arrow"
+                            style={{
+                                left: context.middlewareData.arrow?.x,
+                                top: context.middlewareData.arrow?.y,
+                            }}
+                        />
+                        <div className="Modal__content">{props.children}</div>
+                    </div>
                 </div>
             </FloatingFocusManager>
         </FloatingPortal>

@@ -6,13 +6,15 @@ import {
     getSideAxis,
 } from '@floating-ui/utils';
 
+export interface TransformOrigin {
+    x: string;
+    y: string;
+}
+
 /**
  * Compute transform origin based on placement.
  */
-export function getTransformOrigin(placement: Placement): {
-    x: string;
-    y: string;
-} {
+export function getTransformOrigin(placement: Placement): TransformOrigin {
     const side = getSide(placement);
     const axis = getSideAxis(placement);
     const alignment = getAlignment(placement);
@@ -30,10 +32,25 @@ export function getTransformOrigin(placement: Placement): {
 export function getShiftTransformOrigin(
     placement: Placement,
     shift?: { x: number; y: number },
-): { x: string; y: string } {
+): TransformOrigin {
     const transformOrigin = getTransformOrigin(placement);
     return {
         x: `calc(${transformOrigin.x} - ${shift?.x ?? 0}px)`,
         y: `calc(${transformOrigin.y} - ${shift?.y ?? 0}px)`,
     };
+}
+
+export function getArrowTransformOrigin(
+    placement: Placement,
+    arrow?: { x?: number; y?: number },
+): TransformOrigin {
+    const transformOrigin = getTransformOrigin(placement);
+
+    if (arrow?.x) {
+        transformOrigin.x = `${arrow.x}px`;
+    } else if (arrow?.y) {
+        transformOrigin.y = `${arrow.y}px`;
+    }
+
+    return transformOrigin;
 }
