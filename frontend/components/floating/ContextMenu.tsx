@@ -18,20 +18,21 @@ import {
     getAlignment,
     getAlignmentAxis,
 } from '@floating-ui/utils';
+import { type IconProp } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     cloneElement,
+    type ComponentPropsWithoutRef,
     createContext,
     type Dispatch,
     isValidElement,
+    type MouseEventHandler,
     type ReactNode,
     type SetStateAction,
     useContext,
     useMemo,
     useState,
 } from 'react';
-
-import { Menu } from './Menu';
-import { MenuItem, type MenuItemProps } from './MenuItem';
 
 function useContextMenu(context: FloatingContext): ElementProps {
     const { onOpenChange } = context;
@@ -197,21 +198,36 @@ export function ContextMenuContent(props: ContextMenuContentProps) {
                     style={context.floatingStyles}
                     {...context.getFloatingProps()}
                 >
-                    <Menu
+                    <div
+                        className="ContextMenu"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                        }}
                         style={{
                             transformOrigin: `${transformOrigin.x} ${transformOrigin.y}`,
                         }}
                     >
                         {props.children}
-                    </Menu>
+                    </div>
                 </div>
             </FloatingFocusManager>
         </FloatingPortal>
     );
 }
 
-export function ContextMenuItem(props: MenuItemProps) {
-    const { onClick, ...otherProps } = props;
+interface ContextMenuItemOwnProps {
+    icon: IconProp;
+    title: string;
+    shortcut?: string;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
+    disabled?: boolean;
+}
+
+type ContextMenuItemProps = ContextMenuItemOwnProps &
+    Omit<ComponentPropsWithoutRef<'button'>, keyof ContextMenuItemOwnProps>;
+
+export function ContextMenuItem(props: ContextMenuItemProps) {
+    const { icon, title, shortcut, onClick, ...otherProps } = props;
 
     const context = useContext(ContextMenuContext);
     if (context === null) {
@@ -219,12 +235,20 @@ export function ContextMenuItem(props: MenuItemProps) {
     }
 
     return (
-        <MenuItem
-            {...otherProps}
+        <button
+            role="menuitem"
+            className="ContextMenuItem"
             onClick={(e) => {
                 onClick?.(e);
                 context.setOpen(false);
             }}
-        />
+            {...otherProps}
+        >
+            <span className="ContextMenuItem__icon">
+                <FontAwesomeIcon icon={icon} />
+            </span>
+            <span className="ContextMenuItem__title">{title}</span>
+            <span className="ContextMenuItem__shortcut">{shortcut}</span>
+        </button>
     );
 }
