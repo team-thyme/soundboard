@@ -16,7 +16,7 @@ function SearchBar(props: SearchBarProps) {
     const { playRandomFilteredSample } = useContext(PlayerContext)!;
 
     return (
-        <div className="SearchBar">
+        <div className="SearchBar" role="search" aria-label="Search samples">
             <input
                 name="query"
                 className="SearchBar__input"
@@ -58,7 +58,7 @@ export function Header(props: HeaderProps) {
             <div className="Header__search">
                 <SearchBar query={query} onQueryChange={onQueryChange} />
             </div>
-            <div className="Header__buttons">
+            <div className="Header__buttons" role="menubar">
                 <Modal>
                     <ModalTrigger>
                         <IconButton
