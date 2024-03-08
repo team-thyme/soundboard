@@ -14,72 +14,89 @@ const keyToDirection: Record<ArrowKey, Direction> = {
     ArrowRight: 'right',
 };
 
-function navigateSample(target: HTMLElement, direction: Direction) {
-    let nextTarget = null;
+const SAMPLE_SELECTOR = '.SampleItem';
+const ITEM_SELECTOR = '.SampleList__item';
+const ROW_SELECTOR = '.SampleList__row';
 
+function navigateSample(sample: HTMLElement, direction: Direction) {
+    const item = sample.closest(ITEM_SELECTOR) as HTMLElement;
+    const row = item.closest(ROW_SELECTOR) as HTMLElement;
+
+    let nextSample;
     switch (direction) {
         case 'left':
-            nextTarget = target.previousElementSibling;
+            nextSample =
+                item.previousElementSibling?.querySelector(SAMPLE_SELECTOR);
             break;
         case 'right':
-            nextTarget = target.nextElementSibling;
+            nextSample =
+                item.nextElementSibling?.querySelector(SAMPLE_SELECTOR);
             break;
         case 'up':
-            nextTarget = findClosest(
-                target,
-                target.parentElement?.previousElementSibling,
-            );
+            nextSample = findClosest(sample, row.previousElementSibling);
             break;
         case 'down':
-            nextTarget = findClosest(
-                target,
-                target.parentElement?.nextElementSibling,
-            );
+            nextSample = findClosest(sample, row.nextElementSibling);
             break;
     }
 
-    if (nextTarget instanceof HTMLElement) {
-        nextTarget.focus();
+    if (nextSample instanceof HTMLElement) {
+        nextSample.focus();
     }
 }
 
-function findClosest(
-    target: Element,
-    row: Element | undefined | null,
-): Element | null {
-    if (row === null || row === undefined) {
+function findClosest(sample: Element, row: Element | null): Element | null {
+    if (row === null) {
         return null;
     }
 
     const { left: targetMin, right: targetMax } =
-        target.getBoundingClientRect();
+        sample.getBoundingClientRect();
     const targetMean = (targetMin + targetMax) / 2;
 
-    let closest = null;
+    let closestSample = null;
     let closestDissimilarity = Infinity;
 
-    Array.from(row.children).forEach((child) => {
-        const { left: childMin, right: childMax } =
-            child.getBoundingClientRect();
-        const childMean = (childMin + childMax) / 2;
+    Array.from(row.querySelectorAll(SAMPLE_SELECTOR)).forEach((otherSample) => {
+        const { left: otherSampleMin, right: otherSampleMax } =
+            otherSample.getBoundingClientRect();
+        const otherSampleMean = (otherSampleMin + otherSampleMax) / 2;
 
         const dissimilarity =
-            Math.abs(targetMean - childMean) /
-            (Math.max(targetMax, childMax) - Math.min(targetMin, childMin));
+            Math.abs(targetMean - otherSampleMean) /
+            (Math.max(targetMax, otherSampleMax) -
+                Math.min(targetMin, otherSampleMin));
 
         if (dissimilarity < closestDissimilarity) {
-            closest = child;
+            closestSample = otherSample;
             closestDissimilarity = dissimilarity;
         }
     });
 
-    return closest;
+    return closestSample;
 }
 
 interface UseSampleListNavigationResult {
     onKeyDown: KeyboardEventHandler;
 }
 
+/**
+ * TODO: Documentation
+ *
+ * Assumes the following structure in the DOM:
+ *
+ * ```html
+ * <div class="SampleList">
+ *     <div class="SampleList__row">
+ *         <div class="SampleList__item">
+ *             <button class="SampleItem">...</button> <!-- Target -->
+ *         </div>
+ *         ...
+ *     </div>
+ *     ...
+ * </div>
+ * ```
+ */
 export function useSampleListNavigation(): UseSampleListNavigationResult {
     const onKeyDown = useCallback(
         (event: KeyboardEvent) => {

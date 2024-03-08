@@ -64,6 +64,7 @@ export function SampleItem(props: SampleItemProps) {
         <ContextMenu>
             <ContextMenuTrigger>
                 <button
+                    type="button"
                     className={cx('SampleItem', {
                         'SampleItem--isPlaying': isPlaying,
                     })}
@@ -75,6 +76,8 @@ export function SampleItem(props: SampleItemProps) {
                         e.preventDefault();
                         e.stopPropagation();
                     }}
+                    aria-pressed={isPlaying}
+                    aria-label={`${isPlaying ? 'Stop' : 'Play'} ${sample.name}`}
                     {...otherProps}
                 >
                     <span className="SampleItem__name">{sample.name}</span>

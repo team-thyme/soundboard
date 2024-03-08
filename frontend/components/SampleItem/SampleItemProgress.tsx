@@ -30,7 +30,7 @@ export function SampleItemProgress(props: { sample: Sample }): JSX.Element {
     const progresses = usePlayerProgress(sample);
 
     return (
-        <svg className="SampleItem__progress">
+        <svg className="SampleItem__progress" role="presentation">
             {progresses.map((progress, index) => (
                 <rect key={index} width={`${progress * 100}%`} height="100%" />
             ))}

@@ -17,6 +17,10 @@
         flex-direction: row;
     }
 
+    &__item {
+        display: contents;
+    }
+
     &__pusher {
         flex: 10 0 auto;
     }

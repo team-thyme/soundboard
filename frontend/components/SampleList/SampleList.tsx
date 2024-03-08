@@ -172,6 +172,9 @@ export const SampleList = forwardRef(function SampleList(
         <div
             className="SampleList"
             style={{ height: rowVirtualizer.getTotalSize() }}
+            role="grid"
+            aria-label="Grid of samples"
+            aria-readonly
         >
             {rowVirtualizer
                 .getVirtualItems()
@@ -181,17 +184,23 @@ export const SampleList = forwardRef(function SampleList(
                         className="SampleList__row"
                         style={{ top: start }}
                         role="row"
+                        aria-rowindex={rowIndex + 1}
                         // Used to color rows differently in "cirkeltrek" theme
                         data-index-mod3={rowIndex % 3}
                     >
                         {layout[rowIndex].map((index) => {
                             const sample = samples[index];
                             return (
-                                <SampleItem
+                                <div
                                     key={sample.key}
-                                    sample={sample}
-                                    {...itemProps}
-                                />
+                                    className="SampleList__item"
+                                    role="gridcell"
+                                >
+                                    <SampleItem
+                                        sample={sample}
+                                        {...itemProps}
+                                    />
+                                </div>
                             );
                         })}
                         {rowIndex === layout.length - 1 && (

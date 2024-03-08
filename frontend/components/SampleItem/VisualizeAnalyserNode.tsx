@@ -105,7 +105,7 @@ export function VisualizeAnalyserNode({ analyserNode }: Props): JSX.Element {
 
     return (
         <div ref={wrapperRef} className="SampleItem__visualize">
-            <canvas ref={canvasRef} />
+            <canvas ref={canvasRef} role="presentation" />
         </div>
     );
 }
