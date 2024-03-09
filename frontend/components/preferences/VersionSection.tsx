@@ -12,7 +12,7 @@ export function VersionSection(): JSX.Element {
 }
 
 function VersionInfo(): JSX.Element {
-    const { playSampleById } = useContext(PlayerContext)!;
+    const { playRandomSampleById } = useContext(PlayerContext)!;
 
     return (
         <div className="VersionInfo">
@@ -26,7 +26,7 @@ function VersionInfo(): JSX.Element {
                 href={`${config.baseUrl}${config.versionSampleId}`}
                 onClick={(e) => {
                     e.preventDefault();
-                    playSampleById(config.versionSampleId);
+                    playRandomSampleById(config.versionSampleId);
                 }}
             >
                 {config.versionName}
