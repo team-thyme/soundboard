@@ -14,7 +14,7 @@ import { type Search } from '../helpers/Search';
 import { type SampleListImperativeHandle } from './SampleList/SampleList';
 
 interface PlayerContextValue {
-    playRandomSampleById(id: string): void;
+    playRandomSampleByHash(hash: string): void;
     playRandomFilteredSample(): void;
 }
 
@@ -56,10 +56,10 @@ export function PlayerContextProvider(
         [playRandomSample, filteredSamples],
     );
 
-    /** Play a random sample by its ID (note that ID is not unique). */
-    const playRandomSampleById = useCallback(
-        (id: string) =>
-            playRandomSample(samples.filter((sample) => sample.id === id)),
+    /** Play a random sample by its hash. */
+    const playRandomSampleByHash = useCallback(
+        (hash: string) =>
+            playRandomSample(samples.filter((sample) => sample.hash === hash)),
         [samples, playRandomSample],
     );
 
@@ -86,18 +86,17 @@ export function PlayerContextProvider(
             .filter((part) => part !== '');
 
         pathParts.forEach((part) => {
-            // If part is an ID, play sample by ID. Otherwise, try to search for
-            // a sample with the part as a query.
-            playRandomSampleById(part) || playRandomSampleByQuery(part);
+            // Try to play a sample matching the hash, then the query
+            playRandomSampleByHash(part) || playRandomSampleByQuery(part);
         });
-    }, [samples, playRandomSampleById, playRandomSampleByQuery]);
+    }, [samples, playRandomSampleByHash, playRandomSampleByQuery]);
 
     const playerContextValue = useMemo(
         () => ({
-            playRandomSampleById,
+            playRandomSampleByHash,
             playRandomFilteredSample,
         }),
-        [playRandomSampleById, playRandomFilteredSample],
+        [playRandomSampleByHash, playRandomFilteredSample],
     );
 
     return (

@@ -12,7 +12,7 @@ export function VersionSection(): JSX.Element {
 }
 
 function VersionInfo(): JSX.Element {
-    const { playRandomSampleById } = useContext(PlayerContext)!;
+    const { playRandomSampleByHash } = useContext(PlayerContext)!;
 
     return (
         <div className="VersionInfo">
@@ -23,10 +23,10 @@ function VersionInfo(): JSX.Element {
                 Soundboard v{config.versionNumber}
             </a>
             <a
-                href={`${config.baseUrl}${config.versionSampleId}`}
+                href={`${config.baseUrl}${config.versionSampleHash}`}
                 onClick={(e) => {
                     e.preventDefault();
-                    playRandomSampleById(config.versionSampleId);
+                    playRandomSampleByHash(config.versionSampleHash);
                 }}
             >
                 {config.versionName}

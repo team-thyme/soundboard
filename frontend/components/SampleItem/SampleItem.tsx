@@ -124,7 +124,7 @@ export function SampleItem(props: SampleItemProps) {
                     title="Copy URL"
                     onClick={async () => {
                         const url = new URL(
-                            sample.id,
+                            sample.hash,
                             new URL(config.baseUrl, document.baseURI),
                         );
                         await navigator.clipboard.writeText(url.href);

@@ -6,7 +6,7 @@ export interface Sample {
     // from server
     path: string;
     name: string;
-    id: string;
+    hash: string;
     mtime: number;
     categories: string[];
 
@@ -27,6 +27,7 @@ export async function fetchSamples(signal?: AbortSignal): Promise<Sample[]> {
     const data = await res.json();
     return data.samples.map((sampleData: any) => ({
         ...sampleData,
+        hash: sampleData.id,
         mtime: sampleData.mtime * 1000,
         key: sampleData.path,
         url: `${url}/${sampleData.path}`,
