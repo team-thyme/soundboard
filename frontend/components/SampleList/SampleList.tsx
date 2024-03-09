@@ -7,6 +7,7 @@ import {
 import {
     type ForwardedRef,
     forwardRef,
+    type JSX,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -20,9 +21,8 @@ import {
     detailFont,
     nameFont,
     sampleHeight,
-    sampleListPadding,
-    sampleMargin,
     samplePaddingX,
+    sampleSpacing,
 } from '../../styles/sync-variables';
 import { SampleItem } from '../SampleItem/SampleItem';
 import { computeLayout } from './computeLayout';
@@ -37,7 +37,6 @@ function useSampleWidths(samples: Sample[]): number[] {
 
     const getWidth = useCallback(
         (sample: Sample): number =>
-            sampleMargin * 2 +
             samplePaddingX * 2 +
             Math.max(
                 nameMeasurer.measureWidth(sample.name),
@@ -92,16 +91,15 @@ export interface SampleListImperativeHandle {
 export const SampleList = forwardRef(function SampleList(
     props: SampleListProps,
     ref: ForwardedRef<SampleListImperativeHandle>,
-): React.JSX.Element {
+): JSX.Element {
     const { samples } = props;
 
-    const containerWidth = useBodyWidth() - sampleListPadding * 2;
-    const rowHeight = sampleHeight + sampleMargin * 2;
+    const rowWidth = useBodyWidth() - sampleSpacing * 2;
 
     const widths = useSampleWidths(samples);
     const layout = useMemo(
-        () => computeLayout(widths, containerWidth),
-        [widths, containerWidth],
+        () => computeLayout(widths, rowWidth, sampleSpacing),
+        [widths, rowWidth],
     );
 
     const { fixedHeaderHeight, totalHeaderHeight } = useMemo(
@@ -111,10 +109,10 @@ export const SampleList = forwardRef(function SampleList(
 
     const rowVirtualizer = useWindowVirtualizer({
         count: layout.length,
-        estimateSize: () => rowHeight,
+        estimateSize: () => sampleHeight + sampleSpacing,
 
-        paddingStart: sampleListPadding,
-        paddingEnd: sampleListPadding,
+        paddingStart: sampleSpacing,
+        paddingEnd: sampleSpacing,
 
         // Account for offset caused by header; otherwise the rows would end up
         // a bit lower on the page than the virtualizer expects.

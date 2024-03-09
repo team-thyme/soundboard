@@ -16,9 +16,8 @@ $z-index-box-shadow: 4;
     position: relative;
     overflow: hidden;
 
-    max-width: calc(100% - #{2 * $sampleMargin});
+    max-width: 100%;
     height: $sampleHeight;
-    margin: $sampleMargin;
     padding: 0 $samplePaddingX;
 
     border: 0;

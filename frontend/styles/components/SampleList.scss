@@ -6,15 +6,20 @@
     position: relative;
     z-index: $z-index-sample-list;
 
-    // margin-block: <added by virtualizer>
-    margin-inline: $sampleListPadding;
+    display: flex;
+    flex-direction: column;
+
+    // margin-block: <added via virtualizer>;
+    // gap: <added via virtualizer>;
 
     &__row {
         position: absolute;
-        width: 100%;
+        left: $sampleSpacing;
+        right: $sampleSpacing;
 
         display: flex;
         flex-direction: row;
+        gap: $sampleSpacing;
     }
 
     &__item {
@@ -32,8 +37,7 @@
         justify-content: center;
         flex-direction: column;
 
-        width: 100%;
-        height: 100%;
+        flex: 1;
         padding: 20px;
 
         color: var(--no-results-color);
