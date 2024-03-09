@@ -1,0 +1,32 @@
+@use 'variables' as *;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    scroll-padding-block-start: var(--fixed-header-height);
+
+    font: 16px $font-stack;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+
+    background: var(--sample-list-bg);
+    accent-color: var(--accent-color);
+    color-scheme: var(--color-scheme);
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}

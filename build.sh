@@ -11,21 +11,21 @@ if [ "$APP_ENV" == 'dev' ]; then
     fi
 
     composer install
-    npm install
+    yarn install
 
     if [ "$1" == '--serve' ]; then
         composer run dev-server & \
-        npm run dev-server
+        yarn run dev-server
         exit 0
     fi
 
-    npm run build
+    yarn run build
     exit 0
 fi
 
 echo "Building soundboard in production mode..."
 rm -rf .slim-cache
 composer install --no-dev --optimize-autoloader
-npm install
-BASE_URL=${BASE_URL:=/} npm run build-production
+yarn install
+BASE_URL=${BASE_URL:=/} yarn run build-production
 exit 0

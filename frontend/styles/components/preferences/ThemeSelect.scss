@@ -1,0 +1,31 @@
+@use '../../variables' as *;
+
+.ThemeSelect {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.ThemeSelect__item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ThemeSelect__label {
+    font-size: 14px;
+    text-align: center;
+}
+
+.ThemeSelect__thumb {
+    display: flex;
+
+    padding: 5px;
+
+    border: 1.5px solid hsl(0 0% 85%);
+    border-radius: $border-radius-base;
+
+    .ThemeSelect__item:hover & {
+        border-color: hsl(0 0% 70%);
+    }
+}

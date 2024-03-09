@@ -1,0 +1,42 @@
+@use '../../variables' as *;
+
+.ThemeThumb {
+    &__header {
+        fill: var(--header-bg);
+    }
+
+    &__search {
+        fill: var(--search-bar-bg);
+    }
+
+    &__headerTitle {
+        font-family: $title-font-family;
+        font-weight: 600;
+
+        fill: var(--header-color);
+    }
+
+    &__headerIcon {
+        font-weight: bold;
+        fill: var(--icon-button-header-color);
+    }
+
+    &__sampleList {
+        fill: var(--sample-list-bg);
+    }
+
+    &__sampleItem {
+        fill: var(--sample-bg);
+        filter: drop-shadow(0 1px rgba(black, 0.08));
+
+        rx: 1.5px;
+
+        &:hover {
+            fill: var(--sample-bg-hover);
+        }
+
+        &.ThemeThumb__sampleItem--playing {
+            fill: var(--sample-playing-bg);
+        }
+    }
+}

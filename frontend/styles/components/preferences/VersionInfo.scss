@@ -1,0 +1,16 @@
+.VersionInfo {
+    display: flex;
+    flex-direction: column;
+
+    font-size: 14px;
+    text-align: center;
+
+    a {
+        color: hsl(210, 5%, 50%);
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
