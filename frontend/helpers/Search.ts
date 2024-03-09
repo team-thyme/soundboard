@@ -25,22 +25,29 @@ export class Search {
     }
 
     public filter(query: string): Sample[] {
-        // Normalize the query to match against the normalized samples
-        const normalizedQuery = normalize(query);
+        const subQueryTerms = query
+            // Split the query into sub-queries
+            .split('|')
+            // Normalize the query to match against the normalized samples
+            .map(normalize)
+            // Remove empty sub-queries
+            .filter((subQuery) => subQuery !== '')
+            // Split into an array of terms
+            .map((subQuery) => subQuery.split(/[\s+&]+/g));
 
         // Early return for empty queries
-        if (normalizedQuery === '') {
+        if (subQueryTerms.length === 0) {
             return this.samples;
         }
 
-        // Split the query into an array of terms
-        const terms = normalizedQuery.split(/[\s+&]+/g);
-
         return this.samples.filter((_sample, index) => {
-            // Every term must be included in the sample text
-            return terms.every((term) =>
-                this.normalizedSamples[index].includes(term),
-            );
+            // The sample must match at least one of the sub-queries
+            return subQueryTerms.some((terms) => {
+                // Every term must be included in the sample text
+                return terms.every((term) =>
+                    this.normalizedSamples[index].includes(term),
+                );
+            });
         });
     }
 }
