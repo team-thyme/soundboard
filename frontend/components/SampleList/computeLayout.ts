@@ -22,6 +22,5 @@ export function computeLayout(
             rows.push([itemIndex]);
         }
     }
-    console.log(rows);
     return rows;
 }
