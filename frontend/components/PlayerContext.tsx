@@ -29,27 +29,26 @@ export function PlayerContextProvider(
 ): JSX.Element {
     const { sampleListRef, samples, filteredSamples } = props;
 
-    const playRandomFilteredSample = useCallback(() => {
-        if (filteredSamples.length === 0) {
+    const playRandomSample = useCallback((samples: Sample[]) => {
+        if (samples.length === 0) {
             return;
         }
 
-        const index = Math.floor(Math.random() * filteredSamples.length);
-        const sample = filteredSamples[index];
-        void player.togglePlay(sample);
+        const index = Math.floor(Math.random() * samples.length);
+        const sample = samples[index];
+        void player.togglePlay(sample, { spam: true });
         sampleListRef.current?.scrollToSample(sample);
-    }, [filteredSamples]);
+    }, []);
+
+    const playRandomFilteredSample = useCallback(() => {
+        playRandomSample(filteredSamples);
+    }, [playRandomSample, filteredSamples]);
 
     const playSampleById = useCallback(
         (id: string) => {
-            const sample = samples.find((sample) => sample.id === id);
-            if (!sample) {
-                return;
-            }
-            void player.togglePlay(sample);
-            sampleListRef.current?.scrollToSample(sample);
+            playRandomSample(samples.filter((sample) => sample.id === id));
         },
-        [samples],
+        [playRandomSample, samples],
     );
 
     const playerContextValue = useMemo(
