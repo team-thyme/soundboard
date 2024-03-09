@@ -309,6 +309,11 @@ class Player extends TypedEventTarget<PlayerEvents> {
                     `ended ${key}`,
                     new Event(`ended ${key}`),
                 );
+
+                if (this.playing.size === 0 && 'mediaSession' in navigator) {
+                    navigator.mediaSession.playbackState = 'none';
+                    navigator.mediaSession.metadata = null;
+                }
             }
         };
 
@@ -328,6 +333,14 @@ class Player extends TypedEventTarget<PlayerEvents> {
             }
 
             await audio.play();
+
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = 'playing';
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: sample.name,
+                    artist: sample.categories.join(' / '),
+                });
+            }
         } catch (error) {
             handleStop();
 
