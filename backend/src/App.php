@@ -4,10 +4,6 @@ namespace TeamThyme\Soundboard;
 
 use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Interfaces\RouteParserInterface;
 use Symfony\Component\Dotenv\Dotenv;
 use TeamThyme\Soundboard\Controller\ApiController;
