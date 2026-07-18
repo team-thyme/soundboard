@@ -1,0 +1,55 @@
+@use '../variables' as *;
+
+.Header {
+    position: sticky;
+    z-index: $z-index-header;
+    top: calc(var(--fixed-header-height) - var(--total-header-height));
+    left: 0;
+    right: 0;
+
+    flex: 0 0 auto;
+    height: var(--total-header-height);
+    padding: 10px;
+
+    display: grid;
+    grid-template-areas: "title search buttons";
+    grid-template-columns: auto 50% auto;
+    row-gap: 10px;
+    column-gap: 15px;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+
+    background: var(--header-bg);
+    color: var(--header-color);
+
+    &__title {
+        grid-area: title;
+        margin: 0;
+        padding-left: 20px;
+
+        font-family: $title-font-family;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+
+    &__search {
+        grid-area: search;
+    }
+
+    &__buttons {
+        grid-area: buttons;
+
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    @media (width < 800px) {
+        grid-template-areas: "title buttons" "search search";
+        grid-template-columns: auto auto;
+
+        &__title {
+            padding-left: 10px;
+        }
+    }
+}

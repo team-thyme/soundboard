@@ -1,0 +1,51 @@
+[data-theme='cirkeltrek'] {
+    $cirkeltrek-oranje: #E27000;
+    $cirkeltrek-rood: #AE1C28;
+    $cirkeltrek-wit: #FFFFFF;
+    $cirkeltrek-blauw: #21468B;
+
+    --accent-color: #{$cirkeltrek-oranje};
+    --color-scheme: light;
+
+    $header-bg: $cirkeltrek-oranje;
+    $header-color: #fff;
+
+    --header-bg: #{$header-bg};
+    --header-color: #{$header-color};
+
+    --icon-button-header-color: #{$header-color};
+    --icon-button-header-bg-hover: #{rgba($header-color, 0.1)};
+    --icon-button-header-color-hover: #{$header-color};
+    --icon-button-header-bg-active: #{rgba($header-color, 0.15)};
+    --icon-button-header-color-active: #{$header-color};
+
+    --sample-list-bg: #{darken(white, 5%)};
+
+    // SampleItem (playing)
+    $sample-playing-bg: $cirkeltrek-oranje;
+    --sample-playing-bg: #{$sample-playing-bg};
+    --sample-playing-bg-hover: #{darken($sample-playing-bg, 5%)};
+    --sample-playing-bg-active: #{darken($sample-playing-bg, 10%)};
+
+    --sample-playing-color: white;
+
+    --sample-progress-bg: #{rgba(lighten($sample-playing-bg, 30%), .4)};
+
+    --sample-visualize-color: white;
+
+    // SampleItem (not playing)
+    $sample-item-colors:
+        0 $cirkeltrek-rood white,
+        1 $cirkeltrek-wit #222,
+        2 $cirkeltrek-blauw white;
+
+    @each $index, $bg, $color in $sample-item-colors {
+        [data-index-mod3='#{$index}']:not([data-theme='cirkeltrek'] [data-theme]:not([data-theme='cirkeltrek']) *) {
+            --sample-bg: #{$bg};
+            --sample-bg-hover: #{darken($bg, 4%)};
+            --sample-bg-active: #{darken($bg, 8%)};
+
+            --sample-color: #{$color};
+        }
+    }
+}

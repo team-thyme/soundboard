@@ -1,0 +1,91 @@
+@function make-shadow($edge-color, $bottom-color) {
+    @return inset 0 -1px $bottom-color, inset 0 0 0 1px $edge-color;
+}
+
+// Theme variables
+:root,
+[data-theme='default'] {
+    $text-color: #000;
+    $accent-color: #61e294;
+    $gray: #405162;
+
+    --accent-color: #{$accent-color};
+    --color-scheme: light;
+
+    --text-primary-color: #{$text-color};
+    --text-secondary-color: #{$gray};
+
+    // Header
+    $header-bg: $accent-color;
+    --header-bg: #{$header-bg};
+    --header-color: #{$text-color};
+
+    // SearchBar
+    --search-bar-bg: #fff;
+    --search-bar-box-shadow:
+        0 1px 5px #{rgba(black, 0.1)},
+        0 0 0 1px #{rgba(black, 0.15)};
+    --search-bar-color: #{$text-color};
+    --search-bar-placeholder-color: #{rgba($text-color, 0.4)};
+
+    // IconButton
+    --icon-button-search-color: #{$text-color};
+    --icon-button-search-bg-hover: #{rgba($text-color, 0.1)};
+    --icon-button-search-bg-active: #{rgba($text-color, 0.2)};
+
+    --icon-button-header-color: #{mix($header-bg, $text-color, 20%)};
+    --icon-button-header-bg-hover: #{rgba($text-color, 0.1)};
+    --icon-button-header-color-hover: #{mix($header-bg, $text-color, 10%)};
+    --icon-button-header-bg-active: #{rgba($text-color, 0.15)};
+    --icon-button-header-color-active: #{mix($header-bg, $text-color, 0%)};
+
+    // SampleList
+    $sample-list-bg: mix($gray, white, 4%);
+    --sample-list-bg: #{$sample-list-bg};
+
+    $no-results-color: mix($sample-list-bg, $text-color, 50%);
+    --no-results-color: #{$no-results-color};
+    --no-results-icon-color: #{lighten($no-results-color, 10%)};
+
+    // SampleItem
+    $sample-bg: #fff;
+    --sample-bg: #{$sample-bg};
+    --sample-bg-hover: #{mix($gray, $sample-bg, 5%)};
+    --sample-bg-active: #{mix($gray, $sample-bg, 8%)};
+
+    $sample-edge-shadow: rgba(black, 0.1);
+    $sample-bottom-shadow: rgba(black, 0.12);
+    --sample-box-shadow: #{make-shadow($sample-edge-shadow, $sample-bottom-shadow)};
+    --sample-box-shadow-hover: var(--sample-box-shadow);
+    --sample-box-shadow-active: #{make-shadow($sample-edge-shadow, transparent)};
+
+    --sample-color: #{$text-color};
+
+    $sample-playing-bg: $accent-color;
+    --sample-playing-bg: #{$sample-playing-bg};
+    --sample-playing-bg-hover: #{darken($sample-playing-bg, 5%)};
+    --sample-playing-bg-active: #{darken($sample-playing-bg, 10%)};
+
+    --sample-playing-box-shadow: var(--sample-box-shadow);
+    --sample-playing-box-shadow-hover: var(--sample-box-shadow-hover);
+    --sample-playing-box-shadow-active: var(--sample-box-shadow-active);
+
+    --sample-playing-color: var(--sample-color);
+
+    --sample-progress-bg: #{rgba(lighten($sample-playing-bg, 30%), .4)};
+
+    --sample-visualize-line-width: 1.5px; // Only supports pixels!
+    --sample-visualize-color: var(--sample-playing-color);
+
+    // ContextMenu
+    --context-menu-bg: white;
+    --context-menu-box-shadow:
+        0 3px 15px #{rgba(black, 0.1)},
+        0 1px 2px #{rgba(black, 0.15)};
+
+    --context-menu-color-scheme: light;
+
+    --context-menu-item-bg: none;
+    --context-menu-item-bg-hover: #{mix($gray, white, 5%)};
+    --context-menu-item-bg-active: #{mix($gray, white, 8%)};
+}

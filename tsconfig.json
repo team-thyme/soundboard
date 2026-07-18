@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "CommonJS",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["ESNext", "DOM"],
+        "jsx": "react-jsx",
+        "noEmit": true
+    },
+    "include": ["frontend/**/*"]
+}

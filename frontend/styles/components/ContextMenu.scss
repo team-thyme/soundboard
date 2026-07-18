@@ -1,0 +1,87 @@
+@use '../variables' as *;
+
+.ContextMenu {
+    // positioned using floating ui
+    z-index: $z-index-context-menu;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    width: 240px;
+    padding: 5px;
+
+    background: var(--context-menu-bg);
+    border-radius: $border-radius-large;
+    box-shadow: var(--context-menu-box-shadow);
+
+    color-scheme: var(--context-menu-color-scheme);
+
+    @keyframes context-menu-appear {
+        0% {
+            opacity: 0;
+            transform: scale(.9);
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    animation: context-menu-appear 100ms cubic-bezier(0.25, 1, 0.5, 1); // easeOutQuart
+}
+
+.ContextMenuItem {
+    display: flex;
+    align-items: baseline;
+
+    width: 100%;
+    padding: 7px 10px;
+
+    background: var(--context-menu-item-bg);
+    border: none;
+    font: inherit;
+
+    border-radius: $border-radius-base;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+        background: var(--context-menu-item-bg-hover);
+    }
+    &:active {
+        background: var(--context-menu-item-bg-active);
+    }
+
+    &:disabled {
+        color: inherit;
+        opacity: 0.3;
+        background: none;
+        cursor: default;
+    }
+
+    &__icon {
+        width: 1em;
+        margin-right: .5em;
+        margin-left: -.1em;
+
+        * {
+            max-width: 1em;
+            fill: var(--text-secondary-color);
+        }
+    }
+
+    &__title {
+        margin-right: auto;
+        color: var(--text-primary-color);
+    }
+
+    &__shortcut {
+        margin-left: 20px;
+
+        font-size: 14px;
+        color: var(--text-secondary-color);
+    }
+}

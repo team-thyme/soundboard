@@ -1,0 +1,51 @@
+@use '../variables' as *;
+
+.SampleList {
+    flex: 1 0 auto;
+
+    position: relative;
+    z-index: $z-index-sample-list;
+
+    display: flex;
+    flex-direction: column;
+
+    // margin-block: <added via virtualizer>;
+    // gap: <added via virtualizer>;
+
+    &__row {
+        position: absolute;
+        left: $sampleSpacing;
+        right: $sampleSpacing;
+
+        display: flex;
+        flex-direction: row;
+        gap: $sampleSpacing;
+    }
+
+    &__item {
+        display: contents;
+    }
+
+    &__pusher {
+        flex: 10 0 auto;
+    }
+
+    // No results
+    &__noResults {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        flex: 1;
+        padding: 20px;
+
+        color: var(--no-results-color);
+    }
+
+    &__noResultsIcon {
+        margin-bottom: 10px;
+
+        color: var(--no-results-icon-color);
+    }
+}

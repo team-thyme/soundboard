@@ -1,104 +1,13 @@
 <!doctype html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <base href="/">
-        <meta name="viewport" content="initial-scale=1">
-        <meta name="mobile-web-app-capable" content="yes">
-        <title>Soundboard</title>
-        <link rel="shortcut icon" href="favicon.ico">
-        <link rel="icon" sizes="192x192" href="icon.png">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="styles/main.scss">
-        <script type="module" src="src/main.js"></script>
-    </head>
-    <body>
-        <header class="header">
-            <div class="header__search">
-                <div class="search">
-                    <input class="search__input" type="text" placeholder="Cook, Search, Delicious!" autofocus>
-                    <div class="search__clear">
-                        <i class="material-icons">close</i>
-                    </div>
-                </div>
-            </div>
-            <div class="header__button" data-action="show-settings-modal">
-                <i class="material-icons">settings</i>
-            </div>
-            <div class="header__button" data-action="show-contribution-modal">
-                <i class="material-icons">library_add</i>
-            </div>
-        </header>
-        <div class="audio-blocked-overlay">
-            <div class="audio-blocked-overlay__icon material-icons">play_arrow</div>
-            <div class="audio-blocked-overlay__text">Alright let's do this</div>
-        </div>\
-        <div class="sample-container">
-            <div class="sample-container__empty">
-                <div class="sample-container__empty-icon material-icons">search</div>
-                <div class="sample-container__empty-label">
-                    Whether&nbsp;you're&nbsp;looking&nbsp;for
-                    things&nbsp;that&nbsp;do&nbsp;what ...
-                </div>
-            </div>
-        </div>
-        <!-- Settings modal -->
-        <div class="modal" id="settings-modal">
-            <div class="modal__dialog">
-                <div class="modal__header">
-                    <div class="modal__title">
-                        Settings
-                    </div>
-                </div>
-                <div class="modal__content"></div>
-                <div class="modal__footer modal__footer--align-end">
-                    <div class="button button--default" data-action="cancel">Cancel</div>
-                    <div class="button button--primary" data-action="save">Save</div>
-                </div>
-                <div class="modal__footer modal__footer--align-center">
-                    <span class="version">
-                        <span class="version__link" data-action="show-changelog-modal">
-                            Soundboard
-                            <span class="version__number" data-content="version-number"></span>
-                        </span>
-                        <span
-                            class="version__link"
-                            data-action="play-version-sample"
-                            data-content="version-name"
-                        >
-                        </span>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <!-- Requests modal -->
-        <div class="modal" id="request-modal">
-            <div class="modal__dialog">
-                <div class="modal__header">
-                    <div class="modal__title">
-                        Requests
-                    </div>
-                </div>
-                <div class="modal__content"></div>
-                <div class="modal__footer">
-                    <div class="form form--horizontal">
-                        <div class="form__item form__item--grow">
-                            <div class="form__control">
-                                <input type="text" class="input" placeholder="pls make add soundboard">
-                            </div>
-                        </div>
-                        <div class="form__item">
-                            <div class="form__control">
-                                <div class="button button--primary">
-                                    <span class="material-icons button__icon">add</span>
-                                    <span>Add</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
-</html>
+<html lang="en">
+<head>
+    <title>Soundboard</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/styles.scss">
+    <script type="module" src="index.tsx"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>

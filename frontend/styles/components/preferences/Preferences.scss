@@ -1,0 +1,16 @@
+.Preferences {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 20px;
+}
+
+.Preferences__section {
+    display: flex;
+    flex-direction: column;
+}
+
+.Preferences__label {
+    font-weight: 500;
+    margin-bottom: 5px;
+}

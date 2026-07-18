@@ -1,0 +1,26 @@
+@forward 'sync-variables';
+
+$font-stack: 'Work Sans', sans-serif;
+$title-font-family: 'Josefin Sans';
+
+$border-radius-base: 5px;
+$border-radius-large: 8px;
+
+$z-index-header: 10;
+$z-index-sample-list: 0;
+$z-index-blocked-overlay: 20;
+$z-index-context-menu: 100;
+$z-index-modal: 50;
+
+:root {
+    --fixed-header-height: 80px;
+    --total-header-height: 80px;
+}
+
+// TODO: Improve breakpoint
+@media (max-width: 800px) {
+    :root {
+        --fixed-header-height: 80px;
+        --total-header-height: #{80px + 60px};
+    }
+}
